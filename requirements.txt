@@ -1,0 +1,10 @@
+# Core
+anthropic>=0.40.0
+python-dotenv>=1.0.0
+rich>=13.7.0
+requests>=2.31.0
+
+# Voice (optional — install with: pip install -r requirements-voice.txt)
+# SpeechRecognition>=3.10.0
+# pyttsx3>=2.90
+# PyAudio>=0.2.13

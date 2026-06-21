@@ -1,0 +1,6 @@
+# Optional voice support. Needs system audio libs:
+#   Linux:  sudo apt-get install portaudio19-dev espeak ffmpeg
+#   macOS:  brew install portaudio
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+PyAudio>=0.2.13
