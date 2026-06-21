@@ -22,6 +22,36 @@ You are capable, direct, and warm — a trusted right hand, not a chatbot.
 - If you don't know something and can't find it, say so plainly."""
 
 
+def _gemini_convert_schema(node: dict) -> dict:
+    """Convert a JSON-schema node to Gemini's format (uppercase types)."""
+    out: dict = {}
+    if "type" in node:
+        out["type"] = node["type"].upper()
+    if "description" in node:
+        out["description"] = node["description"]
+    if "enum" in node:
+        out["enum"] = node["enum"]
+    if "properties" in node:
+        out["properties"] = {
+            k: _gemini_convert_schema(v) for k, v in node["properties"].items()
+        }
+    if "required" in node:
+        out["required"] = node["required"]
+    if "items" in node:
+        out["items"] = _gemini_convert_schema(node["items"])
+    return out
+
+
+def _gemini_declaration(schema: dict) -> dict:
+    """Turn a Jarvis tool schema into a Gemini function_declaration."""
+    decl = {"name": schema["name"], "description": schema["description"]}
+    params = schema.get("input_schema", {})
+    # Gemini rejects an empty parameters object — omit it for no-arg tools.
+    if params.get("properties"):
+        decl["parameters"] = _gemini_convert_schema(params)
+    return decl
+
+
 class Agent:
     def __init__(self, confirm_cb: Callable[[str], bool] | None = None):
         self.memory = Memory(config.memory_path)
@@ -50,6 +80,8 @@ class Agent:
     def chat(self, user_text: str) -> str:
         if config.provider == "claude":
             return self._chat_claude(user_text)
+        if config.provider == "gemini":
+            return self._chat_gemini(user_text)
         if config.provider == "ollama":
             return self._chat_ollama(user_text)
         raise RuntimeError(
@@ -111,6 +143,68 @@ class Agent:
             break
 
         return final_text.strip() or "(no response)"
+
+    # --- Gemini backend (free tier, with client-side tools) ---
+
+    def _chat_gemini(self, user_text: str) -> str:
+        import requests
+
+        if not config.gemini_api_key:
+            raise RuntimeError(
+                "GEMINI_API_KEY is not set. Get a free key at "
+                "https://aistudio.google.com and add it to your .env file."
+            )
+
+        self.messages.append({"role": "user", "parts": [{"text": user_text}]})
+
+        tools = [
+            {
+                "function_declarations": [
+                    _gemini_declaration(s) for s in self.toolbox.schemas()
+                ]
+            }
+        ]
+        url = (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            f"{config.gemini_model}:generateContent?key={config.gemini_api_key}"
+        )
+        base = {
+            "system_instruction": {"parts": [{"text": self._system()}]},
+            "tools": tools,
+        }
+
+        for _ in range(12):
+            body = {**base, "contents": self.messages}
+            resp = requests.post(url, json=body, timeout=120)
+            resp.raise_for_status()
+            candidates = resp.json().get("candidates", [])
+            if not candidates:
+                return "(no response)"
+            parts = candidates[0].get("content", {}).get("parts", [])
+            self.messages.append({"role": "model", "parts": parts})
+
+            calls = [p["functionCall"] for p in parts if "functionCall" in p]
+            if calls:
+                results = []
+                for call in calls:
+                    result, _is_error = self.toolbox.dispatch(
+                        call["name"], dict(call.get("args", {}))
+                    )
+                    results.append(
+                        {
+                            "functionResponse": {
+                                "name": call["name"],
+                                "response": {"result": result},
+                            }
+                        }
+                    )
+                self.messages.append({"role": "user", "parts": results})
+                continue
+
+            text = "".join(p.get("text", "") for p in parts if "text" in p)
+            return text.strip() or "(no response)"
+
+        return "(stopped after too many tool calls)"
 
     # --- Ollama backend (local, chat-only, no tools) ---
 

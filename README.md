@@ -13,8 +13,8 @@ write files, run shell commands, and remember things about you across sessions.
 - **Tools** — web search, file read/write, shell commands, date/time.
 - **Memory** — durable facts persisted to `jarvis_memory.json` across sessions.
 - **Voice** *(optional)* — talk to Jarvis and hear it reply.
-- **Pluggable brain** — Claude (full features) or Ollama (local, free, chat-only).
-  OpenAI / Gemini are scaffolded for you to add.
+- **Pluggable brain** — Claude (full features), **Gemini (free tier, with tools)**,
+  or Ollama (local, free, chat-only). OpenAI is scaffolded for you to add.
 
 ## Quick start
 
@@ -53,6 +53,21 @@ Jarvis › It's Saturday, 14:32. Got it — I'll remember you prefer Python.
 pip install -r requirements-voice.txt   # needs system audio libs (see file)
 python main.py --voice
 ```
+
+### Free backend: Google Gemini
+
+No card needed — grab a free key at [aistudio.google.com](https://aistudio.google.com):
+
+```bash
+# in .env:
+JARVIS_PROVIDER=gemini
+GEMINI_API_KEY=your-key-here
+GEMINI_MODEL=gemini-2.0-flash
+python main.py
+```
+
+Gemini supports the client-side tools (files, shell, memory, time). Web search
+is currently a Claude-only feature.
 
 ### Local / offline (no API key)
 

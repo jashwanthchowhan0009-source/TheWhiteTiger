@@ -49,10 +49,15 @@ def run(use_voice: bool = False) -> None:
             console.print(f"[red]{exc}[/]")
             sys.exit(1)
 
+    model_label = {
+        "claude": config.model,
+        "gemini": config.gemini_model,
+        "ollama": config.ollama_model,
+    }.get(config.provider, "")
     console.print(
         Panel.fit(
             f"[bold cyan]Jarvis[/] online — provider: [green]{config.provider}[/]"
-            + (f", model: [green]{config.model}[/]" if config.provider == "claude" else "")
+            + (f", model: [green]{model_label}[/]" if model_label else "")
             + "\nType [bold]/help[/] for commands.",
             border_style="cyan",
         )
