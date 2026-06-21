@@ -1,0 +1,7 @@
+# Desktop control + voice (for the always-on assistant on Windows).
+# Install after requirements.txt:  pip install -r requirements-desktop.txt
+pyautogui>=0.9.54
+pywhatkit>=5.4
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+PyAudio>=0.2.13

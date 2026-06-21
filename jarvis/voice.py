@@ -25,14 +25,17 @@ class Voice:
         self._sr = sr
         self._recognizer = sr.Recognizer()
         self._engine = pyttsx3.init()
+        self._calibrated = False
 
     def speak(self, text: str) -> None:
         self._engine.say(text)
         self._engine.runAndWait()
 
-    def listen(self, timeout: int = 8, phrase_time_limit: int = 20) -> str:
+    def listen(self, timeout: int | None = 8, phrase_time_limit: int = 20) -> str:
         with self._sr.Microphone() as source:
-            self._recognizer.adjust_for_ambient_noise(source, duration=0.5)
+            if not self._calibrated:
+                self._recognizer.adjust_for_ambient_noise(source, duration=0.5)
+                self._calibrated = True
             audio = self._recognizer.listen(
                 source, timeout=timeout, phrase_time_limit=phrase_time_limit
             )
