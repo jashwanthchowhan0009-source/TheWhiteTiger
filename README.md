@@ -13,6 +13,8 @@ write files, run shell commands, and remember things about you across sessions.
 - **Tools** — web search, file read/write, shell commands, date/time.
 - **Memory** — durable facts persisted to `jarvis_memory.json` across sessions.
 - **Voice** *(optional)* — talk to Jarvis and hear it reply.
+- **Always-on desktop control** *(Windows)* — wake-word daemon that opens apps,
+  plays YouTube, controls media/volume, types, and runs commands by voice.
 - **Pluggable brain** — Claude (full features), **Gemini (free tier, with tools)**,
   or Ollama (local, free, chat-only). OpenAI is scaffolded for you to add.
 
@@ -82,6 +84,69 @@ python main.py
 > Note: the local backend is chat-only — tools, web search, and the agentic
 > loop are Claude-backed features.
 
+## 🦾 Always-on voice assistant (Windows)
+
+This is the Iron-Man mode: Jarvis runs in the background, waits for the wake
+word **"Jarvis"**, and controls your PC by voice — open apps, play YouTube,
+open websites/files, type, control media and volume, run commands, and more.
+
+### 1. Install desktop + voice deps
+
+```powershell
+pip install -r requirements.txt
+pip install -r requirements-desktop.txt
+```
+
+> If `PyAudio` fails to install, get it with: `pip install pipwin && pipwin install pyaudio`
+
+### 2. Pick a free brain
+
+Edit `.env` (copy from `.env.example`):
+
+```
+JARVIS_PROVIDER=gemini
+GEMINI_API_KEY=your-free-key-from-aistudio.google.com
+```
+
+### 3. Run it
+
+```powershell
+python main.py --assistant
+```
+
+Then just talk:
+
+- *"Jarvis, open Chrome"*
+- *"Jarvis, play lofi beats on YouTube"*
+- *"Jarvis, open my downloads folder"*
+- *"Jarvis, search for the weather in Mumbai"*
+- *"Jarvis, volume up"* / *"Jarvis, pause"*
+- *"Jarvis, open Notepad and type my shopping list"*
+
+Say **"goodbye Jarvis"** to stop.
+
+### 4. Start automatically when the PC turns on
+
+Jarvis waits for the internet, then starts listening — fully hands-free.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install_autostart.ps1
+```
+
+That adds a Startup shortcut (runs silently, no console window). To remove it,
+press `Win+R`, type `shell:startup`, and delete the **Jarvis** shortcut.
+
+> Using a virtual environment? Edit `scripts\start_jarvis.bat` and point
+> `PYTHON` at `.venv\Scripts\python.exe`.
+
+### What it can do (tools)
+
+`open_application`, `open_website`, `play_youtube`, `web_search_open`,
+`type_text`, `press_hotkey`, `media_control`, `volume`, `open_path`,
+`screenshot`, `run_shell`, `read_file`, `write_file`, `remember`/`forget`.
+
+The LLM decides which tools to chain for each spoken request.
+
 ## Configuration
 
 All settings live in `.env` (see `.env.example` for the full list):
@@ -98,13 +163,15 @@ All settings live in `.env` (see `.env.example` for the full list):
 
 ```
 jarvis/
-  agent.py     core agent + Claude tool loop
-  tools.py     client-side tools (files, shell, memory, time)
-  memory.py    persistent memory store
-  voice.py     optional speech in/out
-  config.py    env-based configuration
-  cli.py       interactive terminal UI
-main.py        entry point
+  agent.py      core agent + tool loop (Claude / Gemini / Ollama)
+  tools.py      tools: desktop control, files, shell, memory, time
+  assistant.py  always-on wake-word voice daemon
+  memory.py     persistent memory store
+  voice.py      speech in/out (STT + TTS)
+  config.py     env-based configuration
+  cli.py        interactive terminal UI + entry routing
+main.py         entry point
+scripts/        Windows autostart (.bat / .vbs / install_autostart.ps1)
 ```
 
 ## Extending it
