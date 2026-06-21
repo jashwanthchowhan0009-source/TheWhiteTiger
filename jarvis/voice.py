@@ -31,7 +31,12 @@ class Voice:
         self._engine.say(text)
         self._engine.runAndWait()
 
-    def listen(self, timeout: int | None = 8, phrase_time_limit: int = 20) -> str:
+    def listen(
+        self,
+        timeout: int | None = 8,
+        phrase_time_limit: int = 20,
+        language: str = "en-US",
+    ) -> str:
         with self._sr.Microphone() as source:
             if not self._calibrated:
                 self._recognizer.adjust_for_ambient_noise(source, duration=0.5)
@@ -39,5 +44,6 @@ class Voice:
             audio = self._recognizer.listen(
                 source, timeout=timeout, phrase_time_limit=phrase_time_limit
             )
-        # Uses the free Google Web Speech API by default.
-        return self._recognizer.recognize_google(audio)
+        # Uses the free Google Web Speech API. `language` improves accuracy for
+        # Indian-accented English / Hinglish (e.g. "en-IN").
+        return self._recognizer.recognize_google(audio, language=language)

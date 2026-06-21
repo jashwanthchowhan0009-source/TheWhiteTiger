@@ -42,6 +42,12 @@ class Config:
     allow_shell: bool = _bool("JARVIS_ALLOW_SHELL", True)
     confirm_shell: bool = _bool("JARVIS_CONFIRM_SHELL", True)
 
+    # Voice / assistant
+    # Speech-recognition language. en-IN handles Indian-accented English (and
+    # Hinglish) well; use hi-IN for mostly-Hindi, en-US for US English.
+    speech_lang: str = os.getenv("JARVIS_LANG", "en-IN")
+    wake_word: str = os.getenv("JARVIS_WAKE_WORD", "jarvis").lower()
+
     memory_path: str = os.getenv("JARVIS_MEMORY_PATH", "jarvis_memory.json")
 
 

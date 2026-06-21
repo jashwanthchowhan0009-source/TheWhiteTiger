@@ -15,8 +15,12 @@ import time
 from .agent import Agent
 from .config import config
 
-WAKE_WORDS = ("jarvis", "hey jarvis", "okay jarvis")
-EXIT_PHRASES = ("goodbye jarvis", "stop listening", "shut down jarvis", "go to sleep")
+def _wake_words() -> tuple[str, ...]:
+    w = config.wake_word
+    return (w, f"hey {w}", f"okay {w}", f"ok {w}")
+
+
+EXIT_PHRASES = ("goodbye", "stop listening", "shut down", "go to sleep", "band ho jao")
 
 
 def has_internet(host: str = "8.8.8.8", port: int = 53, timeout: float = 3.0) -> bool:
@@ -35,7 +39,8 @@ def wait_for_internet(poll: float = 5.0) -> None:
 
 def _strip_wake(text: str) -> str:
     low = text.lower()
-    for w in WAKE_WORDS:
+    # Longest match first so "hey jarvis" strips fully before "jarvis".
+    for w in sorted(_wake_words(), key=len, reverse=True):
         idx = low.find(w)
         if idx != -1:
             return text[idx + len(w) :].strip(" ,.!?")
@@ -61,17 +66,23 @@ def run() -> None:
         print(exc)
         return
 
+    lang = config.speech_lang
     voice.speak("Jarvis online and ready.")
-    print(f"Listening for wake word… (provider: {config.provider})")
+    print(
+        f"Listening for wake word '{config.wake_word}'… "
+        f"(provider: {config.provider}, lang: {lang})"
+    )
 
     while True:
         # 1) Listen (short) for the wake word.
         try:
-            heard = voice.listen(timeout=None, phrase_time_limit=5).lower()
+            heard = voice.listen(
+                timeout=None, phrase_time_limit=5, language=lang
+            ).lower()
         except Exception:
             continue  # timeout / no speech / not understood
 
-        if not any(w in heard for w in WAKE_WORDS):
+        if not any(w in heard for w in _wake_words()):
             continue
 
         # 2) Got the wake word. The command may be in the same phrase…
@@ -80,7 +91,9 @@ def run() -> None:
             # …otherwise prompt and listen for the command.
             voice.speak("Yes?")
             try:
-                command = voice.listen(timeout=6, phrase_time_limit=15).strip()
+                command = voice.listen(
+                    timeout=6, phrase_time_limit=15, language=lang
+                ).strip()
             except Exception:
                 voice.speak("I didn't catch that.")
                 continue
