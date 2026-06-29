@@ -454,10 +454,37 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}
 .reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
 
+/* ════ 3D depth & dimensionality ════ */
+.pillars,.cards,.team,.vm-grid,.stack,.biz,.layers,.fund,.comp,.stats{perspective:1300px}
+.pillar,.fcard,.vm-card,.member,.tech,.stat,.biz-card,.layer,.fund .f,.comp .c{
+  transition:transform .3s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease);
+  transform-style:preserve-3d;will-change:transform}
+.glass{box-shadow:0 24px 60px -30px rgba(0,0,0,.7)}
+.pillar:hover,.fcard:hover,.vm-card:hover,.member:hover,.tech:hover,.biz-card:hover,
+.layer:hover,.fund .f:hover,.comp .c:hover{
+  box-shadow:0 44px 90px -34px rgba(0,0,0,.85),0 0 46px -12px rgba(240,167,60,.2)}
+.fcard .ic,.pillar .dot,.vm-card .ic,.member .av,.comp .c i{transform:translateZ(26px)}
+.fcard h4,.pillar h4,.tech b{transform:translateZ(14px)}
+
+/* hero logo — float, depth, grounded glow */
+.eye-wrap{animation:floaty 6.5s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.eye-wrap::after{content:"";position:absolute;left:50%;bottom:-3%;width:56%;height:32px;
+  transform:translateX(-50%);border-radius:50%;z-index:-1;filter:blur(13px);
+  background:radial-gradient(ellipse at center,rgba(240,167,60,.42),transparent 70%);
+  animation:platGlow 6.5s ease-in-out infinite}
+@keyframes platGlow{0%,100%{opacity:.5;width:56%}50%{opacity:.85;width:48%}}
+.eye-core{will-change:transform}
+
+/* buttons & glass — richer light */
+.btn-primary{box-shadow:0 12px 34px rgba(240,167,60,.34),inset 0 1px 0 rgba(255,255,255,.55)}
+.stat:hover,.eyebrow{backface-visibility:hidden}
+
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
   .hero h1 .line span{transform:none}
+  .eye-wrap,.eye-wrap::after{animation:none!important}
 }
 </style>
 </head>
@@ -1068,11 +1095,23 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
         var r = eyeWrap.getBoundingClientRect();
         var dx = (e.clientX - (r.left+r.width/2)) / r.width;
         var dy = (e.clientY - (r.top+r.height/2)) / r.height;
-        eyeCore.style.transform = 'translate('+(dx*16)+'px,'+(dy*16)+'px) rotateX('+(-dy*8)+'deg) rotateY('+(dx*8)+'deg)';
+        eyeCore.style.transform = 'perspective(900px) translate('+(dx*22)+'px,'+(dy*22)+'px) rotateX('+(-dy*15)+'deg) rotateY('+(dx*15)+'deg) translateZ(42px)';
       }
     });
     (function loop(){ cx+=(gx-cx)*.12; cy+=(gy-cy)*.12;
       glow.style.left=cx+'px'; glow.style.top=cy+'px'; requestAnimationFrame(loop); })();
+
+    /* 3D pointer-tracking tilt on cards */
+    var tiltEls = document.querySelectorAll('.pillar,.fcard,.vm-card,.member,.tech,.stat,.biz-card,.layer,.fund .f,.comp .c');
+    tiltEls.forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - .5;
+        var py = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = 'perspective(820px) rotateX('+(-py*7).toFixed(2)+'deg) rotateY('+(px*7).toFixed(2)+'deg) translateZ(16px) scale(1.018)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform=''; });
+    });
   } else { glow.style.display='none'; }
 
   /* Year */
