@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Download SherrByte — TheWhiteTiger</title>
+<meta name="description" content="Get SherrByte — TheWhiteTiger's hyper-personalised, AI-verified information feed. Install the Progressive Web App on Android, iOS or desktop.">
+<meta name="theme-color" content="#05070d">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2305070d'/%3E%3Cpath d='M50 30C68 30 84 44 90 50 84 56 68 70 50 70 32 70 16 56 10 50 16 44 32 30 50 30Z' fill='%230a0d15' stroke='%23e9eef9' stroke-width='2.4'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%23f0a73c'/%3E%3Cellipse cx='50' cy='50' rx='5' ry='16' fill='%23120a00'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --bg:#05070d;--bg-2:#080b14;--ink:#eaf0ff;--ink-soft:#9fb0d0;--ink-dim:#6b7a99;
+  --line:rgba(150,180,255,.10);--line-2:rgba(150,180,255,.18);
+  --glass:rgba(255,255,255,.045);--glass-2:rgba(255,255,255,.07);--glass-br:rgba(255,255,255,.10);
+  --gold:#f0a73c;--gold-2:#ffce7a;--ice:#7fd4ff;--v-violet:#9a6bff;--v-green:#34d399;
+  --r:22px;--maxw:1080px;--ease:cubic-bezier(.22,1,.36,1);
+  --f:"Inter",-apple-system,system-ui,sans-serif;--fd:"Sora",var(--f);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);line-height:1.6;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100svh}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(240,167,60,.32);color:#fff}
+.bg-fx{position:fixed;inset:0;z-index:-2;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% -10%,#0c1124 0%,var(--bg) 55%)}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 22s ease-in-out infinite}
+.orb.a{width:480px;height:480px;left:-120px;top:-80px;background:radial-gradient(circle,rgba(240,167,60,.45),transparent 70%)}
+.orb.b{width:520px;height:520px;right:-160px;top:20%;background:radial-gradient(circle,rgba(90,107,255,.42),transparent 70%);animation-delay:-7s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-30px) scale(1.08)}}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;position:relative;z-index:2}
+.glass{background:var(--glass);border:1px solid var(--glass-br);border-radius:var(--r);
+  backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+  position:relative;overflow:hidden}
+.grad{background:linear-gradient(110deg,var(--gold),var(--gold-2) 30%,var(--ice) 70%,var(--v-violet));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-size:.72rem;
+  font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-2);
+  padding:7px 15px;border:1px solid var(--line-2);border-radius:999px;background:var(--glass)}
+
+/* nav */
+header{padding:20px 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--fd);font-weight:700;font-size:1.06rem}
+.brand-mark{width:38px;height:38px;border-radius:11px;filter:drop-shadow(0 0 14px rgba(240,167,60,.45))}
+.brand b{color:#fff}.brand span{color:var(--gold)}
+.back{font-size:.9rem;color:var(--ink-soft);display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border:1px solid var(--line-2);border-radius:999px;transition:.25s;background:var(--glass)}
+.back:hover{color:#fff;border-color:var(--gold)}
+
+/* hero */
+.dl-hero{padding:clamp(50px,9vw,90px) 0 40px;text-align:center}
+.dl-hero .mark{width:96px;height:96px;border-radius:26px;margin:0 auto 28px;display:block;
+  filter:drop-shadow(0 0 30px rgba(240,167,60,.4))}
+.dl-hero h1{font-family:var(--fd);font-weight:800;font-size:clamp(2.2rem,6vw,3.6rem);
+  letter-spacing:-.02em;line-height:1.04;margin:20px 0 16px}
+.dl-hero p{color:var(--ink-soft);font-size:clamp(1rem,2vw,1.18rem);max-width:580px;margin:0 auto}
+
+/* install cards */
+.installs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:46px 0}
+.inst{padding:30px 26px;text-align:center;transition:.4s var(--ease)}
+.inst:hover{transform:translateY(-6px);background:var(--glass-2);border-color:var(--line-2)}
+.inst .ic{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;
+  margin:0 auto 18px;color:var(--gold);background:rgba(240,167,60,.1);border:1px solid rgba(240,167,60,.22)}
+.inst h3{font-family:var(--fd);font-size:1.2rem;margin-bottom:8px}
+.inst p{font-size:.88rem;color:var(--ink-soft);margin-bottom:18px;min-height:42px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--fd);
+  font-weight:600;font-size:.92rem;padding:12px 22px;border-radius:999px;transition:.35s var(--ease);width:100%}
+.btn-primary{background:linear-gradient(120deg,var(--gold),var(--gold-2));color:#1a1206;
+  box-shadow:0 10px 28px rgba(240,167,60,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(240,167,60,.44)}
+.btn-ghost{border:1px solid var(--line-2);background:var(--glass);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--gold);background:var(--glass-2)}
+@media(max-width:820px){.installs{grid-template-columns:1fr}}
+
+/* steps */
+.steps-wrap{padding:34px clamp(24px,4vw,44px);margin-bottom:46px}
+.steps-wrap h2{font-family:var(--fd);font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:24px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step .n{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--fd);font-weight:700;background:var(--bg-2);border:1px solid var(--line-2);color:var(--gold)}
+.step b{font-family:var(--fd);display:block;margin-bottom:3px}
+.step span{font-size:.86rem;color:var(--ink-dim)}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* perks */
+.perks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:46px}
+.perk{padding:20px 22px;display:flex;gap:13px;align-items:flex-start}
+.perk i{color:var(--v-green);margin-top:4px}
+.perk b{font-family:var(--fd);display:block;margin-bottom:2px}
+.perk span{font-size:.86rem;color:var(--ink-dim)}
+@media(max-width:600px){.perks{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);padding:32px 0;text-align:center;color:var(--ink-dim);
+  font-size:.84rem;margin-top:20px}
+footer a{color:var(--gold-2)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="iris" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#ffe6b0"/><stop offset="34%" stop-color="#ffce7a"/>
+      <stop offset="68%" stop-color="#f0a73c"/><stop offset="100%" stop-color="#8a4d12"/>
+    </radialGradient>
+    <linearGradient id="lid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#161a26"/><stop offset="100%" stop-color="#05070d"/>
+    </linearGradient>
+    <symbol id="tigereye" viewBox="0 0 100 100">
+      <rect width="100" height="100" rx="22" fill="url(#lid)"/>
+      <path d="M24 16 L30 50 L22 84" fill="none" stroke="#e9eef9" stroke-width="3.4" stroke-linecap="round" opacity=".82"/>
+      <path d="M78 18 L72 50 L80 82" fill="none" stroke="#cfd8ea" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+      <path d="M50 30 C68 30 84 44 90 50 C84 56 68 70 50 70 C32 70 16 56 10 50 C16 44 32 30 50 30 Z" fill="#0a0d15" stroke="#e9eef9" stroke-width="2.2"/>
+      <circle cx="50" cy="50" r="18" fill="url(#iris)"/>
+      <ellipse cx="50" cy="50" rx="5.2" ry="16" fill="#0a0700"/>
+      <circle cx="44" cy="43" r="3.4" fill="#fff" opacity=".9"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="bg-fx" aria-hidden="true"><div class="orb a"></div><div class="orb b"></div></div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="../" class="brand" aria-label="TheWhiteTiger home">
+        <svg class="brand-mark" viewBox="0 0 100 100" role="img" aria-label="TheWhiteTiger logo"><use href="#tigereye"/></svg>
+        <span>The<b>White</b><span>Tiger</span></span>
+      </a>
+      <a href="../" class="back"><i class="fa-solid fa-arrow-left"></i> Back to site</a>
+    </nav>
+  </div>
+</header>
+
+<section class="dl-hero">
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 100 100" role="img" aria-label="SherrByte"><use href="#tigereye"/></svg>
+    <span class="eyebrow"><i class="fa-solid fa-mobile-screen"></i> Flagship product · Free to start</span>
+    <h1>Get <span class="grad">SherrByte</span></h1>
+    <p>One verified, hyper-personalised information feed across all 9 VIBGYOR pillars.
+       Install it as an app on any device — no app store required.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="installs">
+    <div class="inst glass">
+      <div class="ic"><i class="fa-brands fa-android"></i></div>
+      <h3>Android</h3>
+      <p>Open SherrByte in Chrome, then tap “Add to Home screen”.</p>
+      <a href="#" class="btn btn-primary" data-app><i class="fa-solid fa-arrow-up-right-from-square"></i> Launch app</a>
+    </div>
+    <div class="inst glass">
+      <div class="ic"><i class="fa-brands fa-apple"></i></div>
+      <h3>iPhone / iPad</h3>
+      <p>Open in Safari, tap Share, then “Add to Home Screen”.</p>
+      <a href="#" class="btn btn-primary" data-app><i class="fa-solid fa-arrow-up-right-from-square"></i> Launch app</a>
+    </div>
+    <div class="inst glass">
+      <div class="ic"><i class="fa-solid fa-desktop"></i></div>
+      <h3>Desktop</h3>
+      <p>In Chrome or Edge, click the install icon in the address bar.</p>
+      <a href="#" class="btn btn-ghost" data-app><i class="fa-solid fa-arrow-up-right-from-square"></i> Open web app</a>
+    </div>
+  </div>
+
+  <div class="steps-wrap glass">
+    <h2>Up and running in <span class="grad">three steps</span></h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><b>Open SherrByte</b><span>Launch the web app on your device — it loads instantly, no download.</span></div></div>
+      <div class="step"><div class="n">2</div><div><b>Install it</b><span>Add to your home screen for a full-screen, native-like app experience.</span></div></div>
+      <div class="step"><div class="n">3</div><div><b>Pick your pillars</b><span>Choose the VIBGYOR topics you care about and your feed personalises itself.</span></div></div>
+    </div>
+  </div>
+
+  <div class="perks">
+    <div class="perk glass"><i class="fa-solid fa-circle-check"></i><div><b>Verified, bias-stripped</b><span>RAG-consensus checks every AI summary against its source.</span></div></div>
+    <div class="perk glass"><i class="fa-solid fa-circle-check"></i><div><b>One feed, nine pillars</b><span>The whole internet's signal, classified and de-duplicated.</span></div></div>
+    <div class="perk glass"><i class="fa-solid fa-circle-check"></i><div><b>Privacy by design</b><span>Your data is never sold to third parties.</span></div></div>
+    <div class="perk glass"><i class="fa-solid fa-circle-check"></i><div><b>Works offline-first</b><span>Installable PWA — fast, light, and always with you.</span></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© <span id="year">2026</span> TheWhiteTiger · SherrByte —
+       questions? <a href="mailto:thewhitetigerdotin@gmail.com">thewhitetigerdotin@gmail.com</a></p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  // App URL not live yet — point the launch buttons back to the site and flag clearly.
+  var APP_URL = ''; // set this to the SherrByte PWA URL when it goes live
+  document.querySelectorAll('[data-app]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      if(!APP_URL){ e.preventDefault();
+        a.innerHTML = '<i class="fa-solid fa-clock"></i> Launching soon';
+        setTimeout(function(){ a.innerHTML = a.dataset._o || a.innerHTML; }, 1800);
+      } else { a.href = APP_URL; }
+    });
+    a.dataset._o = a.innerHTML;
+  });
+</script>
+</body>
+</html>
