@@ -7,7 +7,9 @@
 <meta name="description" content="TheWhiteTiger is an information & data intelligence company. We collect, process, structure, verify and deliver clean, objective, real-time information at scale. Flagship product: SherrByte.">
 <meta name="theme-color" content="#05070d">
 <meta name="author" content="TheWhiteTiger">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2305070d'/%3E%3Cpath d='M50 30C68 30 84 44 90 50 84 56 68 70 50 70 32 70 16 56 10 50 16 44 32 30 50 30Z' fill='%230a0d15' stroke='%23e9eef9' stroke-width='2.4'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%23f0a73c'/%3E%3Cellipse cx='50' cy='50' rx='5' ry='16' fill='%23120a00'/%3E%3C/svg%3E">
+<!-- Browser-tab logo: uses YOUR logo file once added at company/tiger-logo.png -->
+<link rel="icon" type="image/png" href="tiger-logo.png">
+<link rel="apple-touch-icon" href="tiger-logo.png">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -17,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
@@ -63,8 +65,9 @@
   --spring: cubic-bezier(.34,1.56,.64,1);
 
   --f:  "Inter", -apple-system, system-ui, sans-serif;
-  --fd: "Sora", "Space Grotesk", var(--f);
-  --fm: "Space Grotesk", var(--f);
+  --fx: "Bricolage Grotesque", "Sora", var(--f);   /* display headlines */
+  --fd: "Sora", "Space Grotesk", var(--f);          /* sub-headings */
+  --fm: "Space Grotesk", var(--f);                  /* labels / mono */
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -128,7 +131,7 @@ section{position:relative}
 .eyebrow i{color:var(--gold)}
 h1,h2,h3{font-family:var(--fd);font-weight:700;letter-spacing:-.02em;line-height:1.05}
 .sec-head{max-width:760px;margin-bottom:54px}
-.sec-head h2{font-size:clamp(2rem,5vw,3.3rem);margin:18px 0 16px}
+.sec-head h2{font-family:var(--fx);font-size:clamp(2rem,5vw,3.3rem);margin:18px 0 16px;letter-spacing:-.03em}
 .sec-head p{color:var(--ink-soft);font-size:clamp(1rem,2vw,1.16rem)}
 .grad{background:linear-gradient(110deg,var(--gold) 0%,var(--gold-2) 30%,var(--ice) 70%,var(--v-violet) 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
@@ -191,21 +194,21 @@ header.scrolled .nav{background:rgba(8,11,20,.72);border-color:var(--line-2);
 }
 
 /* ════ HERO ════ */
-.hero{min-height:100svh;display:flex;align-items:center;padding:130px 0 70px;overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center;width:100%}
+.hero{min-height:100svh;display:flex;align-items:center;padding:96px 0 40px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:46px;align-items:center;width:100%}
 .hero-copy{max-width:640px}
-.hero h1{font-size:clamp(2.6rem,7vw,5.1rem);margin:24px 0;line-height:.98}
+.hero h1{font-family:var(--fx);font-size:clamp(2.3rem,5vw,4.1rem);margin:16px 0;line-height:.96;letter-spacing:-.03em}
 .hero h1 .line{display:block;overflow:hidden}
 .hero h1 .line span{display:block;transform:translateY(110%);
   animation:riseUp .9s var(--ease) forwards}
 .hero h1 .line:nth-child(2) span{animation-delay:.12s}
 .hero h1 .line:nth-child(3) span{animation-delay:.24s}
 @keyframes riseUp{to{transform:translateY(0)}}
-.hero-sub{font-size:clamp(1.02rem,2vw,1.22rem);color:var(--ink-soft);max-width:540px;margin-bottom:34px;
+.hero-sub{font-size:clamp(.98rem,1.5vw,1.1rem);color:var(--ink-soft);max-width:540px;margin-bottom:24px;
   opacity:0;animation:fadeUp .8s .5s var(--ease) forwards}
 .hero-actions{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .68s var(--ease) forwards}
-.hero-meta{display:flex;gap:28px;margin-top:42px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .85s var(--ease) forwards}
-.hero-meta .m b{font-family:var(--fd);font-size:1.5rem;color:#fff;display:block}
+.hero-meta{display:flex;gap:26px;margin-top:26px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .85s var(--ease) forwards}
+.hero-meta .m b{font-family:var(--fd);font-size:1.35rem;color:#fff;display:block}
 .hero-meta .m span{font-size:.78rem;color:var(--ink-dim);letter-spacing:.04em}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
@@ -457,34 +460,6 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 </head>
 <body>
 
-<!-- ── Inline tiger-eye brand mark (self-contained, no external asset) ── -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <radialGradient id="iris" cx="50%" cy="42%" r="62%">
-      <stop offset="0%" stop-color="#ffe6b0"/>
-      <stop offset="34%" stop-color="#ffce7a"/>
-      <stop offset="68%" stop-color="#f0a73c"/>
-      <stop offset="100%" stop-color="#8a4d12"/>
-    </radialGradient>
-    <linearGradient id="lid" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#161a26"/>
-      <stop offset="100%" stop-color="#05070d"/>
-    </linearGradient>
-    <symbol id="tigereye" viewBox="0 0 100 100">
-      <rect width="100" height="100" rx="22" fill="url(#lid)"/>
-      <!-- claw-mark slashes -->
-      <path d="M24 16 L30 50 L22 84" fill="none" stroke="#e9eef9" stroke-width="3.4" stroke-linecap="round" opacity=".82"/>
-      <path d="M78 18 L72 50 L80 82" fill="none" stroke="#cfd8ea" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-      <!-- almond eye -->
-      <path d="M50 30 C68 30 84 44 90 50 C84 56 68 70 50 70 C32 70 16 56 10 50 C16 44 32 30 50 30 Z" fill="#0a0d15" stroke="#e9eef9" stroke-width="2.2"/>
-      <circle cx="50" cy="50" r="18" fill="url(#iris)"/>
-      <ellipse cx="50" cy="50" rx="5.2" ry="16" fill="#0a0700"/>
-      <circle cx="44" cy="43" r="3.4" fill="#fff" opacity=".9"/>
-      <path d="M50 50 m-17 0 a17 17 0 1 0 34 0" fill="none" stroke="#fff2cf" stroke-width=".8" opacity=".4"/>
-    </symbol>
-  </defs>
-</svg>
-
 <div id="progress"></div>
 <div class="bg-fx" aria-hidden="true">
   <div class="bg-grid"></div>
@@ -498,8 +473,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
   <div class="wrap">
     <nav class="nav">
       <a href="#top" class="brand" aria-label="TheWhiteTiger home">
-        <img class="brand-mark" src="tiger-logo.png" alt="TheWhiteTiger logo"
-             onerror="this.onerror=null;this.outerHTML='&lt;svg class=&quot;brand-mark&quot; viewBox=&quot;0 0 100 100&quot;&gt;&lt;use href=&quot;#tigereye&quot;/&gt;&lt;/svg&gt;'">
+        <img class="brand-mark" src="tiger-logo.png" alt="TheWhiteTiger logo" onerror="this.style.display='none'">
         <span>The<b>White</b><span>Tiger</span></span>
       </a>
       <div class="nav-links" id="navlinks">
@@ -554,9 +528,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
           <div class="eye-ring r2"></div>
           <div class="eye-ring r3"></div>
           <div class="eye-core" id="eyeCore">
-            <!-- Drop a 3D render at company/hero-logo.png to use it here; falls back to the SVG eye. -->
-            <img src="hero-logo.png" alt="The White Tiger — watchful eye of verified truth"
-                 onerror="this.onerror=null;this.outerHTML='&lt;svg viewBox=&quot;0 0 100 100&quot;&gt;&lt;use href=&quot;#tigereye&quot;/&gt;&lt;/svg&gt;'">
+            <!-- Your logo goes here: drop the file at company/hero-logo.png (or company/tiger-logo.png). -->
+            <img src="hero-logo.png" alt="The White Tiger logo" onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
           </div>
           <div class="eye-glowdot"></div>
           <div class="eye-tag t1"><i class="fa-solid fa-bolt"></i>Real-time ingestion</div>
@@ -985,7 +958,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <div class="brand"><img class="brand-mark" src="tiger-logo.png" alt="TheWhiteTiger" onerror="this.onerror=null;this.outerHTML='&lt;svg class=&quot;brand-mark&quot; viewBox=&quot;0 0 100 100&quot;&gt;&lt;use href=&quot;#tigereye&quot;/&gt;&lt;/svg&gt;'"><span>The<b>White</b><span>Tiger</span></span></div>
+        <div class="brand"><img class="brand-mark" src="tiger-logo.png" alt="TheWhiteTiger" onerror="this.style.display='none'"><span>The<b>White</b><span>Tiger</span></span></div>
         <p>An information &amp; data intelligence company. We turn the world's noise into clean, verified, objective truth. Flagship product: SherrByte.</p>
       </div>
       <div class="foot-col">
