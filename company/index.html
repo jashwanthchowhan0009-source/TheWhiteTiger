@@ -19,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
@@ -77,7 +77,7 @@ body{
   background:var(--bg);
   color:var(--ink);
   line-height:1.6;
-  overflow-x:hidden;
+  overflow-x:clip;
   font-feature-settings:"ss01","cv05";
   -webkit-font-smoothing:antialiased;
 }
@@ -483,11 +483,48 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .btn-primary{box-shadow:0 12px 34px rgba(240,167,60,.34),inset 0 1px 0 rgba(255,255,255,.55)}
 .stat:hover,.eyebrow{backface-visibility:hidden}
 
+/* ════ Cinematic scroll hero (museum-style) ════ */
+.cinema{position:relative;height:340vh;background:var(--bg)}
+.cinema-stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.col-lines{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 6vw;pointer-events:none;z-index:1}
+.col-lines span{width:1px;height:100%;
+  background:linear-gradient(180deg,transparent,var(--line) 10%,var(--line) 90%,transparent)}
+.cinema-center{position:absolute;display:grid;place-items:center;z-index:2;will-change:transform}
+.ring{position:absolute;width:min(64vh,560px);aspect-ratio:1/1;border-radius:50%;
+  border:1.4px solid rgba(255,255,255,.78);
+  box-shadow:0 0 90px rgba(255,255,255,.16),inset 0 0 80px rgba(255,255,255,.045);
+  will-change:transform;z-index:1}
+.cinema-logo{position:relative;width:min(50vh,440px);object-fit:contain;z-index:2;will-change:transform;
+  filter:drop-shadow(0 34px 80px rgba(0,0,0,.72)) drop-shadow(0 0 54px rgba(240,167,60,.26))}
+.scene{position:absolute;left:7vw;max-width:min(48vw,580px);z-index:3;opacity:0;
+  will-change:transform,opacity}
+.scene .eyebrow{margin-bottom:24px}
+.serif{font-family:"Playfair Display",Georgia,serif;font-weight:600;line-height:1.02;
+  letter-spacing:-.01em;font-size:clamp(2.5rem,6.2vw,5.2rem);color:var(--ink)}
+.serif em{font-style:italic;color:var(--gold-2)}   /* the single rare amber accent */
+.scene p{margin-top:22px;color:var(--ink-soft);font-size:clamp(1rem,1.5vw,1.16rem);max-width:430px}
+.cinema-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:9px;color:var(--ink-dim);
+  font-family:var(--fm);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;transition:opacity .4s}
+.scroll-hint i{animation:hintBob 1.8s ease-in-out infinite}
+@keyframes hintBob{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(7px);opacity:1}}
+@media(max-width:760px){
+  .scene{left:7vw;right:7vw;max-width:none}
+  .cinema-logo{width:min(40vh,280px)} .ring{width:min(50vh,360px)}
+  .col-lines{padding:0 4vw}
+}
+
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
   .hero h1 .line span{transform:none}
   .eye-wrap,.eye-wrap::after{animation:none!important}
+  /* static cinematic fallback: show first scene only */
+  .cinema{height:100svh}
+  .cinema-stage{position:relative}
+  .scene.s1{opacity:1}
+  .scene.s2,.scene.s3,.scroll-hint{display:none}
 }
 </style>
 </head>
@@ -528,49 +565,36 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 </header>
 
 <!-- ══════════ HERO ══════════ -->
-<section class="hero" id="top">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Information &amp; Data Intelligence · India</span>
-        <h1>
-          <span class="line"><span>The Information</span></span>
-          <span class="line"><span class="grad">Sovereignty</span></span>
-          <span class="line"><span>Engine.</span></span>
-        </h1>
-        <p class="hero-sub">
-          TheWhiteTiger collects, processes, structures, verifies and delivers the world's
-          real-time information — stripping out noise, bias and clickbait to hand every user
-          clean, objective, verifiable truth. Our flagship product, <b style="color:#fff">SherrByte</b>,
-          puts that engine in your pocket.
-        </p>
-        <div class="hero-actions">
-          <a href="/download/" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download SherrByte</a>
-          <a href="#engine" class="btn btn-ghost">Explore the engine <i class="fa-solid fa-arrow-down"></i></a>
-        </div>
-        <div class="hero-meta">
-          <div class="m"><b data-count="24" data-suffix="+">0</b><span>Verified sources</span></div>
-          <div class="m"><b data-count="9">0</b><span>Knowledge pillars</span></div>
-          <div class="m"><b data-count="6">0</b><span>AI pipeline stages</span></div>
-          <div class="m"><b data-count="95" data-suffix="%">0</b><span>Lower compute cost</span></div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="eye-wrap" id="eyeWrap">
-          <div class="eye-ring"></div>
-          <div class="eye-ring r2"></div>
-          <div class="eye-ring r3"></div>
-          <div class="eye-core" id="eyeCore">
-            <!-- Your logo goes here: drop the file at company/hero-logo.png (or company/tiger-logo.png). -->
-            <img src="hero-logo.png" alt="The White Tiger logo" onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
-          </div>
-          <div class="eye-glowdot"></div>
-          <div class="eye-tag t1"><i class="fa-solid fa-bolt"></i>Real-time ingestion</div>
-          <div class="eye-tag t2"><i class="fa-solid fa-check-double"></i>Bias stripped</div>
-          <div class="eye-tag t3"><i class="fa-solid fa-fingerprint"></i>Source-verified</div>
-        </div>
+<section class="cinema" id="top">
+  <div class="cinema-stage" id="cinemaStage">
+    <div class="col-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+    <div class="cinema-center" id="cinemaCenter">
+      <div class="ring" id="ring" aria-hidden="true"></div>
+      <img class="cinema-logo" id="cLogo" src="hero-logo.png" alt="The White Tiger logo"
+           onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
+    </div>
+
+    <div class="scene s1" data-scene>
+      <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Information &amp; Data Intelligence · India</span>
+      <h1 class="serif">The Information<br><em>Sovereignty</em><br>Engine</h1>
+    </div>
+
+    <div class="scene s2" data-scene>
+      <h2 class="serif">Clean. Verified.<br><em>Objective</em> truth.</h2>
+      <p>Real-time information from 24+ verified sources — noise, bias and clickbait stripped, every single minute.</p>
+    </div>
+
+    <div class="scene s3" data-scene>
+      <h2 class="serif">Reclaim your time.<br><em>Own</em> your truth.</h2>
+      <p>SherrByte puts the whole engine in your pocket — one verified, hyper-personalised feed.</p>
+      <div class="cinema-cta">
+        <a href="/download/" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download SherrByte</a>
+        <a href="#engine" class="btn btn-ghost">Explore the engine <i class="fa-solid fa-arrow-down"></i></a>
       </div>
     </div>
+
+    <div class="scroll-hint" id="scrollHint" aria-hidden="true"><span>Scroll</span><i class="fa-solid fa-arrow-down-long"></i></div>
   </div>
 </section>
 
@@ -1116,6 +1140,54 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
       el.addEventListener('mouseleave', function(){ el.style.transform=''; });
     });
   } else { glow.style.display='none'; }
+
+  /* Cinematic scroll-sequence hero */
+  (function(){
+    var cinema = document.querySelector('.cinema'),
+        ring = document.getElementById('ring'),
+        cLogo = document.getElementById('cLogo'),
+        hint = document.getElementById('scrollHint'),
+        scenes = document.querySelectorAll('.scene');
+    if(!cinema){ return; }
+    if(rm){ if(scenes[0]) scenes[0].style.opacity=1; return; }
+
+    function clampv(v,a,b){return v<a?a:v>b?b:v;}
+    function kf(p,pts){
+      if(p<=pts[0][0]) return pts[0][1];
+      for(var i=1;i<pts.length;i++){ if(p<=pts[i][0]){ var a=pts[i-1],b=pts[i],t=(p-a[0])/(b[0]-a[0]); return a[1]+(b[1]-a[1])*t; } }
+      return pts[pts.length-1][1];
+    }
+    function fade(p,a,b,c,d){ if(p<a||p>d) return 0; if(p<b) return (p-a)/(b-a); if(p<c) return 1; return 1-(p-c)/(d-c); }
+
+    var ticking=false;
+    function render(){
+      ticking=false;
+      var f = Math.min(window.innerWidth,1600)/1440;
+      var rect = cinema.getBoundingClientRect();
+      var total = cinema.offsetHeight - window.innerHeight;
+      var p = clampv(-rect.top/Math.max(total,1),0,1);
+
+      var rs = kf(p,[[0,.9],[.5,1.18],[1,1.5]]);
+      var rx = kf(p,[[0,0],[.5,46],[1,-34]])*f;
+      var ry = kf(p,[[0,6],[1,-26]])*f;
+      if(ring) ring.style.transform='translate('+rx.toFixed(1)+'px,'+ry.toFixed(1)+'px) scale('+rs.toFixed(3)+') rotate('+(p*44).toFixed(1)+'deg)';
+
+      var lx = kf(p,[[0,0],[.5,-34],[1,46]])*f;
+      var ly = kf(p,[[0,0],[.5,-12],[1,20]])*f;
+      var ls = kf(p,[[0,1],[1,.84]]);
+      if(cLogo) cLogo.style.transform='translate('+lx.toFixed(1)+'px,'+ly.toFixed(1)+'px) scale('+ls.toFixed(3)+')';
+
+      var o1=fade(p,0,.03,.20,.30), o2=fade(p,.36,.45,.58,.67), o3=fade(p,.72,.81,1.01,1.3);
+      if(scenes[0]){ scenes[0].style.opacity=o1; scenes[0].style.transform='translateY('+((1-o1)*30).toFixed(1)+'px)'; }
+      if(scenes[1]){ scenes[1].style.opacity=o2; scenes[1].style.transform='translateY('+((1-o2)*30).toFixed(1)+'px)'; }
+      if(scenes[2]){ scenes[2].style.opacity=o3; scenes[2].style.transform='translateY('+((1-o3)*30).toFixed(1)+'px)'; }
+      if(hint) hint.style.opacity = p>.04?0:1;
+    }
+    function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(render); } }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', render);
+    render();
+  })();
 
   /* Year */
   document.getElementById('year').textContent = new Date().getFullYear();
