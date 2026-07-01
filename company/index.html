@@ -198,6 +198,7 @@ header.scrolled .nav{background:rgba(8,11,20,.72);border-color:var(--line-2);
   .burger{display:block;z-index:1200}
   .nav-cta .btn-ghost{display:none}
 }
+@media(max-width:560px){ .nav-cta .btn-primary{display:none} }
 
 /* ════ HERO ════ */
 .hero{min-height:100svh;display:flex;align-items:center;padding:96px 0 40px;overflow:hidden}
@@ -501,7 +502,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 
 /* ════ Cinematic scroll hero (museum-style) ════ */
 .cinema{position:relative;height:340vh;background:var(--bg)}
-.cinema-stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center}
+.cinema-stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;
+  background:radial-gradient(116% 86% at 50% 42%,transparent 52%,rgba(0,0,0,.5))}
 .col-lines{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 6vw;pointer-events:none;z-index:1}
 .col-lines span{width:1px;height:100%;
   background:linear-gradient(180deg,transparent,var(--line) 10%,var(--line) 90%,transparent)}
@@ -527,10 +529,25 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
   font-family:var(--fm);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;transition:opacity .4s}
 .scroll-hint i{animation:hintBob 1.8s ease-in-out infinite}
 @keyframes hintBob{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(7px);opacity:1}}
+.scene-dots{position:absolute;left:2.2vw;top:50%;transform:translateY(-50%);z-index:4;
+  display:flex;flex-direction:column;gap:14px}
+.scene-dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2);
+  background:transparent;padding:0;cursor:pointer;transition:.35s var(--ease)}
+.scene-dots button.active{background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 14px rgba(240,167,60,.55);transform:scale(1.3)}
+.scene-dots button:hover{border-color:var(--gold-2)}
+
 @media(max-width:760px){
-  .scene{left:7vw;right:7vw;max-width:none}
-  .cinema-logo{width:min(40vh,280px)} .ring{width:min(50vh,360px)}
+  .cinema-center{align-self:start;margin-top:12vh}
+  .cinema-logo{width:min(40vh,240px)} .ring{width:min(48vh,300px)}
   .col-lines{padding:0 4vw}
+  .scene,.scene.s2{left:0;right:0;padding:0 7vw;max-width:none;text-align:center;top:auto;bottom:12vh}
+  .scene p,.scene.s2 p{margin-left:auto;margin-right:auto}
+  .cinema-cta{justify-content:center}
+  .serif{font-size:clamp(2rem,8.4vw,3.1rem)}
+  .cinema-stage::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,transparent 42%,rgba(10,10,12,.82) 76%)}
+  .scene-dots{left:12px;gap:11px}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -620,6 +637,12 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
         <a href="/download/" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download SherrByte</a>
         <a href="#engine" class="btn btn-ghost">Explore the engine <i class="fa-solid fa-arrow-down"></i></a>
       </div>
+    </div>
+
+    <div class="scene-dots" id="sceneDots">
+      <button type="button" data-goto="0" class="active" aria-label="Scene 1"></button>
+      <button type="button" data-goto="1" aria-label="Scene 2"></button>
+      <button type="button" data-goto="2" aria-label="Scene 3"></button>
     </div>
 
     <div class="scroll-hint" id="scrollHint" aria-hidden="true"><span>Scroll</span><i class="fa-solid fa-arrow-down-long"></i></div>
@@ -1188,6 +1211,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
         ring = document.getElementById('ring'),
         cLogo = document.getElementById('cLogo'),
         hint = document.getElementById('scrollHint'),
+        dots = document.getElementById('sceneDots'),
+        dotBtns = dots ? dots.querySelectorAll('button') : [],
         scenes = document.querySelectorAll('.scene');
     if(!cinema){ return; }
     if(rm){ if(scenes[0]) scenes[0].style.opacity=1; return; }
@@ -1222,15 +1247,26 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
       var ls = kf(p,[[0,1],[1,.86]]);
       if(cLogo) cLogo.style.transform='translate('+lx.toFixed(1)+'px,'+ly.toFixed(1)+'px) scale('+ls.toFixed(3)+')';
 
-      var o1=fade(p,0,.03,.20,.30), o2=fade(p,.36,.45,.58,.67), o3=fade(p,.72,.81,1.01,1.3);
+      var o1=fade(p,-.5,0,.20,.30), o2=fade(p,.36,.45,.58,.67), o3=fade(p,.72,.81,1.01,1.3);
       if(scenes[0]){ scenes[0].style.opacity=o1; scenes[0].style.transform='translateY('+((1-o1)*30).toFixed(1)+'px)'; }
       if(scenes[1]){ scenes[1].style.opacity=o2; scenes[1].style.transform='translateY('+((1-o2)*30).toFixed(1)+'px)'; }
       if(scenes[2]){ scenes[2].style.opacity=o3; scenes[2].style.transform='translateY('+((1-o3)*30).toFixed(1)+'px)'; }
       if(hint) hint.style.opacity = p>.04?0:1;
+
+      var ai = p<.33?0:(p<.66?1:2);
+      for(var di=0;di<dotBtns.length;di++){ dotBtns[di].classList.toggle('active', di===ai); }
     }
     function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(render); } }
     window.addEventListener('scroll', onScroll, {passive:true});
     window.addEventListener('resize', render);
+
+    var fracs=[.10,.50,.88];
+    for(var k=0;k<dotBtns.length;k++){ (function(k){
+      dotBtns[k].addEventListener('click', function(){
+        var total = cinema.offsetHeight - window.innerHeight;
+        window.scrollTo({top: cinema.offsetTop + total*fracs[k], behavior:'smooth'});
+      });
+    })(k); }
     render();
   })();
 
