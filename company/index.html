@@ -30,33 +30,33 @@
 ═══════════════════════════════════════════════════════════════ */
 
 :root{
-  --bg:        #0a0a0c;
-  --bg-2:      #101014;
-  --ink:       #f1f2f5;
-  --ink-soft:  #a6abb4;
-  --ink-dim:   #6a6f79;
-  --line:      rgba(255,255,255,.08);
-  --line-2:    rgba(255,255,255,.15);
+  --bg:        #05070d;
+  --bg-2:      #080b14;
+  --ink:       #eaf0ff;
+  --ink-soft:  #9fb0d0;
+  --ink-dim:   #6b7a99;
+  --line:      rgba(150,180,255,.10);
+  --line-2:    rgba(150,180,255,.18);
 
-  --glass:     rgba(255,255,255,.04);
-  --glass-2:   rgba(255,255,255,.065);
+  --glass:     rgba(255,255,255,.045);
+  --glass-2:   rgba(255,255,255,.07);
   --glass-br:  rgba(255,255,255,.10);
 
-  --gold:      #f0a73c;   /* tiger-eye amber — the ONE accent, used sparingly */
+  --gold:      #f0a73c;   /* tiger eye amber */
   --gold-2:    #ffce7a;
-  --ice:       #dfe4ec;   /* silver/white (was blue) */
-  --ice-2:     #f2f5fa;
+  --ice:       #7fd4ff;
+  --ice-2:     #b9e8ff;
 
-  /* VIBGYOR — muted pastels, used only on the taxonomy pillars */
-  --v-violet:  #a895cf;
-  --v-indigo:  #8f9ccc;
-  --v-blue:    #8fb0d2;
-  --v-cyan:    #8fc6c9;
-  --v-green:   #8fc8a8;
-  --v-yellow:  #cfbd8f;
-  --v-orange:  #d3a87e;
-  --v-red:     #cf9298;
-  --v-slate:   #a3a9b3;
+  /* VIBGYOR knowledge pillars */
+  --v-violet:  #9a6bff;
+  --v-indigo:  #5a6bff;
+  --v-blue:    #3a8dff;
+  --v-cyan:    #22d3ee;
+  --v-green:   #34d399;
+  --v-yellow:  #f5d142;
+  --v-orange:  #ff9e44;
+  --v-red:     #ff5d6c;
+  --v-slate:   #8aa0c2;
 
   --r:    22px;
   --r-sm: 14px;
@@ -90,13 +90,13 @@ section{position:relative}
 /* ── Scroll progress ── */
 #progress{
   position:fixed;top:0;left:0;height:3px;width:0;z-index:2000;
-  background:linear-gradient(90deg,var(--gold),var(--gold-2));
-  box-shadow:0 0 16px rgba(240,167,60,.45);transition:width .12s linear;
+  background:linear-gradient(90deg,var(--gold),var(--ice),var(--v-violet));
+  box-shadow:0 0 16px rgba(240,167,60,.5);transition:width .12s linear;
 }
 
 /* ── Animated cosmic background ── */
 .bg-fx{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
-  radial-gradient(120% 90% at 50% -10%, #17171b 0%, var(--bg) 58%);}
+  radial-gradient(120% 90% at 50% -10%, #0c1124 0%, var(--bg) 55%);}
 .bg-grid{position:absolute;inset:-2px;
   background-image:linear-gradient(var(--line) 1px,transparent 1px),
                    linear-gradient(90deg,var(--line) 1px,transparent 1px);
@@ -105,14 +105,14 @@ section{position:relative}
   -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 80%);
   animation:gridDrift 40s linear infinite;}
 @keyframes gridDrift{to{background-position:64px 64px}}
-.orb{position:absolute;border-radius:50%;filter:blur(96px);opacity:.4;
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;
   animation:float 22s ease-in-out infinite;will-change:transform}
 .orb.a{width:520px;height:520px;left:-120px;top:-80px;
-  background:radial-gradient(circle,rgba(240,167,60,.20),transparent 70%)}
+  background:radial-gradient(circle,rgba(240,167,60,.5),transparent 70%)}
 .orb.b{width:560px;height:560px;right:-160px;top:18%;
-  background:radial-gradient(circle,rgba(190,196,208,.10),transparent 70%);animation-delay:-7s}
+  background:radial-gradient(circle,rgba(90,107,255,.45),transparent 70%);animation-delay:-7s}
 .orb.c{width:600px;height:600px;left:20%;bottom:-10%;
-  background:radial-gradient(circle,rgba(150,156,168,.08),transparent 70%);animation-delay:-13s}
+  background:radial-gradient(circle,rgba(34,211,238,.32),transparent 70%);animation-delay:-13s}
 @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.08)}66%{transform:translate(-30px,40px) scale(.95)}}
 .noise{position:fixed;inset:0;z-index:-1;opacity:.04;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
@@ -133,7 +133,7 @@ h1,h2,h3{font-family:var(--fd);font-weight:700;letter-spacing:-.02em;line-height
 .sec-head{max-width:760px;margin-bottom:54px}
 .sec-head h2{font-family:var(--fx);font-size:clamp(2rem,5vw,3.3rem);margin:18px 0 16px;letter-spacing:-.03em}
 .sec-head p{color:var(--ink-soft);font-size:clamp(1rem,2vw,1.16rem)}
-.grad{background:linear-gradient(110deg,#ffffff 0%,#e7eaf0 42%,#9aa0ab 100%);
+.grad{background:linear-gradient(110deg,var(--gold) 0%,var(--gold-2) 30%,var(--ice) 70%,var(--v-violet) 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 /* the single rare amber moment — opt-in via .grad-amber */
 .grad-amber{background:linear-gradient(110deg,var(--gold-2),var(--gold));
@@ -265,7 +265,7 @@ header.scrolled .nav{background:rgba(8,11,20,.72);border-color:var(--line-2);
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .stat{padding:30px 24px;text-align:center}
 .stat .num{font-family:var(--fd);font-size:clamp(2.1rem,4.6vw,3.1rem);font-weight:800;
-  line-height:1;background:linear-gradient(160deg,#fff,#aab0bb);
+  line-height:1;background:linear-gradient(160deg,#fff,var(--gold-2));
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .stat .lbl{margin-top:12px;color:var(--ink-soft);font-size:.92rem}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
@@ -400,7 +400,7 @@ header.scrolled .nav{background:rgba(8,11,20,.72);border-color:var(--line-2);
 .fund{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .fund .f{padding:26px 22px;text-align:center}
 .fund .f .v{font-family:var(--fd);font-size:1.9rem;font-weight:800;
-  background:linear-gradient(160deg,#fff,#aab0bb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(160deg,#fff,var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .fund .f .l{font-size:.84rem;color:var(--ink-soft);margin-top:8px}
 @media(max-width:820px){.biz{grid-template-columns:1fr}.fund{grid-template-columns:1fr}}
 
