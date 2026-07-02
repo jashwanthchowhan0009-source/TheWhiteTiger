@@ -485,19 +485,22 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .stat:hover,.eyebrow{backface-visibility:hidden}
 
 /* ════ Intro loader ════ */
-.intro{position:fixed;inset:0;z-index:5000;display:grid;place-items:center;background:var(--bg);
-  transition:opacity .7s var(--ease),visibility .7s}
+.intro{position:fixed;inset:0;z-index:5000;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(circle at 50% 44%, #16110a 0%, var(--bg) 62%);
+  transition:opacity .8s var(--ease),visibility .8s}
 .intro.done{opacity:0;visibility:hidden}
-.intro-inner{display:grid;place-items:center;gap:20px;position:relative}
-.intro-ring{position:absolute;top:-16px;width:114px;height:114px;border-radius:50%;
-  border:1.5px solid rgba(255,255,255,.18);border-top-color:var(--gold);
-  animation:introSpin 1s linear infinite}
-@keyframes introSpin{to{transform:rotate(360deg)}}
-.intro-logo{width:74px;height:74px;object-fit:contain;
-  filter:drop-shadow(0 0 26px rgba(240,167,60,.4));animation:introPop .8s var(--spring) both}
-@keyframes introPop{0%{opacity:0;transform:scale(.55)}100%{opacity:1;transform:scale(1)}}
-.intro-word{font-family:var(--fd);font-weight:700;font-size:1.15rem;letter-spacing:.01em;
-  opacity:0;animation:fadeUp .6s .4s var(--ease) forwards}
+.intro-inner{display:grid;place-items:center;gap:22px}
+.intro-logo{width:170px;height:170px;object-fit:contain;transform-origin:50% 44%;
+  filter:drop-shadow(0 0 30px rgba(240,167,60,.42));
+  animation:tigerReveal 2.6s cubic-bezier(.22,1,.36,1) both}
+@keyframes tigerReveal{
+  0%{transform:scale(3.9);opacity:0;filter:blur(7px) drop-shadow(0 0 48px rgba(240,167,60,.6))}
+  16%{opacity:1}
+  70%{transform:scale(1.1);filter:blur(0) drop-shadow(0 0 30px rgba(240,167,60,.48))}
+  100%{transform:scale(1);filter:blur(0) drop-shadow(0 0 24px rgba(240,167,60,.4))}
+}
+.intro-word{font-family:var(--fd);font-weight:700;font-size:1.2rem;letter-spacing:.02em;
+  opacity:0;animation:fadeUp .7s 1.75s var(--ease) both}
 .intro-word b{color:#fff}.intro-word span{color:var(--gold)}
 
 /* ════ Cinematic scroll hero (museum-style) ════ */
@@ -582,8 +585,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 <!-- Cinematic intro loader -->
 <div id="intro" class="intro">
   <div class="intro-inner">
-    <span class="intro-ring"></span>
-    <img class="intro-logo" src="tiger-logo.png" alt="" onerror="this.style.display='none'">
+    <img class="intro-logo" src="hero-logo.png" alt=""
+         onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
     <span class="intro-word">The<b>White</b><span>Tiger</span></span>
   </div>
 </div>
@@ -1137,8 +1140,8 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
     else {
       document.documentElement.style.overflow='hidden';
       var closeIntro = function(){ if(!intro.classList.contains('done')){ intro.classList.add('done'); document.documentElement.style.overflow=''; } };
-      window.addEventListener('load', function(){ setTimeout(closeIntro, 1500); });
-      setTimeout(closeIntro, 2600); /* safety fallback */
+      window.addEventListener('load', function(){ setTimeout(closeIntro, 2900); });
+      setTimeout(closeIntro, 3900); /* safety fallback */
     }
   }
 
