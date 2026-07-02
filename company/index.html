@@ -508,19 +508,25 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .col-lines span{width:1px;height:100%;
   background:linear-gradient(180deg,transparent,var(--line) 10%,var(--line) 90%,transparent)}
 .cinema-center{position:absolute;display:grid;place-items:center;z-index:2;will-change:transform}
-.ring{position:absolute;width:min(64vh,560px);aspect-ratio:1/1;border-radius:50%;
+.ring{position:absolute;width:min(46vh,400px);aspect-ratio:1/1;border-radius:50%;
   border:1.4px solid rgba(255,255,255,.78);
   box-shadow:0 0 90px rgba(255,255,255,.16),inset 0 0 80px rgba(255,255,255,.045);
   will-change:transform;z-index:1}
-.cinema-logo{position:relative;width:min(50vh,440px);object-fit:contain;z-index:2;will-change:transform;
-  filter:drop-shadow(0 34px 80px rgba(0,0,0,.72)) drop-shadow(0 0 54px rgba(240,167,60,.26))}
+.logo3d{position:relative;z-index:2;will-change:transform;transform-style:preserve-3d}
+.cinema-logo{display:block;width:min(36vh,320px);object-fit:contain;will-change:transform;
+  filter:drop-shadow(0 30px 70px rgba(0,0,0,.72)) drop-shadow(0 0 48px rgba(240,167,60,.26));
+  animation:logoSway 7s ease-in-out infinite}
+@keyframes logoSway{
+  0%,100%{transform:perspective(1100px) rotateY(-15deg) rotateX(5deg) translateY(0)}
+  50%{transform:perspective(1100px) rotateY(15deg) rotateX(-4deg) translateY(-12px)}
+}
 .scene{position:absolute;left:7vw;max-width:min(48vw,580px);z-index:3;opacity:0;
   will-change:transform,opacity}
 .scene.s2{left:auto;right:7vw;text-align:right}
 .scene.s2 p{margin-left:auto}
 .scene .eyebrow{margin-bottom:24px}
-.serif{font-family:"Playfair Display",Georgia,serif;font-weight:600;line-height:1.02;
-  letter-spacing:-.01em;font-size:clamp(2.5rem,6.2vw,5.2rem);color:var(--ink)}
+.serif{font-family:"Playfair Display",Georgia,serif;font-weight:600;line-height:1.03;
+  letter-spacing:-.01em;font-size:clamp(1.9rem,4.2vw,3.6rem);color:var(--ink)}
 .serif em{font-style:italic;color:var(--gold-2)}   /* the single rare amber accent */
 .scene p{margin-top:22px;color:var(--ink-soft);font-size:clamp(1rem,1.5vw,1.16rem);max-width:430px}
 .cinema-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
@@ -616,8 +622,10 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 
     <div class="cinema-center" id="cinemaCenter">
       <div class="ring" id="ring" aria-hidden="true"></div>
-      <img class="cinema-logo" id="cLogo" src="hero-logo.png" alt="The White Tiger logo"
-           onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
+      <div class="logo3d" id="cLogoWrap">
+        <img class="cinema-logo" id="cLogo" src="hero-logo.png" alt="The White Tiger logo"
+             onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
+      </div>
     </div>
 
     <div class="scene s1" data-scene>
@@ -1209,7 +1217,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
     var cinema = document.querySelector('.cinema'),
         center = document.getElementById('cinemaCenter'),
         ring = document.getElementById('ring'),
-        cLogo = document.getElementById('cLogo'),
+        cLogo = document.getElementById('cLogoWrap'),
         hint = document.getElementById('scrollHint'),
         dots = document.getElementById('sceneDots'),
         dotBtns = dots ? dots.querySelectorAll('button') : [],
@@ -1237,7 +1245,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
       var cx = kf(p,[[0,120],[.26,150],[.5,-140],[.72,-150],[1,20]])*f;
       if(center) center.style.transform='translateX('+cx.toFixed(1)+'px)';
 
-      var rs = kf(p,[[0,.9],[.5,1.16],[1,1.5]]);
+      var rs = kf(p,[[0,.85],[.5,1.05],[1,1.22]]);
       var rx = kf(p,[[0,0],[1,14]])*f;
       var ry = kf(p,[[0,6],[1,-22]])*f;
       if(ring) ring.style.transform='translate('+rx.toFixed(1)+'px,'+ry.toFixed(1)+'px) scale('+rs.toFixed(3)+') rotate('+(p*44).toFixed(1)+'deg)';
