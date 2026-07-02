@@ -504,6 +504,13 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .cinema{position:relative;height:340vh;background:var(--bg)}
 .cinema-stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;
   background:radial-gradient(116% 86% at 50% 42%,transparent 52%,rgba(0,0,0,.5))}
+/* optional pre-rendered video layer (shows only when the asset loads) */
+.cinema-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+  opacity:0;transition:opacity .9s var(--ease);pointer-events:none}
+.cinema-stage.has-video .cinema-video{opacity:1}
+.cinema-stage.has-video .cinema-center{opacity:0}       /* the video becomes the visual */
+.cinema-stage.has-video::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,7,13,.45),rgba(5,7,13,.12) 45%,rgba(5,7,13,.74))}
 .col-lines{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 6vw;pointer-events:none;z-index:1}
 .col-lines span{width:1px;height:100%;
   background:linear-gradient(180deg,transparent,var(--line) 10%,var(--line) 90%,transparent)}
@@ -618,6 +625,11 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 <!-- ══════════ HERO ══════════ -->
 <section class="cinema" id="top">
   <div class="cinema-stage" id="cinemaStage">
+    <!-- Drop a white-tiger reveal clip at company/assets/tiger-reveal.webm (+ .mp4) and it plays here automatically; otherwise the animated fallback below shows. -->
+    <video class="cinema-video" id="cinemaVideo" muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="assets/tiger-reveal.webm" type="video/webm">
+      <source src="assets/tiger-reveal.mp4" type="video/mp4">
+    </video>
     <div class="col-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="cinema-center" id="cinemaCenter">
@@ -1215,6 +1227,18 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
       el.addEventListener('mouseleave', function(){ el.style.transform=''; });
     });
   } else { glow.style.display='none'; }
+
+  /* Optional pre-rendered video hero (enables only if the asset loads) */
+  (function(){
+    var stage = document.getElementById('cinemaStage'), video = document.getElementById('cinemaVideo');
+    if(!stage || !video) return;
+    if(rm){ if(video.parentNode) video.parentNode.removeChild(video); return; }
+    var enable = function(){ stage.classList.add('has-video'); var pr=video.play(); if(pr&&pr.catch) pr.catch(function(){}); };
+    var disable = function(){ if(video.parentNode) video.parentNode.removeChild(video); };
+    video.addEventListener('canplay', enable);
+    video.addEventListener('error', disable, true);
+    setTimeout(function(){ if(!stage.classList.contains('has-video')) disable(); }, 4500);
+  })();
 
   /* Cinematic scroll-sequence hero */
   (function(){
