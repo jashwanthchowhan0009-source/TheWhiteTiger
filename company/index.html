@@ -508,18 +508,18 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 .col-lines span{width:1px;height:100%;
   background:linear-gradient(180deg,transparent,var(--line) 10%,var(--line) 90%,transparent)}
 .cinema-center{position:absolute;display:grid;place-items:center;z-index:2;will-change:transform}
-.ring{position:absolute;width:min(46vh,400px);aspect-ratio:1/1;border-radius:50%;
+.ring{position:absolute;width:min(34vh,300px);aspect-ratio:1/1;border-radius:50%;
   border:1.4px solid rgba(255,255,255,.78);
   box-shadow:0 0 90px rgba(255,255,255,.16),inset 0 0 80px rgba(255,255,255,.045);
   will-change:transform;z-index:1}
-.logo3d{position:relative;z-index:2;will-change:transform;transform-style:preserve-3d}
-.cinema-logo{display:block;width:min(36vh,320px);object-fit:contain;will-change:transform;
-  filter:drop-shadow(0 30px 70px rgba(0,0,0,.72)) drop-shadow(0 0 48px rgba(240,167,60,.26));
-  animation:logoSway 7s ease-in-out infinite}
-@keyframes logoSway{
-  0%,100%{transform:perspective(1100px) rotateY(-15deg) rotateX(5deg) translateY(0)}
-  50%{transform:perspective(1100px) rotateY(15deg) rotateX(-4deg) translateY(-12px)}
-}
+.logo3d{position:relative;z-index:2;will-change:transform;perspective:1200px}
+.logo-spin{position:relative;display:grid;place-items:center;width:min(27vh,235px);aspect-ratio:1/1;
+  transform-style:preserve-3d;animation:spin3d 18s linear infinite}
+.cinema-logo{grid-area:1/1;width:100%;height:100%;object-fit:contain;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  filter:drop-shadow(0 24px 60px rgba(0,0,0,.7)) drop-shadow(0 0 42px rgba(240,167,60,.28))}
+.cinema-logo.back{transform:rotateY(180deg) scaleX(-1)}
+@keyframes spin3d{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
 .scene{position:absolute;left:7vw;max-width:min(48vw,580px);z-index:3;opacity:0;
   will-change:transform,opacity}
 .scene.s2{left:auto;right:7vw;text-align:right}
@@ -545,7 +545,7 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
 
 @media(max-width:760px){
   .cinema-center{align-self:start;margin-top:12vh}
-  .cinema-logo{width:min(40vh,240px)} .ring{width:min(48vh,300px)}
+  .logo-spin{width:min(38vh,200px)} .ring{width:min(44vh,250px)}
   .col-lines{padding:0 4vw}
   .scene,.scene.s2{left:0;right:0;padding:0 7vw;max-width:none;text-align:center;top:auto;bottom:12vh}
   .scene p,.scene.s2 p{margin-left:auto;margin-right:auto}
@@ -623,27 +623,31 @@ footer{border-top:1px solid var(--line);padding:64px 0 36px;margin-top:40px}
     <div class="cinema-center" id="cinemaCenter">
       <div class="ring" id="ring" aria-hidden="true"></div>
       <div class="logo3d" id="cLogoWrap">
-        <img class="cinema-logo" id="cLogo" src="hero-logo.png" alt="The White Tiger logo"
-             onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
+        <div class="logo-spin">
+          <img class="cinema-logo" id="cLogo" src="hero-logo.png" alt="The White Tiger logo"
+               onerror="this.onerror=null;this.src='tiger-logo.png';this.onerror=function(){this.style.display='none'}">
+          <img class="cinema-logo back" src="hero-logo.png" alt="" aria-hidden="true"
+               onerror="this.style.display='none'">
+        </div>
       </div>
     </div>
 
     <div class="scene s1" data-scene>
-      <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Information &amp; Data Intelligence · India</span>
-      <h1 class="serif">The Information<br><em>Sovereignty</em><br>Engine</h1>
+      <span class="eyebrow"><i class="fa-solid fa-mobile-screen"></i> SherrByte · your personal information OS</span>
+      <h1 class="serif">The informed<br>are <em>ungovernable</em>.</h1>
     </div>
 
     <div class="scene s2" data-scene>
-      <h2 class="serif">Clean. Verified.<br><em>Objective</em> truth.</h2>
-      <p>Real-time information from 24+ verified sources — noise, bias and clickbait stripped, every single minute.</p>
+      <h2 class="serif">Ask in plain language.<br>Get <em>sourced</em> intelligence.</h2>
+      <p>No noise, no AI slop — every answer is consensus-checked and every claim links straight back to its source.</p>
     </div>
 
     <div class="scene s3" data-scene>
-      <h2 class="serif">Reclaim your time.<br><em>Own</em> your truth.</h2>
-      <p>SherrByte puts the whole engine in your pocket — one verified, hyper-personalised feed.</p>
+      <h2 class="serif">Your feed. Your data.<br>Your <em>call</em>.</h2>
+      <p>Personalised news, searchable history and a personal data layer you can see, export or delete — anytime.</p>
       <div class="cinema-cta">
-        <a href="/download/" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download SherrByte</a>
-        <a href="#engine" class="btn btn-ghost">Explore the engine <i class="fa-solid fa-arrow-down"></i></a>
+        <a href="/download/" class="btn btn-primary"><i class="fa-solid fa-download"></i> Get SherrByte</a>
+        <a href="#engine" class="btn btn-ghost">See how it works <i class="fa-solid fa-arrow-down"></i></a>
       </div>
     </div>
 
