@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The White Tiger — Exhibition</title>
+<meta name="description" content="An interactive 3D exhibition of The White Tiger — a museum-style, scroll-driven 360° showcase.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="../favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind (utility classes) + GSAP, as requested -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{ --gold:#f0a73c; --gold-2:#ffce7a; --ink:#f3f4f7; --dim:#8b8f98; --line:rgba(255,255,255,.06); }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:auto}
+  body{background:#000;color:var(--ink);font-family:"Inter",system-ui,sans-serif;overflow-x:hidden}
+  ::selection{background:rgba(240,167,60,.32);color:#fff}
+  a{color:inherit;text-decoration:none}
+  .serif{font-family:"Playfair Display",Georgia,serif}
+  .serif-2{font-family:"Cormorant Garamond",Georgia,serif}
+  .mono{font-family:"Space Grotesk",sans-serif;letter-spacing:.16em;text-transform:uppercase}
+
+  /* Fixed WebGL stage behind everything */
+  #stage{position:fixed;inset:0;z-index:0}
+  #stage canvas{display:block}
+
+  /* vertical column grid lines */
+  .cols{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;justify-content:space-between;padding:0 6vw}
+  .cols span{width:1px;height:100%;background:linear-gradient(180deg,transparent,var(--line) 12%,var(--line) 88%,transparent)}
+
+  /* vignette */
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.7))}
+
+  /* nav */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+    padding:22px 6vw;font-size:.86rem}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Space Grotesk",sans-serif;font-weight:600;letter-spacing:.02em}
+  .brand img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(240,167,60,.5))}
+  .brand b{color:#fff}.brand i{color:var(--gold);font-style:normal}
+  .nav .links{display:flex;gap:26px;color:var(--dim)}
+  .nav .links a:hover{color:#fff}
+  .back{color:var(--dim);display:inline-flex;gap:8px;align-items:center}
+  .back:hover{color:var(--gold-2)}
+  @media(max-width:720px){ .nav .links{display:none} }
+
+  /* scroll panels */
+  #scroll{position:relative;z-index:10}
+  .panel{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:0 6vw;position:relative}
+  .panel.right{align-items:flex-end;text-align:right}
+  .panel .inner{max-width:min(52vw,620px)}
+  .panel.right .inner{align-items:flex-end}
+  @media(max-width:720px){ .panel .inner{max-width:none} .panel.right{text-align:left;align-items:flex-start} }
+
+  .eyebrow{display:inline-block;font-family:"Space Grotesk",sans-serif;font-size:.72rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--gold-2);margin-bottom:20px}
+  .h-hero{font-size:clamp(3rem,9vw,7rem);line-height:.98;font-weight:700;letter-spacing:-.02em}
+  .h-hero em{font-style:italic;color:var(--gold-2)}
+  .h-sec{font-size:clamp(2rem,5.4vw,3.8rem);line-height:1.05;font-weight:600}
+  .lede{margin-top:22px;color:#c4c8d0;font-size:clamp(1rem,1.5vw,1.16rem);max-width:440px;line-height:1.7}
+  .panel.right .lede{margin-left:auto}
+  .spec{display:flex;gap:40px;margin-top:34px;flex-wrap:wrap}
+  .panel.right .spec{justify-content:flex-end}
+  .spec .s b{font-family:"Playfair Display",serif;font-size:2.1rem;display:block;line-height:1}
+  .spec .s span{font-size:.76rem;color:var(--dim);letter-spacing:.06em}
+
+  /* loader + note */
+  #loader{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#000;transition:opacity .8s,visibility .8s}
+  #loader.done{opacity:0;visibility:hidden}
+  #loader .ring{width:74px;height:74px;border-radius:50%;border:1.5px solid rgba(255,255,255,.16);
+    border-top-color:var(--gold);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #note{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;color:var(--dim);
+    font-size:.74rem;letter-spacing:.04em;text-align:center;max-width:90vw;display:none}
+  #note code{color:var(--gold-2)}
+
+  .scroll-cue{position:fixed;bottom:24px;left:6vw;z-index:20;color:var(--dim);font-family:"Space Grotesk",sans-serif;
+    font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .scroll-cue .bar{width:34px;height:1px;background:var(--dim);position:relative;overflow:hidden}
+  .scroll-cue .bar::after{content:"";position:absolute;inset:0;background:var(--gold);transform:translateX(-100%);
+    animation:cue 2s ease-in-out infinite}
+  @keyframes cue{50%{transform:translateX(0)}100%{transform:translateX(100%)}}
+</style>
+</head>
+<body>
+
+<!-- WebGL exhibition stage -->
+<div id="stage" aria-hidden="true"></div>
+<div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div id="loader"><div class="ring"></div></div>
+
+<!-- Nav -->
+<header class="nav">
+  <a href="../" class="brand" aria-label="TheWhiteTiger home">
+    <img src="../tiger-logo.png" alt="" onerror="this.style.display='none'">
+    <span>The<b>White</b><i>Tiger</i></span>
+  </a>
+  <nav class="links">
+    <a href="../#engine">The Engine</a>
+    <a href="../#vibgyor">VIBGYOR</a>
+    <a href="../#team">Team</a>
+  </nav>
+  <a href="../" class="back">← Back to site</a>
+</header>
+
+<!-- Scroll-driven editorial panels -->
+<main id="scroll">
+  <section class="panel" data-panel>
+    <div class="inner">
+      <span class="eyebrow">The Exhibition · 360° Showcase</span>
+      <h1 class="h-hero serif">The White<br><em>Tiger</em></h1>
+      <p class="lede">A living emblem of clarity and power. Scroll to circle the exhibit — the tiger turns to meet you.</p>
+    </div>
+  </section>
+
+  <section class="panel right" data-panel>
+    <div class="inner">
+      <span class="eyebrow">The Profile</span>
+      <h2 class="h-sec serif">Watchful. Precise.<br>Unbiased by nature.</h2>
+      <p class="lede">Every angle reveals the same intent — signal over noise, truth over spectacle. The engine that never blinks.</p>
+      <div class="spec">
+        <div class="s"><b>24+</b><span>Verified sources</span></div>
+        <div class="s"><b>9</b><span>VIBGYOR pillars</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" data-panel>
+    <div class="inner">
+      <span class="eyebrow">The Reveal</span>
+      <h2 class="h-sec serif">The informed are<br><em style="font-style:italic;color:var(--gold-2)">ungovernable</em>.</h2>
+      <p class="lede">Clean, verified, objective intelligence — delivered to your pocket by SherrByte.</p>
+      <div class="spec">
+        <a href="../download/" class="s" style="text-decoration:none">
+          <b class="serif" style="font-size:1.3rem;color:var(--gold-2)">Get SherrByte →</b>
+          <span>Your personal information OS</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="note">Showing a placeholder exhibit. Drop a model at <code>company/assets/white_tiger.glb</code> for the full 3D tiger.</div>
+<div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll to rotate</div>
+
+<!-- CDN-independent safety: always reveal the page even if WebGL/CDN fails to load -->
+<script>
+  setTimeout(function(){ var l=document.getElementById('loader'); if(l) l.classList.add('done'); }, 5000);
+</script>
+
+<!-- Three.js via ES modules -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const { gsap, ScrollTrigger } = window;
+gsap.registerPlugin(ScrollTrigger);
+
+const stage = document.getElementById('stage');
+const loader = document.getElementById('loader');
+const note = document.getElementById('note');
+
+/* ── Renderer ── */
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.appendChild(renderer.domElement);
+
+/* ── Scene & camera ── */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0, 0.25, 6);
+camera.lookAt(0, 0, 0);
+
+/* Image-based lighting for realistic fur/PBR */
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+/* ── Cinematic studio lighting ── */
+const keyLight = new THREE.DirectionalLight(0xffffff, 3.4);   // bright key on the fur
+keyLight.position.set(4.5, 6, 6);
+const rimLight = new THREE.DirectionalLight(0xa9c9ff, 2.6);   // cool blue/white rim from behind
+rimLight.position.set(-5, 3.5, -6);
+const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.55);
+const amberGlow = new THREE.PointLight(0xf0a73c, 6, 12);      // warm accent = the tiger-eye amber
+amberGlow.position.set(0, 0.2, 2.4);
+scene.add(keyLight, rimLight, fill, amberGlow);
+
+/* ── Glowing neon halo ring (bloomed) ── */
+const ring = new THREE.Mesh(
+  new THREE.TorusGeometry(1.75, 0.018, 32, 220),
+  new THREE.MeshBasicMaterial({ color:0xffffff })
+);
+ring.position.z = -0.7;
+scene.add(ring);
+
+/* ── Post-processing: Unreal Bloom for the halo glow ── */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.85,  // strength
+  0.55,  // radius
+  0.82   // threshold
+);
+composer.addPass(bloom);
+
+/* ── The exhibit model group (rotated by scroll) ── */
+const model = new THREE.Group();
+scene.add(model);
+
+function frameObject(obj, targetSize){
+  const box = new THREE.Box3().setFromObject(obj);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  obj.position.sub(center);
+  const s = targetSize / Math.max(size.x, size.y, size.z);
+  obj.scale.setScalar(s);
+}
+
+function finishLoad(){ loader.classList.add('done'); }
+
+/* Try the real 3D model; fall back to a textured plane exhibit */
+const gltfLoader = new GLTFLoader();
+gltfLoader.load(
+  '../assets/white_tiger.glb',
+  (gltf) => { const m = gltf.scene; frameObject(m, 3.0); model.add(m); finishLoad(); },
+  undefined,
+  () => { buildFallbackExhibit(); }
+);
+
+function buildFallbackExhibit(){
+  const tex = new THREE.TextureLoader().load('../tiger-logo.png', finishLoad, undefined, finishLoad);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.5, 2.5),
+    new THREE.MeshBasicMaterial({ map:tex, transparent:true, side:THREE.DoubleSide })
+  );
+  model.add(plane);
+  if(note) note.style.display = 'block';
+}
+
+/* Safety: never leave the loader stuck */
+setTimeout(finishLoad, 6000);
+
+/* ── Render loop ── */
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  ring.rotation.z = t * 0.15;                 // slow halo drift
+  model.position.y = Math.sin(t * 0.8) * 0.05; // gentle float
+  composer.render();
+}
+animate();
+
+/* ── Resize ── */
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ── GSAP ScrollTrigger: bind Y-rotation to the scrollbar (360° exhibition) ── */
+gsap.to(model.rotation, {
+  y: Math.PI * 2,
+  ease: 'none',
+  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
+});
+
+/* Camera dollies slightly closer + the halo grows toward the reveal */
+gsap.to(camera.position, {
+  z: 4.4, y: 0.05, ease: 'none',
+  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1,
+    onUpdate: () => camera.lookAt(0, 0, 0) }
+});
+gsap.to(ring.scale, {
+  x: 1.25, y: 1.25, z: 1.25, ease: 'none',
+  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
+});
+
+/* ── Editorial text: fade/slide in and out, synced to scroll ── */
+gsap.utils.toArray('[data-panel]').forEach((panel) => {
+  const inner = panel.querySelector('.inner');
+  gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
+    autoAlpha:1, y:0, ease:'power2.out',
+    scrollTrigger:{ trigger:panel, start:'top 80%', end:'top 42%', scrub:true }
+  });
+  gsap.to(inner, {
+    autoAlpha:0, y:-34, ease:'power2.in',
+    scrollTrigger:{ trigger:panel, start:'bottom 62%', end:'bottom 22%', scrub:true }
+  });
+});
+</script>
+</body>
+</html>
