@@ -189,7 +189,7 @@ const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPref
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.85;
+renderer.toneMappingExposure = 0.95;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.appendChild(renderer.domElement);
 
@@ -204,21 +204,21 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 /* ── Cinematic studio lighting ── */
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.55);  // key on the fur
+const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);   // key on the stone
 keyLight.position.set(4.5, 6, 6);
-const rimLight = new THREE.DirectionalLight(0xa9c9ff, 1.25);  // cool blue/white rim from behind
+const rimLight = new THREE.DirectionalLight(0xa9c9ff, 1.8);   // cool blue/white rim from behind
 rimLight.position.set(-5, 3.5, -6);
-const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.45);
-const amberGlow = new THREE.PointLight(0xf0a73c, 1.8, 12);    // warm accent = the tiger-eye amber
+const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.5);
+const amberGlow = new THREE.PointLight(0xf0a73c, 1.6, 12);    // warm accent = the tiger-eye amber
 amberGlow.position.set(0, 0.2, 2.4);
 scene.add(keyLight, rimLight, fill, amberGlow);
 
 /* ── Glowing neon halo ring (bloomed) ── */
 const ring = new THREE.Mesh(
-  new THREE.TorusGeometry(1.75, 0.018, 32, 220),
+  new THREE.TorusGeometry(0.9, 0.014, 32, 160),
   new THREE.MeshBasicMaterial({ color:0xffffff })
 );
-ring.position.z = -0.7;
+ring.position.set(0, 0.75, -0.9);   // small halo, up & behind the tiger
 scene.add(ring);
 
 /* ── Post-processing: Unreal Bloom for the halo glow ── */
@@ -226,9 +226,9 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
-  0.5,   // strength
+  0.6,   // strength
   0.5,   // radius
-  0.96   // threshold — only the near-white halo ring blooms, not the lit tiger
+  0.9    // threshold — only the near-white halo ring blooms, not the stone tiger
 );
 composer.addPass(bloom);
 
@@ -324,13 +324,24 @@ const draco = new DRACOLoader();
 draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/libs/draco/');
 gltfLoader.setDRACOLoader(draco);
 
-function addGltf(gltf, whiten){
+// Turn any model into a WHITE STONE statue with dark scales: desaturate the
+// texture, boost contrast, and remap dark→scales / light→pale stone.
+function stonify(mat){
+  if(!mat) return;
+  mat.roughness = 0.9; mat.metalness = 0.0; if(mat.color) mat.color.set(0xffffff);
+  mat.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
+      '#include <map_fragment>\n' +
+      'float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));\n' +
+      '_l = pow(clamp(_l,0.0,1.0), 1.35);\n' +
+      'diffuseColor.rgb = mix(vec3(0.05,0.05,0.06), vec3(0.82,0.83,0.86), _l);');
+  };
+  mat.needsUpdate = true;
+}
+
+function addGltf(gltf){
   const m = gltf.scene;
-  if(whiten){
-    m.traverse((o) => { if(o.isMesh){
-      o.material = new THREE.MeshStandardMaterial({ color:0xEDEFF3, roughness:0.5, metalness:0.08 });
-    }});
-  }
+  m.traverse((o) => { if(o.isMesh) stonify(o.material); });
   frameObject(m, 3.2);
   model.add(m);
   if(gltf.animations && gltf.animations.length){       // play idle animation if rigged
@@ -342,7 +353,7 @@ function addGltf(gltf, whiten){
 
 gltfLoader.load(
   '../assets/white_tiger.glb',
-  (g) => addGltf(g, false),               // your real 3D tiger, when present
+  (g) => addGltf(g),                      // your real 3D tiger (rendered as white stone)
   undefined,
   () => buildFallbackExhibit()            // otherwise: the tiger-eye logo, spinning in the ring
 );
