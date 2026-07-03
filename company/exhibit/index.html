@@ -188,7 +188,7 @@ const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPref
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
+renderer.toneMappingExposure = 0.85;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.appendChild(renderer.domElement);
 
@@ -203,12 +203,12 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 /* ── Cinematic studio lighting ── */
-const keyLight = new THREE.DirectionalLight(0xffffff, 3.4);   // bright key on the fur
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.55);  // key on the fur
 keyLight.position.set(4.5, 6, 6);
-const rimLight = new THREE.DirectionalLight(0xa9c9ff, 2.6);   // cool blue/white rim from behind
+const rimLight = new THREE.DirectionalLight(0xa9c9ff, 1.25);  // cool blue/white rim from behind
 rimLight.position.set(-5, 3.5, -6);
-const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.55);
-const amberGlow = new THREE.PointLight(0xf0a73c, 6, 12);      // warm accent = the tiger-eye amber
+const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.45);
+const amberGlow = new THREE.PointLight(0xf0a73c, 1.8, 12);    // warm accent = the tiger-eye amber
 amberGlow.position.set(0, 0.2, 2.4);
 scene.add(keyLight, rimLight, fill, amberGlow);
 
@@ -225,9 +225,9 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
-  0.85,  // strength
-  0.55,  // radius
-  0.82   // threshold
+  0.5,   // strength
+  0.5,   // radius
+  0.96   // threshold — only the near-white halo ring blooms, not the lit tiger
 );
 composer.addPass(bloom);
 
@@ -246,39 +246,78 @@ function frameObject(obj, targetSize){
 
 function finishLoad(){ loader.classList.add('done'); }
 
-/* Animation mixer for rigged models */
-let mixer = null;
-const gltfLoader = new GLTFLoader();
+/* ──────────────────────────────────────────────────────────────
+   Procedural low-poly WHITE TIGER sculpture — pure Three.js geometry.
+   Matte white + silver, flat-shaded for a chiseled, premium look.
+   Returns a THREE.Group so GSAP can spin the whole animal on scroll.
+─────────────────────────────────────────────────────────────── */
+function createProceduralTiger(){
+  const g = new THREE.Group();
+  const white  = new THREE.MeshStandardMaterial({ color:0xE9EBEF, roughness:0.52, metalness:0.05, flatShading:true });
+  const silver = new THREE.MeshStandardMaterial({ color:0xCED3DB, roughness:0.44, metalness:0.16, flatShading:true });
+  const amber  = new THREE.MeshStandardMaterial({ color:0xf0a73c, emissive:0xf0a73c, emissiveIntensity:1.5, roughness:0.3 });
 
-function onModelLoaded(gltf, whiten){
-  const m = gltf.scene;
-  if(whiten){
-    // recolour a stand-in model to a clean white/silver sculpture (on-theme)
-    m.traverse((o) => { if(o.isMesh){
-      o.material = new THREE.MeshStandardMaterial({ color:0xeef1f6, roughness:0.5, metalness:0.05 });
-    }});
+  const V = (x,y,z) => new THREE.Vector3(x,y,z);
+
+  // a tapered, low-poly "bone" cylinder spanning two points (legs, torso, tail)
+  function bone(p1, p2, r1, r2, mat){
+    const dir = new THREE.Vector3().subVectors(p2, p1);
+    const len = dir.length();
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, len, 6, 1), mat || white);
+    m.position.copy(p1).add(p2).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(V(0,1,0), dir.normalize());
+    return m;
   }
-  frameObject(m, 3.0);
-  model.add(m);
-  if(gltf.animations && gltf.animations.length){       // bring rigged models to life
-    mixer = new THREE.AnimationMixer(m);
-    mixer.clipAction(gltf.animations[0]).play();
+  // a faceted ellipsoid "muscle" blob
+  function blob(x,y,z, rx,ry,rz, mat){
+    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), mat || white);
+    m.position.set(x,y,z); m.scale.set(rx,ry,rz); return m;
   }
-  finishLoad();
+
+  // 1 · Torso — muscular barrel between a broad chest and a hip
+  g.add(bone(V(-1.5,1.75,0), V(1.25,1.9,0), 0.95, 1.05, white));
+  g.add(blob( 1.35,1.95,0, 1.15,1.15,1.1, white));   // chest / shoulders
+  g.add(blob(-1.6,1.75,0, 0.95,1.0,0.95, white));    // hip
+
+  // 2 · Neck + angular head (lowered — a stalking pose), snout, ears, amber eyes
+  g.add(bone(V(1.5,2.0,0), V(2.7,1.5,0), 0.72, 0.62, white));   // neck
+  const head = new THREE.Mesh(new THREE.BoxGeometry(1.15,1.0,1.0), white);
+  head.position.set(3.05,1.42,0); head.rotation.z = -0.18; g.add(head);
+  const snout = new THREE.Mesh(new THREE.ConeGeometry(0.5,0.95,4), silver);   // 4-sided pyramid muzzle
+  snout.position.set(3.85,1.24,0); snout.rotation.z = -Math.PI/2; snout.rotation.y = Math.PI/4; g.add(snout);
+  [-1,1].forEach(s => {   // pointed ears
+    const ear = new THREE.Mesh(new THREE.ConeGeometry(0.24,0.52,4), silver);
+    ear.position.set(2.78,2.06,0.34*s); ear.rotation.z = 0.22; ear.rotation.x = -0.18*s; g.add(ear);
+  });
+  [-1,1].forEach(s => {   // glowing amber eyes (brand accent)
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.1,12,12), amber);
+    e.position.set(3.42,1.55,0.26*s); g.add(e);
+  });
+
+  // 3 · Four legs — thigh + shin + paw, in a coiled, crouching stalking stance
+  function leg(hip, knee, paw){
+    g.add(bone(hip, knee, 0.34, 0.26, white));
+    g.add(bone(knee, paw, 0.26, 0.20, white));
+    const p = new THREE.Mesh(new THREE.BoxGeometry(0.46,0.22,0.36), silver);
+    p.position.copy(paw).add(V(0.06,-0.02,0)); g.add(p);
+  }
+  leg(V( 1.10,1.55, 0.60), V( 1.45,0.80, 0.62), V( 1.75,0.08, 0.62)); // front, reaching
+  leg(V( 1.10,1.55,-0.60), V( 1.30,0.80,-0.62), V( 1.40,0.08,-0.62)); // front
+  leg(V(-1.35,1.55, 0.60), V(-1.75,0.78, 0.62), V(-1.15,0.08, 0.62)); // rear, coiled
+  leg(V(-1.35,1.55,-0.60), V(-1.70,0.78,-0.62), V(-1.20,0.08,-0.62)); // rear
+
+  // 4 · Tail — a segmented, tapering curve sweeping off the spine
+  const tail = [ V(-1.75,1.9,0), V(-2.7,2.15,0.1), V(-3.4,1.8,0.2), V(-3.7,1.05,0.15), V(-3.55,0.5,0.05) ];
+  for(let i=0;i<tail.length-1;i++) g.add(bone(tail[i], tail[i+1], 0.22-i*0.035, 0.19-i*0.035, white));
+
+  return g;
 }
 
-/* Load order: real tiger → recoloured stand-in animal → logo plane */
-gltfLoader.load(
-  '../assets/white_tiger.glb',
-  (g) => onModelLoaded(g, false),
-  undefined,
-  () => gltfLoader.load(
-    '../assets/placeholder-animal.glb',
-    (g) => { onModelLoaded(g, true); if(note) note.style.display = 'block'; },
-    undefined,
-    () => buildFallbackExhibit()
-  )
-);
+/* Build the sculpture, normalize its size, and add it to the scroll-rotated group */
+const tiger = createProceduralTiger();
+frameObject(tiger, 3.6);
+model.add(tiger);
+finishLoad();
 
 function buildFallbackExhibit(){
   const tex = new THREE.TextureLoader().load('../tiger-logo.png', finishLoad, undefined, finishLoad);
@@ -298,11 +337,9 @@ setTimeout(finishLoad, 6000);
 const clock = new THREE.Clock();
 function animate(){
   requestAnimationFrame(animate);
-  const dt = clock.getDelta();
-  const t = clock.elapsedTime;
+  const t = clock.getElapsedTime();
   ring.rotation.z = t * 0.15;                 // slow halo drift
   model.position.y = Math.sin(t * 0.8) * 0.05; // gentle float
-  if(mixer) mixer.update(dt);                  // play rigged animation
   composer.render();
 }
 animate();
