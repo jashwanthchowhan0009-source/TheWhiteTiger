@@ -150,7 +150,7 @@
   </section>
 </main>
 
-<div id="note">Stand-in 3D model shown — add <code>company/assets/white_tiger.glb</code> to swap in the real white tiger.</div>
+<div id="note">Add a model at <code>company/assets/white_tiger.glb</code> for a full rotating 3D tiger.</div>
 <div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll to rotate</div>
 
 <!-- CDN-independent safety: always reveal the page even if WebGL/CDN fails to load -->
@@ -171,6 +171,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -236,12 +237,14 @@ const model = new THREE.Group();
 scene.add(model);
 
 function frameObject(obj, targetSize){
-  const box = new THREE.Box3().setFromObject(obj);
+  // scale first…
+  let box = new THREE.Box3().setFromObject(obj);
   const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-  obj.position.sub(center);
-  const s = targetSize / Math.max(size.x, size.y, size.z);
-  obj.scale.setScalar(s);
+  obj.scale.setScalar(targetSize / Math.max(size.x, size.y, size.z));
+  obj.updateMatrixWorld(true);
+  // …then re-measure and centre (robust for models whose origin is off-centre)
+  box = new THREE.Box3().setFromObject(obj);
+  obj.position.sub(box.getCenter(new THREE.Vector3()));
 }
 
 function finishLoad(){ loader.classList.add('done'); }
@@ -313,17 +316,42 @@ function createProceduralTiger(){
   return g;
 }
 
-/* Build the sculpture, normalize its size, and add it to the scroll-rotated group */
-const tiger = createProceduralTiger();
-frameObject(tiger, 3.6);
-model.add(tiger);
-finishLoad();
+/* Load a real GLB model (with DRACO support), falling back gracefully.
+   Order: your tiger → white animated stand-in animal → procedural sculpture. */
+let mixer = null;
+const gltfLoader = new GLTFLoader();
+const draco = new DRACOLoader();
+draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/libs/draco/');
+gltfLoader.setDRACOLoader(draco);
+
+function addGltf(gltf, whiten){
+  const m = gltf.scene;
+  if(whiten){
+    m.traverse((o) => { if(o.isMesh){
+      o.material = new THREE.MeshStandardMaterial({ color:0xEDEFF3, roughness:0.5, metalness:0.08 });
+    }});
+  }
+  frameObject(m, 3.2);
+  model.add(m);
+  if(gltf.animations && gltf.animations.length){       // play idle animation if rigged
+    mixer = new THREE.AnimationMixer(m);
+    mixer.clipAction(gltf.animations[0]).play();
+  }
+  finishLoad();
+}
+
+gltfLoader.load(
+  '../assets/white_tiger.glb',
+  (g) => addGltf(g, false),               // your real 3D tiger, when present
+  undefined,
+  () => buildFallbackExhibit()            // otherwise: the tiger-eye logo, spinning in the ring
+);
 
 function buildFallbackExhibit(){
   const tex = new THREE.TextureLoader().load('../tiger-logo.png', finishLoad, undefined, finishLoad);
   tex.colorSpace = THREE.SRGBColorSpace;
   const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.5, 2.5),
+    new THREE.PlaneGeometry(2.9, 2.9),
     new THREE.MeshBasicMaterial({ map:tex, transparent:true, side:THREE.DoubleSide })
   );
   model.add(plane);
@@ -337,9 +365,11 @@ setTimeout(finishLoad, 6000);
 const clock = new THREE.Clock();
 function animate(){
   requestAnimationFrame(animate);
-  const t = clock.getElapsedTime();
+  const dt = clock.getDelta();
+  const t = clock.elapsedTime;
   ring.rotation.z = t * 0.15;                 // slow halo drift
   model.position.y = Math.sin(t * 0.8) * 0.05; // gentle float
+  if(mixer) mixer.update(dt);                  // play rigged animation
   composer.render();
 }
 animate();
