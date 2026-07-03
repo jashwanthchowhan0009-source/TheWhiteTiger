@@ -185,8 +185,10 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-const { gsap, ScrollTrigger } = window;
-gsap.registerPlugin(ScrollTrigger);
+// GSAP is optional — if its CDN fails to load, the 3D scene must still render.
+const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
+const hasGSAP = !!(gsap && ScrollTrigger);
+if(hasGSAP) gsap.registerPlugin(ScrollTrigger);
 
 const stage = document.getElementById('stage');
 const loader = document.getElementById('loader');
@@ -395,6 +397,7 @@ function animate(){
   ring.rotation.z = t * 0.15;                 // slow halo drift
   camera.position.set(camPos.x, camPos.y, camPos.z);
   camera.lookAt(camTgt.x, camTgt.y, camTgt.z);
+  if(window.__fallbackSpin) model.rotation.y += dt * 0.15;  // gentle turn if GSAP unavailable
   if(mixer) mixer.update(dt);                  // play rigged animation
   composer.render();
 }
@@ -408,31 +411,38 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ── Camera choreography: scroll scrubs a cinematic zoom across the statue ──
-   wide → the EYES → the SHOULDERS → the CLAWS (like a museum walkthrough). */
-const camTL = gsap.timeline({
-  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
-});
-function shot(at, pos, tgt){
-  camTL.to(camPos, { x:pos[0], y:pos[1], z:pos[2], ease:'power1.inOut', duration:1 }, at);
-  camTL.to(camTgt, { x:tgt[0], y:tgt[1], z:tgt[2], ease:'power1.inOut', duration:1 }, at);
-}
-shot(0, [2.3,  0.55, 2.1], [1.35,  0.42, 0]);   // → the EYES / face
-shot(1, [0.7,  0.50, 2.7], [0.50,  0.20, 0]);   // → the SHOULDERS
-shot(2, [1.5, -0.25, 2.2], [0.95, -0.55, 0]);   // → the CLAWS / front paws
+/* ── Scroll-driven animation (only if GSAP loaded; otherwise the scene still shows) ── */
+if(hasGSAP){
+  /* Camera choreography: scroll scrubs a cinematic zoom across the statue
+     wide → the EYES → the SHOULDERS → the CLAWS (a museum walkthrough). */
+  const camTL = gsap.timeline({
+    scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
+  });
+  function shot(at, pos, tgt){
+    camTL.to(camPos, { x:pos[0], y:pos[1], z:pos[2], ease:'power1.inOut', duration:1 }, at);
+    camTL.to(camTgt, { x:tgt[0], y:tgt[1], z:tgt[2], ease:'power1.inOut', duration:1 }, at);
+  }
+  shot(0, [2.3,  0.55, 2.1], [1.35,  0.42, 0]);   // → the EYES / face
+  shot(1, [0.7,  0.50, 2.7], [0.50,  0.20, 0]);   // → the SHOULDERS
+  shot(2, [1.5, -0.25, 2.2], [0.95, -0.55, 0]);   // → the CLAWS / front paws
 
-/* ── Editorial text: fade/slide in and out, synced to scroll ── */
-gsap.utils.toArray('[data-panel]').forEach((panel) => {
-  const inner = panel.querySelector('.inner');
-  gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
-    autoAlpha:1, y:0, ease:'power2.out',
-    scrollTrigger:{ trigger:panel, start:'top 80%', end:'top 42%', scrub:true }
+  /* Editorial text: fade/slide in and out, synced to scroll */
+  gsap.utils.toArray('[data-panel]').forEach((panel) => {
+    const inner = panel.querySelector('.inner');
+    gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
+      autoAlpha:1, y:0, ease:'power2.out',
+      scrollTrigger:{ trigger:panel, start:'top 80%', end:'top 42%', scrub:true }
+    });
+    gsap.to(inner, {
+      autoAlpha:0, y:-34, ease:'power2.in',
+      scrollTrigger:{ trigger:panel, start:'bottom 62%', end:'bottom 22%', scrub:true }
+    });
   });
-  gsap.to(inner, {
-    autoAlpha:0, y:-34, ease:'power2.in',
-    scrollTrigger:{ trigger:panel, start:'bottom 62%', end:'bottom 22%', scrub:true }
-  });
-});
+} else {
+  /* Fallback: no GSAP → keep the statue in a clean wide shot and gently turn it. */
+  camPos.x = 0.4; camPos.y = 0.35; camPos.z = 5.2; camTgt.y = 0.15;
+  window.__fallbackSpin = true;
+}
 </script>
 </body>
 </html>
