@@ -117,17 +117,25 @@
 <main id="scroll">
   <section class="panel" data-panel>
     <div class="inner">
-      <span class="eyebrow">The Exhibition · 360° Showcase</span>
+      <span class="eyebrow">The Exhibition</span>
       <h1 class="h-hero serif">The White<br><em>Tiger</em></h1>
-      <p class="lede">A living emblem of clarity and power. Scroll to circle the exhibit — the tiger turns to meet you.</p>
+      <p class="lede">A statue in motion. Scroll to move through the exhibit — from its watchful eyes to its silent claws.</p>
     </div>
   </section>
 
   <section class="panel right" data-panel>
     <div class="inner">
-      <span class="eyebrow">The Profile</span>
-      <h2 class="h-sec serif">Watchful. Precise.<br>Unbiased by nature.</h2>
-      <p class="lede">Every angle reveals the same intent — signal over noise, truth over spectacle. The engine that never blinks.</p>
+      <span class="eyebrow">I · The Gaze</span>
+      <h2 class="h-sec serif">Watchful.<br><em style="font-style:italic;color:var(--gold-2)">Precise.</em></h2>
+      <p class="lede">Eyes that never blink — signal over noise, truth over spectacle.</p>
+    </div>
+  </section>
+
+  <section class="panel" data-panel>
+    <div class="inner">
+      <span class="eyebrow">II · The Frame</span>
+      <h2 class="h-sec serif">Built for signal,<br>not <em style="font-style:italic;color:var(--gold-2)">spectacle</em>.</h2>
+      <p class="lede">Muscle without the noise — every source verified, every claim traceable.</p>
       <div class="spec">
         <div class="s"><b>24+</b><span>Verified sources</span></div>
         <div class="s"><b>9</b><span>VIBGYOR pillars</span></div>
@@ -135,11 +143,11 @@
     </div>
   </section>
 
-  <section class="panel" data-panel>
+  <section class="panel right" data-panel>
     <div class="inner">
-      <span class="eyebrow">The Reveal</span>
+      <span class="eyebrow">III · The Reveal</span>
       <h2 class="h-sec serif">The informed are<br><em style="font-style:italic;color:var(--gold-2)">ungovernable</em>.</h2>
-      <p class="lede">Clean, verified, objective intelligence — delivered to your pocket by SherrByte.</p>
+      <p class="lede">Clean, verified, objective intelligence — in your pocket, via SherrByte.</p>
       <div class="spec">
         <a href="../download/" class="s" style="text-decoration:none">
           <b class="serif" style="font-size:1.3rem;color:var(--gold-2)">Get SherrByte →</b>
@@ -151,7 +159,7 @@
 </main>
 
 <div id="note">Add a model at <code>company/assets/white_tiger.glb</code> for a full rotating 3D tiger.</div>
-<div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll to rotate</div>
+<div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll to explore</div>
 
 <!-- CDN-independent safety: always reveal the page even if WebGL/CDN fails to load -->
 <script>
@@ -189,14 +197,14 @@ const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPref
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.95;
+renderer.toneMappingExposure = 0.98;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.appendChild(renderer.domElement);
 
 /* ── Scene & camera ── */
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 100);
-camera.position.set(0, 0.25, 6);
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.05, 100);
+camera.position.set(0.4, 0.25, 5.2);
 camera.lookAt(0, 0, 0);
 
 /* Image-based lighting for realistic fur/PBR */
@@ -204,14 +212,15 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 /* ── Cinematic studio lighting ── */
-const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);   // key on the stone
-keyLight.position.set(4.5, 6, 6);
-const rimLight = new THREE.DirectionalLight(0xa9c9ff, 1.8);   // cool blue/white rim from behind
-rimLight.position.set(-5, 3.5, -6);
-const fill = new THREE.HemisphereLight(0xffffff, 0x0a0a12, 0.5);
-const amberGlow = new THREE.PointLight(0xf0a73c, 1.6, 12);    // warm accent = the tiger-eye amber
-amberGlow.position.set(0, 0.2, 2.4);
-scene.add(keyLight, rimLight, fill, amberGlow);
+// Even museum lighting so the whole statue reads as uniform stone (no bright-front / dark-back)
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.7);
+keyLight.position.set(4, 5, 4);
+const fillLight = new THREE.DirectionalLight(0xdfe6ff, 1.25);   // cool fill on the shadow side
+fillLight.position.set(-4, 2, -3);
+const topLight = new THREE.DirectionalLight(0xffffff, 0.8);     // gentle top rim
+topLight.position.set(0, 6, -2);
+const fill = new THREE.HemisphereLight(0xffffff, 0x14141a, 1.15);
+scene.add(keyLight, fillLight, topLight, fill);
 
 /* ── Glowing neon halo ring (bloomed) ── */
 const ring = new THREE.Mesh(
@@ -328,13 +337,13 @@ gltfLoader.setDRACOLoader(draco);
 // texture, boost contrast, and remap dark→scales / light→pale stone.
 function stonify(mat){
   if(!mat) return;
-  mat.roughness = 0.9; mat.metalness = 0.0; if(mat.color) mat.color.set(0xffffff);
+  mat.roughness = 0.88; mat.metalness = 0.0; if(mat.color) mat.color.set(0xffffff);
   mat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
       '#include <map_fragment>\n' +
       'float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));\n' +
-      '_l = pow(clamp(_l,0.0,1.0), 1.35);\n' +
-      'diffuseColor.rgb = mix(vec3(0.05,0.05,0.06), vec3(0.82,0.83,0.86), _l);');
+      '_l = pow(clamp(_l,0.0,1.0), 1.3);\n' +
+      'diffuseColor.rgb = mix(vec3(0.09,0.09,0.10), vec3(0.83,0.84,0.87), _l);');
   };
   mat.needsUpdate = true;
 }
@@ -344,6 +353,7 @@ function addGltf(gltf){
   m.traverse((o) => { if(o.isMesh) stonify(o.material); });
   frameObject(m, 3.2);
   model.add(m);
+  model.rotation.y = Math.PI / 2;   // fixed side profile — head toward +X; camera does the moving
   if(gltf.animations && gltf.animations.length){       // play idle animation if rigged
     mixer = new THREE.AnimationMixer(m);
     mixer.clipAction(gltf.animations[0]).play();
@@ -374,12 +384,15 @@ setTimeout(finishLoad, 6000);
 
 /* ── Render loop ── */
 const clock = new THREE.Clock();
+const camPos = { x:0.4, y:0.25, z:5.2 };   // camera choreography state (driven by scroll)
+const camTgt = { x:0, y:0, z:0 };
 function animate(){
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
   const t = clock.elapsedTime;
   ring.rotation.z = t * 0.15;                 // slow halo drift
-  model.position.y = Math.sin(t * 0.8) * 0.05; // gentle float
+  camera.position.set(camPos.x, camPos.y, camPos.z);
+  camera.lookAt(camTgt.x, camTgt.y, camTgt.z);
   if(mixer) mixer.update(dt);                  // play rigged animation
   composer.render();
 }
@@ -393,23 +406,18 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ── GSAP ScrollTrigger: bind Y-rotation to the scrollbar (360° exhibition) ── */
-gsap.to(model.rotation, {
-  y: Math.PI * 2,
-  ease: 'none',
+/* ── Camera choreography: scroll scrubs a cinematic zoom across the statue ──
+   wide → the EYES → the SHOULDERS → the CLAWS (like a museum walkthrough). */
+const camTL = gsap.timeline({
   scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
 });
-
-/* Camera dollies slightly closer + the halo grows toward the reveal */
-gsap.to(camera.position, {
-  z: 4.4, y: 0.05, ease: 'none',
-  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1,
-    onUpdate: () => camera.lookAt(0, 0, 0) }
-});
-gsap.to(ring.scale, {
-  x: 1.25, y: 1.25, z: 1.25, ease: 'none',
-  scrollTrigger: { trigger: '#scroll', start: 'top top', end: 'bottom bottom', scrub: 1 }
-});
+function shot(at, pos, tgt){
+  camTL.to(camPos, { x:pos[0], y:pos[1], z:pos[2], ease:'power1.inOut', duration:1 }, at);
+  camTL.to(camTgt, { x:tgt[0], y:tgt[1], z:tgt[2], ease:'power1.inOut', duration:1 }, at);
+}
+shot(0, [2.3,  0.55, 2.1], [1.35,  0.42, 0]);   // → the EYES / face
+shot(1, [0.7,  0.50, 2.7], [0.50,  0.20, 0]);   // → the SHOULDERS
+shot(2, [1.5, -0.25, 2.2], [0.95, -0.55, 0]);   // → the CLAWS / front paws
 
 /* ── Editorial text: fade/slide in and out, synced to scroll ── */
 gsap.utils.toArray('[data-panel]').forEach((panel) => {
