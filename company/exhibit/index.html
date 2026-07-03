@@ -197,7 +197,7 @@ const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPref
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.98;
+renderer.toneMappingExposure = 0.86;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 stage.appendChild(renderer.domElement);
 
@@ -214,20 +214,21 @@ scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 /* ── Cinematic studio lighting ── */
 // Even museum lighting so the whole statue reads as uniform stone (no bright-front / dark-back)
 const keyLight = new THREE.DirectionalLight(0xffffff, 1.7);
-keyLight.position.set(4, 5, 4);
-const fillLight = new THREE.DirectionalLight(0xdfe6ff, 1.25);   // cool fill on the shadow side
+keyLight.position.set(4, 5, 5);
+const fillLight = new THREE.DirectionalLight(0xdfe6ff, 1.0);    // cool fill on the shadow side
 fillLight.position.set(-4, 2, -3);
-const topLight = new THREE.DirectionalLight(0xffffff, 0.8);     // gentle top rim
+const topLight = new THREE.DirectionalLight(0xffffff, 0.7);     // gentle top rim
 topLight.position.set(0, 6, -2);
-const fill = new THREE.HemisphereLight(0xffffff, 0x14141a, 1.15);
+const fill = new THREE.HemisphereLight(0xffffff, 0x14141a, 0.8);
 scene.add(keyLight, fillLight, topLight, fill);
 
 /* ── Glowing neon halo ring (bloomed) ── */
 const ring = new THREE.Mesh(
-  new THREE.TorusGeometry(0.9, 0.014, 32, 160),
+  new THREE.TorusGeometry(0.8, 0.013, 32, 180),
   new THREE.MeshBasicMaterial({ color:0xffffff })
 );
-ring.position.set(0, 0.75, -0.9);   // small halo, up & behind the tiger
+ring.position.set(0.2, 2.0, -0.3);  // halo high above the tiger
+ring.rotation.x = Math.PI / 2;      // lay it flat (90° on X) — a floating halo disc
 scene.add(ring);
 
 /* ── Post-processing: Unreal Bloom for the halo glow ── */
@@ -235,7 +236,7 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
-  0.6,   // strength
+  0.4,   // strength
   0.5,   // radius
   0.9    // threshold — only the near-white halo ring blooms, not the stone tiger
 );
@@ -337,13 +338,14 @@ gltfLoader.setDRACOLoader(draco);
 // texture, boost contrast, and remap dark→scales / light→pale stone.
 function stonify(mat){
   if(!mat) return;
-  mat.roughness = 0.88; mat.metalness = 0.0; if(mat.color) mat.color.set(0xffffff);
+  mat.roughness = 0.82; mat.metalness = 0.0; if(mat.color) mat.color.set(0xffffff);
   mat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
       '#include <map_fragment>\n' +
       'float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));\n' +
-      '_l = pow(clamp(_l,0.0,1.0), 1.3);\n' +
-      'diffuseColor.rgb = mix(vec3(0.09,0.09,0.10), vec3(0.83,0.84,0.87), _l);');
+      '_l = pow(clamp(_l,0.0,1.0), 1.5);\n' +
+      '_l = smoothstep(0.02,0.95,_l);\n' +
+      'diffuseColor.rgb = mix(vec3(0.06,0.06,0.07), vec3(0.39,0.40,0.43), _l);'); // grey stone
   };
   mat.needsUpdate = true;
 }
