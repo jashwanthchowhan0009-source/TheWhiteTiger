@@ -1,0 +1,156 @@
+:root {
+  --bg: #0e0e10;
+  --bg-glow: #1a1a1e;
+  --ink: #ece7df;
+  --dim: #8a8a8f;
+  --amber: #e0731d;
+  --line: rgba(236, 231, 223, 0.14);
+  --serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --serif-2: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: auto; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  /* Lenis controls vertical scroll */
+}
+::selection { background: rgba(224, 115, 29, 0.3); color: #fff; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+.serif { font-family: var(--serif); }
+.serif-2 { font-family: var(--serif-2); }
+.italic { font-style: italic; }
+.amber { color: var(--amber); }
+.mono-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ── The subtle radial vignette behind the tiger ── */
+.bg-vignette {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(58% 46% at 50% 44%, var(--bg-glow) 0%, #141416 34%, var(--bg) 70%);
+}
+
+/* ── Fixed WebGL sculpture stage ── */
+.stage {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+}
+.stage canvas { display: block; }
+
+/* ── Two DOM layers so the tiger can pass in front of / behind text ── */
+.layer-back { position: relative; z-index: 1; }   /* behind the canvas */
+.layer-front { position: relative; z-index: 3; }   /* in front of the canvas */
+
+/* ── Nav ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26px clamp(20px, 5vw, 64px);
+  mix-blend-mode: difference;
+}
+.nav .wordmark { font-family: var(--sans); font-weight: 600; font-size: 13px; letter-spacing: 0.28em; }
+.nav .links { display: flex; gap: 30px; }
+.nav .links a { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); opacity: 0.8; transition: opacity .25s, color .25s; }
+.nav .links a:hover { opacity: 1; color: var(--amber); }
+.nav .menu { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+@media (max-width: 760px) { .nav .links { display: none; } }
+
+/* ── Sections shell ── */
+.section { position: relative; width: 100%; padding: 0 clamp(20px, 5vw, 64px); }
+.h-hero, .h-100 { min-height: 100vh; min-height: 100svh; }
+.h-150 { min-height: 150vh; }
+
+/* Giant background words (behind the tiger) */
+.giant {
+  font-family: var(--serif); font-weight: 800; line-height: 0.9;
+  color: #16161a; letter-spacing: -0.02em; user-select: none; white-space: nowrap;
+}
+
+/* ── Hero ── */
+.hero-wrap { position: relative; display: grid; place-items: center; text-align: center; height: 100svh; }
+.hero-head {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(3.4rem, 9vw, 9rem); line-height: 0.95; letter-spacing: -0.02em;
+}
+.hero-sub { margin-top: 26px; color: var(--dim); font-size: clamp(0.95rem, 1.3vw, 1.05rem); letter-spacing: 0.01em; }
+.cta {
+  display: inline-flex; align-items: center; gap: 10px; margin-top: 30px;
+  padding: 13px 26px; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);
+  transition: background .3s, color .3s, border-color .3s; pointer-events: auto;
+}
+.cta:hover { background: var(--amber); color: #140b03; border-color: var(--amber); }
+
+.scroll-hint { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.scroll-hint .line { width: 1px; height: 46px; background: linear-gradient(var(--dim), transparent); position: relative; overflow: hidden; }
+.scroll-hint .line::after { content: ""; position: absolute; inset: 0; background: var(--amber); transform: translateY(-100%); animation: hint 2.2s ease-in-out infinite; }
+@keyframes hint { 40% { transform: translateY(0); } 100% { transform: translateY(100%); } }
+.scroll-hint span { font-size: 10px; letter-spacing: 0.3em; color: var(--dim); }
+
+/* ── Editorial columns ── */
+.col-copy { max-width: 34ch; color: var(--dim); font-size: 1.02rem; line-height: 1.75; }
+.col-copy strong { color: var(--ink); font-weight: 500; }
+.num-label { font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--amber); margin-bottom: 18px; display: block; }
+.h-sec { font-family: var(--serif); font-weight: 700; font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.02; margin-bottom: 20px; }
+
+/* Stats */
+.stats { display: flex; gap: clamp(28px, 5vw, 72px); flex-wrap: wrap; margin-top: 40px; }
+.stat b { font-family: var(--serif); font-weight: 700; font-size: clamp(2.4rem, 4vw, 4rem); display: block; line-height: 1; }
+.stat span { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-top: 10px; display: block; }
+
+/* Gallery */
+.gallery-row { display: flex; gap: 22px; }
+.card { flex: 0 0 clamp(240px, 26vw, 340px); aspect-ratio: 3 / 4; border-radius: 10px; overflow: hidden; position: relative;
+  background: linear-gradient(150deg, #1b1b1f, #101012); border: 1px solid var(--line); transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.card:hover { transform: translateY(-10px) rotate(-0.6deg); }
+.card .cap { position: absolute; left: 18px; bottom: 16px; }
+.card .cap .t { font-family: var(--serif); font-size: 1.15rem; }
+.card .cap .s { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
+.card .idx { position: absolute; right: 16px; top: 14px; font-size: 11px; letter-spacing: 0.2em; color: var(--dim); }
+@media (max-width: 760px) {
+  .gallery-row { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+  .card { scroll-snap-align: center; }
+}
+
+/* Contact / footer */
+.den-head { font-family: var(--serif); font-weight: 700; font-size: clamp(3rem, 9vw, 8rem); line-height: 0.95; text-align: center; }
+.den-mail { display: block; text-align: center; margin-top: 24px; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--amber); letter-spacing: 0.02em; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 28px clamp(20px, 5vw, 64px); border-top: 1px solid var(--line); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
+.footer .fnav { display: flex; gap: 22px; }
+
+/* ── Film grain ── */
+.grain { position: fixed; inset: -50%; z-index: 50; pointer-events: none; opacity: 0.04; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.6s steps(2) infinite; }
+@keyframes grain {
+  0% { transform: translate(0,0); } 25% { transform: translate(-4%, 3%); }
+  50% { transform: translate(3%, -3%); } 75% { transform: translate(-2%, 2%); } 100% { transform: translate(2%, -2%); }
+}
+
+/* ── Loader ── */
+.loader { position: fixed; inset: 0; z-index: 100; background: var(--bg); display: grid; place-items: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease; }
+.loader.done { opacity: 0; visibility: hidden; }
+.loader .word { font-family: var(--sans); font-weight: 600; font-size: 14px; letter-spacing: 0.4em; }
+.loader .count { font-family: var(--serif); font-size: clamp(3rem, 12vw, 8rem); line-height: 1; margin-top: 14px; }
+.loader .bar { width: min(240px, 60vw); height: 1px; background: var(--line); margin-top: 22px; position: relative; overflow: hidden; }
+.loader .bar i { position: absolute; inset: 0; background: var(--amber); transform-origin: left; transform: scaleX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .scroll-hint .line::after { animation: none; }
+}
