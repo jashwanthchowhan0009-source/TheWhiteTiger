@@ -31,25 +31,27 @@ function Lights() {
 
   return (
     <>
+      {/* KEY: far right + up + slightly front → carves the form, deep shadow on the left */}
       <directionalLight
         ref={key}
-        position={[-4.2, 5.2, 4]}
-        intensity={2.2}
-        color={'#fff1e0'}
+        position={[6.5, 6.2, 3.2]}
+        intensity={2.6}
+        color={'#fff2e2'}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-near={1}
-        shadow-camera-far={20}
-        shadow-camera-left={-5}
-        shadow-camera-right={5}
-        shadow-camera-top={5}
-        shadow-camera-bottom={-5}
+        shadow-camera-far={24}
+        shadow-camera-left={-6}
+        shadow-camera-right={6}
+        shadow-camera-top={6}
+        shadow-camera-bottom={-6}
         shadow-bias={-0.0004}
-        shadow-radius={6}
+        shadow-radius={7}
       />
-      <directionalLight ref={rim} position={[4.5, 3, -4.5]} intensity={1.4} color={'#a8c4ff'} />
-      <hemisphereLight ref={hemi} args={['#c9cede', '#101014', 0.25]} />
+      {/* faint cool edge on the shadow (left/back) side so it isn't pure black */}
+      <directionalLight ref={rim} position={[-4.5, 2.5, -3.5]} intensity={0.6} color={'#9fb2e6'} />
+      <hemisphereLight ref={hemi} args={['#aab3c6', '#0a0a0e', 0.12]} />
     </>
   );
 }

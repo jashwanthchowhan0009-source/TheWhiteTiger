@@ -49,12 +49,15 @@ export default function App() {
           <Canvas
             dpr={[1, 2]}
             shadows
-            camera={{ fov: 35, position: [0, 0, 7], near: 0.1, far: 100 }}
+            camera={{ fov: 34, position: [0.7, 1.7, 6.6], near: 0.1, far: 100 }}
             gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-            onCreated={({ gl }) => {
+            onCreated={({ gl, camera }) => {
               gl.toneMapping = THREE.ACESFilmicToneMapping;
-              gl.toneMappingExposure = 0.86;
+              gl.toneMappingExposure = 0.9;
               gl.outputColorSpace = THREE.SRGBColorSpace;
+              // elevated top-side angle, looking slightly down at the sculpture
+              camera.position.set(0.7, 1.7, 6.6);
+              camera.lookAt(0, -0.15, 0);
             }}
           >
             <Scene />
