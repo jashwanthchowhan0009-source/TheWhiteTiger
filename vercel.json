@@ -1,9 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "outputDirectory": "company",
-  "buildCommand": null,
-  "installCommand": null,
-  "cleanUrls": true,
-  "trailingSlash": true
+  "installCommand": "cd tiger-site && npm install",
+  "buildCommand": "cd tiger-site && npm run build",
+  "outputDirectory": "tiger-site/dist",
+  "cleanUrls": true
 }
