@@ -107,6 +107,39 @@ export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE
   return { normal, rough, color };
 }
 
+// cached surface maps (generated once)
+let _maps: { normal: THREE.Texture; rough: THREE.Texture } | null = null;
+function surfaceMaps() {
+  if (!_maps) { const m = makeStoneMaps(); _maps = { normal: m.normal, rough: m.rough }; }
+  return _maps;
+}
+
+// WHITE-TIGER stone: keep the model's own stripe markings (white body, dark
+// stripes) so it reads as a white tiger carved in pale stone — not a blank blob.
+export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.MeshStandardMaterial {
+  const { normal, rough } = surfaceMaps();
+  const mat = new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#ffffff'),
+    map: baseMap || null,
+    roughness: 0.66,
+    metalness: 0.0,
+    envMapIntensity: 0.28,
+    normalMap: normal,
+    normalScale: new THREE.Vector2(0.7, 0.7),
+    roughnessMap: rough,
+  });
+  // remap the model's texture luminance → dark charcoal stripes over warm ivory
+  mat.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
+      `#include <map_fragment>
+       float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));
+       _l = smoothstep(0.10, 0.80, _l);
+       diffuseColor.rgb = mix(vec3(0.085,0.085,0.095), vec3(0.94,0.92,0.88), _l);`);
+  };
+  mat.needsUpdate = true;
+  return mat;
+}
+
 // A single weathered-granite material reused across every mesh of the tiger.
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();

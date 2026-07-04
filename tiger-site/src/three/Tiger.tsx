@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { makeStoneMaterial } from './stone';
+import { makeWhiteTigerMaterial } from './stone';
 import { tigerState, isMobile, prefersReducedMotion } from '../scroll/tigerState';
 import { pointer } from './pointer';
 
@@ -17,10 +17,15 @@ export function Tiger() {
   // Clone + apply the stone material + normalise to height ≈ 2.2, centred.
   const model = useMemo(() => {
     const root = scene.clone(true);
-    const stone = makeStoneMaterial();
     root.traverse((o) => {
       const m = o as THREE.Mesh;
-      if (m.isMesh) { m.material = stone; m.castShadow = true; m.receiveShadow = true; }
+      if (m.isMesh) {
+        const orig = m.material as THREE.MeshStandardMaterial;
+        const map = orig && orig.map ? orig.map : null;
+        if (map) map.colorSpace = THREE.SRGBColorSpace;
+        m.material = makeWhiteTigerMaterial(map);   // keep the tiger's stripe markings
+        m.castShadow = true; m.receiveShadow = true;
+      }
     });
     const box = new THREE.Box3().setFromObject(root);
     const size = box.getSize(new THREE.Vector3());
