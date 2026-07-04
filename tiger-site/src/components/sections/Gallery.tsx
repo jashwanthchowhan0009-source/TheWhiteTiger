@@ -11,7 +11,7 @@ export function Gallery() {
       <div className="layer-back" style={{ position: 'sticky', top: 0, height: '100svh', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
         <div className="giant" data-giant style={{ fontSize: '19vw' }}>GALLERY</div>
       </div>
-      <div className="layer-front copy-scrim" style={{ position: 'absolute', top: '18vh', left: 'clamp(20px,5vw,64px)', maxWidth: '32ch' }} data-reveal>
+      <div className="layer-front copy-scrim sec-copy" style={{ position: 'absolute', top: '18vh', left: 'clamp(20px,5vw,64px)', maxWidth: '32ch' }} data-reveal>
         <span className="num-label">03 — The Edge</span>
         <h2 className="h-sec" style={{ marginBottom: 12 }}>Claw &amp;<br /><span className="italic amber">stone.</span></h2>
       </div>

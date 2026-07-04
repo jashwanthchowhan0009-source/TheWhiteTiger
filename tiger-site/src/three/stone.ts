@@ -47,18 +47,19 @@ export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE
   // mineral blotches and dark speckle, so the stone reads rough and real ──
   const cCanvas = document.createElement('canvas'); cCanvas.width = cCanvas.height = size;
   const cctx = cCanvas.getContext('2d')!; const cImg = cctx.createImageData(size, size);
-  const GREY = [0x8f, 0x8a, 0x82], WARM = [0xa2, 0x93, 0x80], COOL = [0x79, 0x7e, 0x7c], VEIN = [0x45, 0x43, 0x3f];
+  // neutral / cool GREY granite palette — a carved-statue stone, no cream
+  const GREY = [0x77, 0x79, 0x7c], LIGHT = [0x8f, 0x91, 0x95], COOL = [0x66, 0x6a, 0x70], VEIN = [0x3a, 0x3b, 0x3f];
   const mix = (a: number[], b: number[], t: number) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const nx = (x / size) * 8, ny = (y / size) * 8;
-      const warm = fbm(nx * 0.9 + 3, ny * 0.9 + 3, 23);
+      const lightBlotch = fbm(nx * 0.9 + 3, ny * 0.9 + 3, 23);
       const cool = fbm(nx * 1.4 + 9, ny * 1.4 + 9, 51);
       const speck = fbm(nx * 9, ny * 9, 88);
-      let col = mix(GREY, WARM, Math.max(0, warm - 0.45) * 1.6);
-      col = mix(col, COOL, Math.max(0, cool - 0.5) * 1.4);
-      if (speck > 0.78) col = mix(col, VEIN, (speck - 0.78) * 3.2);       // dark grains
-      if (speck < 0.16) col = mix(col, [0xc4, 0xbf, 0xb6], (0.16 - speck) * 2); // quartz flecks
+      let col = mix(GREY, LIGHT, Math.max(0, lightBlotch - 0.45) * 1.5);
+      col = mix(col, COOL, Math.max(0, cool - 0.5) * 1.6);
+      if (speck > 0.78) col = mix(col, VEIN, (speck - 0.78) * 3.4);       // dark grains
+      if (speck < 0.16) col = mix(col, [0xa6, 0xa8, 0xac], (0.16 - speck) * 2); // pale flecks
       const i = (y * size + x) * 4;
       cImg.data[i] = col[0]; cImg.data[i + 1] = col[1]; cImg.data[i + 2] = col[2]; cImg.data[i + 3] = 255;
     }
@@ -110,13 +111,13 @@ export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#efe9df'),   // light tint; granite tones live in the map
+    color: new THREE.Color('#c9cbce'),   // neutral grey tint; granite tones live in the map
     map: color,
-    roughness: 0.72,
+    roughness: 0.76,
     metalness: 0.0,
-    envMapIntensity: 0.40,
+    envMapIntensity: 0.35,
     normalMap: normal,
-    normalScale: new THREE.Vector2(1.0, 1.0),
+    normalScale: new THREE.Vector2(1.05, 1.05),
     roughnessMap: rough,
   });
   // faint surviving stripes: a soft directional band along the body axis, mixed

@@ -159,3 +159,21 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .grain, .scroll-hint .line::after { animation: none; }
 }
+
+/* ── Mobile: keep the tiger centred, drop every copy block to a readable, full-width band at the bottom ── */
+@media (max-width: 760px) {
+  .section { padding: 0 16px; }
+  .sec-copy {
+    position: absolute !important;
+    top: auto !important; bottom: 7vh !important;
+    left: 16px !important; right: 16px !important;
+    margin: 0 !important; max-width: none !important;
+    text-align: left;
+  }
+  .sec-copy .col-copy { max-width: none !important; }
+  .copy-scrim, .copy-scrim.r { background: linear-gradient(0deg, rgba(14,14,16,.94) 0%, rgba(14,14,16,.8) 62%, rgba(14,14,16,.3) 100%); padding: 22px 20px; }
+  .stats { gap: 22px; }
+  .hero-head { font-size: clamp(2.8rem, 15vw, 4.2rem); }
+  .den-head { font-size: clamp(2.4rem, 13vw, 3.6rem); }
+  .copy-scrim.c { padding: 26px 18px; background: radial-gradient(90% 60% at 50% 50%, rgba(14,14,16,.9), transparent 82%); }
+}

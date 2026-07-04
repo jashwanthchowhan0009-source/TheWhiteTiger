@@ -53,7 +53,7 @@ export default function App() {
             gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
             onCreated={({ gl }) => {
               gl.toneMapping = THREE.ACESFilmicToneMapping;
-              gl.toneMappingExposure = 0.98;
+              gl.toneMappingExposure = 0.86;
               gl.outputColorSpace = THREE.SRGBColorSpace;
             }}
           >
