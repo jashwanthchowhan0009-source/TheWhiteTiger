@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The White Tiger — Exhibition</title>
-<meta name="description" content="An interactive 3D exhibition of The White Tiger — a museum-style, scroll-driven showcase.">
+<meta name="description" content="An interactive 3D exhibition of The White Tiger — a museum-style, scroll-driven showcase where the statue turns to face you.">
 <meta name="theme-color" content="#000000">
 <link rel="icon" type="image/png" href="../favicon.png">
 
@@ -19,21 +19,16 @@
   :root{ --gold:#f0a73c; --gold-2:#ffce7a; --ink:#f3f4f7; --dim:#8b8f98; --line:rgba(255,255,255,.06); }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{scroll-behavior:auto}
-  body{background:#05060a;color:var(--ink);font-family:"Inter",system-ui,sans-serif;overflow-x:hidden}
+  body{background:#000;color:var(--ink);font-family:"Inter",system-ui,sans-serif;overflow-x:hidden}
   ::selection{background:rgba(240,167,60,.32);color:#fff}
   a{color:inherit;text-decoration:none}
   .serif{font-family:"Playfair Display",Georgia,serif}
   .serif-2{font-family:"Cormorant Garamond",Georgia,serif}
   .mono{font-family:"Space Grotesk",sans-serif;letter-spacing:.16em;text-transform:uppercase}
 
-  /* Fixed 3D model stage (Sketchfab) behind everything */
-  #stage{position:fixed;inset:0;z-index:0;background:
-    radial-gradient(120% 80% at 50% 38%, #1a1c24 0%, #0d0e14 45%, #05060a 100%)}
-  #stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-  /* subtle museum floor glow under the pedestal */
-  #stage::after{content:"";position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
-    width:60vw;height:22vh;background:radial-gradient(closest-side,rgba(240,167,60,.10),transparent 72%);
-    filter:blur(6px);pointer-events:none}
+  /* Fixed WebGL stage behind everything */
+  #stage{position:fixed;inset:0;z-index:0}
+  #stage canvas{display:block}
 
   /* vertical column grid lines */
   .cols{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;justify-content:space-between;padding:0 6vw}
@@ -41,7 +36,7 @@
 
   /* vignette */
   .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
-    background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.72))}
+    background:radial-gradient(120% 90% at 62% 45%,transparent 52%,rgba(0,0,0,.72))}
 
   /* nav */
   .nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
@@ -55,18 +50,13 @@
   .back:hover{color:var(--gold-2)}
   @media(max-width:720px){ .nav .links{display:none} }
 
-  /* scroll panels — pointer-events pass through so you can orbit the model,
-     except on the text blocks themselves */
-  #scroll{position:relative;z-index:10;pointer-events:none}
-  #scroll a{pointer-events:auto}
+  /* scroll panels — all anchored left so the statue owns the right side */
+  #scroll{position:relative;z-index:10}
   .panel{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:0 6vw;position:relative}
-  .panel.right{align-items:flex-end;text-align:right}
-  .panel .inner{max-width:min(48vw,560px);pointer-events:auto;
-    background:radial-gradient(120% 140% at 0% 0%,rgba(5,6,10,.72),rgba(5,6,10,.30) 60%,transparent);
-    padding:26px 30px;border-radius:14px;backdrop-filter:blur(2px)}
-  .panel.right .inner{background:radial-gradient(120% 140% at 100% 0%,rgba(5,6,10,.72),rgba(5,6,10,.30) 60%,transparent)}
-  @media(max-width:720px){ .panel .inner{max-width:none} .panel.right{text-align:left;align-items:flex-start}
-    .panel.right .inner{background:radial-gradient(120% 140% at 0% 0%,rgba(5,6,10,.72),rgba(5,6,10,.30) 60%,transparent)} }
+  .panel .inner{max-width:min(46vw,540px)}
+  @media(max-width:820px){ .panel .inner{max-width:none;
+    background:radial-gradient(120% 130% at 0% 0%,rgba(0,0,0,.72),rgba(0,0,0,.25) 62%,transparent);
+    padding:22px 24px;border-radius:14px} }
 
   .eyebrow{display:inline-block;font-family:"Space Grotesk",sans-serif;font-size:.72rem;letter-spacing:.24em;
     text-transform:uppercase;color:var(--gold-2);margin-bottom:20px}
@@ -74,25 +64,22 @@
   .h-hero em{font-style:italic;color:var(--gold-2)}
   .h-sec{font-size:clamp(2rem,5.4vw,3.8rem);line-height:1.05;font-weight:600}
   .lede{margin-top:22px;color:#c4c8d0;font-size:clamp(1rem,1.5vw,1.16rem);max-width:440px;line-height:1.7}
-  .panel.right .lede{margin-left:auto}
   .spec{display:flex;gap:40px;margin-top:34px;flex-wrap:wrap}
-  .panel.right .spec{justify-content:flex-end}
   .spec .s b{font-family:"Playfair Display",serif;font-size:2.1rem;display:block;line-height:1}
   .spec .s span{font-size:.76rem;color:var(--dim);letter-spacing:.06em}
 
   /* loader */
-  #loader{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#05060a;transition:opacity .8s,visibility .8s}
+  #loader{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#000;transition:opacity .8s,visibility .8s}
   #loader.done{opacity:0;visibility:hidden}
   #loader .ring{width:74px;height:74px;border-radius:50%;border:1.5px solid rgba(255,255,255,.16);
     border-top-color:var(--gold);animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-
-  .hint{position:fixed;right:6vw;bottom:22px;z-index:20;color:var(--dim);font-size:.72rem;letter-spacing:.04em;
-    display:flex;align-items:center;gap:8px;pointer-events:none}
-  @media(max-width:720px){ .hint{display:none} }
+  #note{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;color:var(--dim);
+    font-size:.74rem;letter-spacing:.04em;text-align:center;max-width:90vw;display:none}
+  #note code{color:var(--gold-2)}
 
   .scroll-cue{position:fixed;bottom:24px;left:6vw;z-index:20;color:var(--dim);font-family:"Space Grotesk",sans-serif;
-    font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;display:flex;align-items:center;gap:10px;pointer-events:none}
+    font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
   .scroll-cue .bar{width:34px;height:1px;background:var(--dim);position:relative;overflow:hidden}
   .scroll-cue .bar::after{content:"";position:absolute;inset:0;background:var(--gold);transform:translateX(-100%);
     animation:cue 2s ease-in-out infinite}
@@ -101,12 +88,8 @@
 </head>
 <body>
 
-<!-- 3D exhibition stage: the White Tiger model (Sketchfab) -->
-<div id="stage" aria-hidden="true">
-  <iframe id="tiger-embed" title="The White Tiger — 3D model" allow="autoplay; fullscreen; xr-spatial-tracking"
-    allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"
-    src="https://sketchfab.com/models/f0892b14dde54d3798c085693bf11983/embed?autostart=1&amp;autospin=0.2&amp;transparent=1&amp;ui_theme=dark&amp;ui_infos=0&amp;ui_controls=1&amp;ui_stop=0&amp;ui_watermark=0&amp;ui_watermark_link=0&amp;ui_hint=0&amp;dnt=1"></iframe>
-</div>
+<!-- WebGL exhibition stage -->
+<div id="stage" aria-hidden="true"></div>
 <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 <div class="vignette" aria-hidden="true"></div>
 
@@ -126,17 +109,17 @@
   <a href="../" class="back">← Back to site</a>
 </header>
 
-<!-- Scroll-driven editorial panels -->
+<!-- Scroll-driven editorial panels — the statue turns as you move down -->
 <main id="scroll">
   <section class="panel" data-panel>
     <div class="inner">
       <span class="eyebrow">The Exhibition</span>
       <h1 class="h-hero serif">The White<br><em>Tiger</em></h1>
-      <p class="lede">A statue in motion. Drag to orbit the tiger — scroll to move through the exhibit, from its watchful eyes to its silent claws.</p>
+      <p class="lede">A statue in motion. Scroll — and the tiger turns to face you, from its watchful gaze to its full stride.</p>
     </div>
   </section>
 
-  <section class="panel right" data-panel>
+  <section class="panel" data-panel>
     <div class="inner">
       <span class="eyebrow">I · The Gaze</span>
       <h2 class="h-sec serif">Watchful.<br><em style="font-style:italic;color:var(--gold-2)">Precise.</em></h2>
@@ -156,7 +139,7 @@
     </div>
   </section>
 
-  <section class="panel right" data-panel>
+  <section class="panel" data-panel>
     <div class="inner">
       <span class="eyebrow">III · The Reveal</span>
       <h2 class="h-sec serif">The informed are<br><em style="font-style:italic;color:var(--gold-2)">ungovernable</em>.</h2>
@@ -171,36 +154,244 @@
   </section>
 </main>
 
-<div class="hint" aria-hidden="true">Drag the tiger to orbit • scroll to read</div>
-<div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll to explore</div>
+<div id="note">Add a model at <code>company/assets/white_tiger.glb</code> for the full rotating 3D tiger.</div>
+<div class="scroll-cue" aria-hidden="true"><span class="bar"></span> Scroll — the tiger turns</div>
 
+<!-- CDN-independent safety: always reveal the page even if WebGL/CDN fails to load -->
 <script>
-  /* Reveal the page once the model frame loads (with a safety timeout). */
-  (function(){
-    var loader = document.getElementById('loader');
-    var frame  = document.getElementById('tiger-embed');
-    function done(){ if(loader) loader.classList.add('done'); }
-    if(frame){ frame.addEventListener('load', function(){ setTimeout(done, 600); }); }
-    setTimeout(done, 4000);
-  })();
+  setTimeout(function(){ var l=document.getElementById('loader'); if(l) l.classList.add('done'); }, 5000);
+</script>
 
-  /* Editorial text: fade/slide in and out, synced to scroll (GSAP optional). */
-  (function(){
-    var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
-    if(!gsap || !ScrollTrigger) return;
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray('[data-panel]').forEach(function(panel){
-      var inner = panel.querySelector('.inner');
-      gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
-        autoAlpha:1, y:0, ease:'power2.out',
-        scrollTrigger:{ trigger:panel, start:'top 82%', end:'top 45%', scrub:true }
-      });
-      gsap.to(inner, {
-        autoAlpha:0, y:-34, ease:'power2.in',
-        scrollTrigger:{ trigger:panel, start:'bottom 60%', end:'bottom 20%', scrub:true }
-      });
+<!-- Three.js via ES modules -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// GSAP is optional — if its CDN fails to load, the 3D scene must still render.
+const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
+const hasGSAP = !!(gsap && ScrollTrigger);
+if(hasGSAP) gsap.registerPlugin(ScrollTrigger);
+
+const stage = document.getElementById('stage');
+const loader = document.getElementById('loader');
+const note = document.getElementById('note');
+
+/* ── Renderer ── */
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;                 // real cast shadows → grounded, not in a void
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+/* ── Scene & camera ── */
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.05, 100);
+const camState = { z:5.2, ty:0.0 };            // dolly distance + look-at height (scroll-driven)
+const TARGET_X = 0.55;                          // statue lives on the right; text on the left
+camera.position.set(0, 0.1, camState.z);
+camera.lookAt(TARGET_X, camState.ty, 0);
+
+/* Image-based lighting for realistic stone PBR */
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+/* ── Museum gallery lighting ──
+   The KEY light comes from directly above (aligned with the halo ring) so the
+   tiger reads with light on top and shadow beneath — a lit statue, not a
+   flat model in a void. It casts a real shadow onto the ground. */
+const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);   keyLight.position.set(0.6, 7, 1.4);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.shadow.camera.near = 1; keyLight.shadow.camera.far = 16;
+keyLight.shadow.camera.left = -3; keyLight.shadow.camera.right = 3;
+keyLight.shadow.camera.top = 3; keyLight.shadow.camera.bottom = -3;
+keyLight.shadow.bias = -0.0004; keyLight.shadow.radius = 4;
+const fillLight = new THREE.DirectionalLight(0xcdd6ff, 0.55); fillLight.position.set(-4, 1, 2);
+const rimLight = new THREE.DirectionalLight(0xffffff, 1.2);   rimLight.position.set(-2, 3, -4);
+const hemi = new THREE.HemisphereLight(0xffffff, 0x0a0a10, 0.35);
+scene.add(keyLight, fillLight, rimLight, hemi);
+
+/* ── Glowing halo ring — a flat disc ABOVE the tiger, the overhead light source (bloomed) ── */
+const ring = new THREE.Mesh(
+  new THREE.TorusGeometry(1.15, 0.018, 32, 220),
+  new THREE.MeshBasicMaterial({ color:0xffffff })
+);
+ring.position.set(TARGET_X, 2.35, -0.1);       // hovers above the tiger like an overhead ring-light
+ring.rotation.x = Math.PI / 2;                 // laid flat (90° on X) — a horizontal halo casting light down
+scene.add(ring);
+
+/* ── Ground shadow-catcher — grounds the statue with a soft contact shadow ── */
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(24, 24),
+  new THREE.ShadowMaterial({ opacity: 0.55 })   // transparent — shows ONLY the shadow over the black stage
+);
+ground.rotation.x = -Math.PI / 2;
+ground.position.set(TARGET_X, -1.15, 0);
+ground.receiveShadow = true;
+scene.add(ground);
+
+/* ── Post-processing: Unreal Bloom makes the halo glow (not the stone) ── */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.7,   // strength
+  0.6,   // radius
+  0.85   // threshold — only the near-white halo ring blooms
+);
+composer.addPass(bloom);
+
+/* ── The exhibit model group (turned by scroll) ── */
+const model = new THREE.Group();
+model.position.x = TARGET_X;
+scene.add(model);
+
+function frameObject(obj, targetSize){
+  let box = new THREE.Box3().setFromObject(obj);
+  const size = box.getSize(new THREE.Vector3());
+  obj.scale.setScalar(targetSize / Math.max(size.x, size.y, size.z));
+  obj.updateMatrixWorld(true);
+  box = new THREE.Box3().setFromObject(obj);
+  obj.position.sub(box.getCenter(new THREE.Vector3()));
+}
+
+function finishLoad(){ loader.classList.add('done'); }
+
+/* Turn the model into a grey MUSEUM STONE statue with dark stripe detail:
+   desaturate the texture, lift contrast, remap dark→charcoal / light→pale stone. */
+function stonify(mat){
+  if(!mat) return;
+  mat.roughness = 0.70; mat.metalness = 0.15; if(mat.color) mat.color.set(0xffffff);
+  mat.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
+      '#include <map_fragment>\n' +
+      'float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));\n' +
+      '_l = pow(clamp(_l,0.0,1.0), 1.3);\n' +
+      '_l = smoothstep(0.03,0.9,_l);\n' +
+      'diffuseColor.rgb = mix(vec3(0.035,0.035,0.045), vec3(0.30,0.30,0.34), _l);'); // grey stone
+  };
+  mat.needsUpdate = true;
+}
+
+let mixer = null;
+const gltfLoader = new GLTFLoader();
+const draco = new DRACOLoader();
+draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/libs/draco/');
+gltfLoader.setDRACOLoader(draco);
+
+function addGltf(gltf){
+  const m = gltf.scene;
+  m.traverse((o) => { if(o.isMesh){ stonify(o.material); o.castShadow = true; o.receiveShadow = true; } });
+  frameObject(m, 3.2);
+  model.add(m);
+  model.rotation.y = ROT_HERO;   // opening angle — a 3/4 gaze toward the viewer
+  if(gltf.animations && gltf.animations.length){
+    mixer = new THREE.AnimationMixer(m);
+    mixer.clipAction(gltf.animations[0]).play();
+  }
+  finishLoad();
+}
+
+gltfLoader.load(
+  '../assets/white_tiger.glb',
+  (g) => addGltf(g),
+  undefined,
+  () => buildFallbackExhibit()
+);
+
+function buildFallbackExhibit(){
+  const tex = new THREE.TextureLoader().load('../tiger-logo.png', finishLoad, undefined, finishLoad);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.9, 2.9),
+    new THREE.MeshBasicMaterial({ map:tex, transparent:true, side:THREE.DoubleSide })
+  );
+  model.add(plane);
+  if(note) note.style.display = 'block';
+}
+
+setTimeout(finishLoad, 6000);
+
+/* ── Turntable choreography ──
+   The statue rotates through flattering angles as you scroll (never the rear).
+   Hero 3/4 gaze → face → toward full body → majestic left profile. */
+const ROT_HERO = -0.45;
+const rot = { y: ROT_HERO };
+
+/* ── Render loop ── */
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  const t = clock.elapsedTime;
+  ring.position.y = 2.35 + Math.sin(t * 0.6) * 0.04;   // gentle overhead-light float
+  model.rotation.y = rot.y;
+  if(window.__fallbackSpin){                     // gentle idle turn if GSAP unavailable
+    rot.y += dt * 0.12;
+    if(rot.y > 1.9) rot.y = ROT_HERO;            // loop within flattering range
+  }
+  camera.position.set(0, 0.1, camState.z);
+  camera.lookAt(TARGET_X, camState.ty, 0);
+  if(mixer) mixer.update(dt);
+  composer.render();
+}
+animate();
+
+/* ── Resize ── */
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ── Scroll-driven turntable (only if GSAP loaded; scene still shows otherwise) ── */
+if(hasGSAP){
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger:'#scroll', start:'top top', end:'bottom bottom', scrub:1 }
+  });
+  // keyframes reached at each panel: rotate the statue + gentle camera dolly
+  // 0 hero (−0.45, 3/4 gaze) → 1 face (0.15, push in) → 2 body (1.05, pull back) → 3 profile (1.85)
+  tl.to(rot,      { y: 0.15, ease:'power1.inOut', duration:1 }, 0)
+    .to(camState, { z: 4.5, ty: 0.28, ease:'power1.inOut', duration:1 }, 0)   // → THE GAZE (face)
+    .to(rot,      { y: 1.05, ease:'power1.inOut', duration:1 }, 1)
+    .to(camState, { z: 5.5, ty: 0.05, ease:'power1.inOut', duration:1 }, 1)   // → THE FRAME (full body)
+    .to(rot,      { y: 1.85, ease:'power1.inOut', duration:1 }, 2)
+    .to(camState, { z: 5.1, ty: 0.05, ease:'power1.inOut', duration:1 }, 2);  // → THE REVEAL (profile)
+
+  /* Editorial text: fade/slide in and out, synced to scroll */
+  gsap.utils.toArray('[data-panel]').forEach((panel) => {
+    const inner = panel.querySelector('.inner');
+    gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
+      autoAlpha:1, y:0, ease:'power2.out',
+      scrollTrigger:{ trigger:panel, start:'top 82%', end:'top 45%', scrub:true }
     });
-  })();
+    gsap.to(inner, {
+      autoAlpha:0, y:-34, ease:'power2.in',
+      scrollTrigger:{ trigger:panel, start:'bottom 60%', end:'bottom 20%', scrub:true }
+    });
+  });
+} else {
+  window.__fallbackSpin = true;   // no GSAP → gently turn the statue on a loop
+}
 </script>
 </body>
 </html>
