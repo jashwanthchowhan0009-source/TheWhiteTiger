@@ -1,7 +1,7 @@
 export function Contact() {
   return (
     <section id="contact" className="section h-100" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <div className="layer-front" style={{ marginTop: '6vh' }} data-reveal>
+      <div className="layer-front copy-scrim c" style={{ marginTop: '6vh', maxWidth: 'min(900px, 92vw)', marginLeft: 'auto', marginRight: 'auto' }} data-reveal>
         <h2 className="den-head">Enter the den.</h2>
         <a href="mailto:hello@thewhitetiger.studio" className="den-mail">hello@thewhitetiger.studio</a>
       </div>

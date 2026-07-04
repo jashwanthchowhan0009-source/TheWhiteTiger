@@ -6,12 +6,12 @@ export function Elegance() {
         <div className="giant" data-giant style={{ fontSize: '20vw' }}>UNTAMED</div>
       </div>
       {/* left column copy in front */}
-      <div className="layer-front" style={{ position: 'absolute', top: '38vh', left: 'clamp(20px,5vw,64px)', maxWidth: '34ch' }} data-reveal>
-        <span className="num-label">01 — The Form</span>
+      <div className="layer-front copy-scrim" style={{ position: 'absolute', top: '30vh', left: 'clamp(20px,5vw,64px)', maxWidth: '38ch' }} data-reveal>
+        <span className="num-label">01 — The Gaze</span>
+        <h2 className="h-sec" style={{ marginBottom: 14 }}>Eyes of<br /><span className="italic amber">stone.</span></h2>
         <p className="col-copy">
-          <strong>Descending, deliberate.</strong> Shoulders raised, head low, one paw already
-          reaching past the plinth. The stone remembers the muscle beneath — every plane cut to
-          catch the light and let the shadow do the rest.
+          Head low, unblinking. Every plane of the face cut to catch the light and let the shadow
+          do the rest — the apex stare, held forever.
         </p>
       </div>
     </section>

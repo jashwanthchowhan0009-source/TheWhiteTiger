@@ -18,6 +18,10 @@ export default function App() {
   const [done, setDone] = useState(false);    // fade the loader
 
   useEffect(() => {
+    // debug framing mode (?pose=…) skips the loader for fast iteration
+    if (new URLSearchParams(window.location.search).has('pose')) {
+      setReady(true); setTimeout(() => setDone(true), 60); return;
+    }
     const fonts = (document as any).fonts?.ready ?? Promise.resolve();
     // never block forever on fonts (offline / blocked CDN): cap the wait
     const fontsCapped = Promise.race([fonts, new Promise((r) => setTimeout(r, 2200))]);

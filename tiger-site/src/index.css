@@ -101,6 +101,11 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes hint { 40% { transform: translateY(0); } 100% { transform: translateY(100%); } }
 .scroll-hint span { font-size: 10px; letter-spacing: 0.3em; color: var(--dim); }
 
+/* soft dark scrim so copy stays readable over the light stone */
+.copy-scrim { background: radial-gradient(135% 150% at 0% 18%, rgba(14,14,16,.92), rgba(14,14,16,.52) 50%, transparent 80%); padding: 30px 34px; border-radius: 16px; }
+.copy-scrim.r { background: radial-gradient(135% 150% at 100% 18%, rgba(14,14,16,.92), rgba(14,14,16,.52) 50%, transparent 80%); }
+.copy-scrim.c { background: radial-gradient(75% 65% at 50% 50%, rgba(14,14,16,.86), rgba(14,14,16,.4) 55%, transparent 78%); padding: 40px; border-radius: 24px; }
+
 /* ── Editorial columns ── */
 .col-copy { max-width: 34ch; color: var(--dim); font-size: 1.02rem; line-height: 1.75; }
 .col-copy strong { color: var(--ink); font-weight: 500; }

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { tigerState, SHOTS, prefersReducedMotion } from '../scroll/tigerState';
+import { tigerState, SHOTS, prefersReducedMotion, debugPose } from '../scroll/tigerState';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +13,14 @@ export function useScroll(ready: boolean) {
   useEffect(() => {
     if (!ready) return;
     const reduced = prefersReducedMotion();
+
+    // debug: freeze a single pose for framing (?pose=elegance&scale=2.6…)
+    const dbg = debugPose();
+    if (dbg) {
+      Object.assign(tigerState, dbg);
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => (el.style.opacity = '1'));
+      return;
+    }
 
     if (reduced) {
       Object.assign(tigerState, SHOTS.hero);
