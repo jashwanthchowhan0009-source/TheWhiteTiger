@@ -44,7 +44,7 @@ export function FallbackTiger() {
     const px = mob ? 0 : tigerState.posX;
     outer.current.position.x += (px - outer.current.position.x) * Math.min(1, dt * 4);
     outer.current.position.y += (tigerState.posY - outer.current.position.y) * Math.min(1, dt * 4);
-    const sc = tigerState.scale;
+    const sc = tigerState.scale * (mob ? 0.64 : 1);
     outer.current.scale.setScalar(outer.current.scale.x + (sc - outer.current.scale.x) * Math.min(1, dt * 4));
     const t = performance.now() * 0.001;
     const par = (mob || reduced) ? 0 : pointer.x * 0.03;

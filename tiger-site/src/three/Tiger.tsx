@@ -38,11 +38,11 @@ export function Tiger() {
   useFrame((_, dt) => {
     if (!outer.current || !inner.current) return;
     const mob = isMobile();
-    // scroll-driven pose (mobile stays centred: no x travel)
+    // scroll-driven pose (mobile stays centred + zoomed out to fit portrait)
     const px = mob ? 0 : tigerState.posX;
     outer.current.position.x += (px - outer.current.position.x) * Math.min(1, dt * 4);
     outer.current.position.y += (tigerState.posY - outer.current.position.y) * Math.min(1, dt * 4);
-    const sc = tigerState.scale;
+    const sc = tigerState.scale * (mob ? 0.64 : 1);
     outer.current.scale.x += (sc - outer.current.scale.x) * Math.min(1, dt * 4);
     outer.current.scale.y = outer.current.scale.z = outer.current.scale.x;
 
