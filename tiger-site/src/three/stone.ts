@@ -39,9 +39,34 @@ function heightCanvas(size = 512): Float32Array {
   return h;
 }
 
-export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE.Texture } {
+export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE.Texture; color: THREE.Texture } {
   const h = heightCanvas(size);
   const idx = (x: number, y: number) => ((y + size) % size) * size + ((x + size) % size);
+
+  // ── albedo / colour map: weathered granite — grey base with warm & cool
+  // mineral blotches and dark speckle, so the stone reads rough and real ──
+  const cCanvas = document.createElement('canvas'); cCanvas.width = cCanvas.height = size;
+  const cctx = cCanvas.getContext('2d')!; const cImg = cctx.createImageData(size, size);
+  const GREY = [0x8f, 0x8a, 0x82], WARM = [0xa2, 0x93, 0x80], COOL = [0x79, 0x7e, 0x7c], VEIN = [0x45, 0x43, 0x3f];
+  const mix = (a: number[], b: number[], t: number) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const nx = (x / size) * 8, ny = (y / size) * 8;
+      const warm = fbm(nx * 0.9 + 3, ny * 0.9 + 3, 23);
+      const cool = fbm(nx * 1.4 + 9, ny * 1.4 + 9, 51);
+      const speck = fbm(nx * 9, ny * 9, 88);
+      let col = mix(GREY, WARM, Math.max(0, warm - 0.45) * 1.6);
+      col = mix(col, COOL, Math.max(0, cool - 0.5) * 1.4);
+      if (speck > 0.78) col = mix(col, VEIN, (speck - 0.78) * 3.2);       // dark grains
+      if (speck < 0.16) col = mix(col, [0xc4, 0xbf, 0xb6], (0.16 - speck) * 2); // quartz flecks
+      const i = (y * size + x) * 4;
+      cImg.data[i] = col[0]; cImg.data[i + 1] = col[1]; cImg.data[i + 2] = col[2]; cImg.data[i + 3] = 255;
+    }
+  }
+  cctx.putImageData(cImg, 0, 0);
+  const color = new THREE.CanvasTexture(cCanvas);
+  color.colorSpace = THREE.SRGBColorSpace;
+  color.wrapS = color.wrapT = THREE.RepeatWrapping; color.repeat.set(3, 3); color.anisotropy = 4;
 
   // Normal map from height gradient
   const nCanvas = document.createElement('canvas'); nCanvas.width = nCanvas.height = size;
@@ -78,19 +103,20 @@ export function makeStoneMaps(size = 512): { normal: THREE.Texture; rough: THREE
     t.repeat.set(6, 6);
     t.anisotropy = 4;
   }
-  return { normal, rough };
+  return { normal, rough, color };
 }
 
 // A single weathered-granite material reused across every mesh of the tiger.
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
-  const { normal, rough } = makeStoneMaps();
+  const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#9b958c'),
-    roughness: 0.68,
+    color: new THREE.Color('#efe9df'),   // light tint; granite tones live in the map
+    map: color,
+    roughness: 0.72,
     metalness: 0.0,
-    envMapIntensity: 0.42,
+    envMapIntensity: 0.40,
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.9, 0.9),
+    normalScale: new THREE.Vector2(1.0, 1.0),
     roughnessMap: rough,
   });
   // faint surviving stripes: a soft directional band along the body axis, mixed

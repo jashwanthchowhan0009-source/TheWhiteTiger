@@ -34,9 +34,9 @@ function Stat({ to, suffix, label, decimals = 0, pad = false }: { to: number; su
 export function About() {
   return (
     <section id="about" className="section h-100" style={{ display: 'flex', alignItems: 'center' }}>
-      <div className="layer-front" style={{ marginLeft: 'auto', maxWidth: '46ch' }} data-reveal>
-        <span className="num-label">02 — The Making</span>
-        <h2 className="h-sec">Carved,<br />not cast.</h2>
+      <div className="layer-front copy-scrim r" style={{ marginLeft: 'auto', maxWidth: '50ch' }} data-reveal>
+        <span className="num-label">02 — The Form</span>
+        <h2 className="h-sec">Carved,<br />not <span className="italic amber">cast.</span></h2>
         <p className="col-copy" style={{ maxWidth: '46ch' }}>
           No mould, no shortcut. A single block met the chisel until the predator emerged —
           the descent, the tension in the haunches, the low unbroken stare.
