@@ -201,13 +201,17 @@ renderer.shadowMap.enabled = true;                 // real cast shadows → grou
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 stage.appendChild(renderer.domElement);
 
-/* ── Scene & camera ── */
+/* ── Scene & camera ──
+   Museum-portrait framing: the tiger's HEAD sits large on the RIGHT (the model
+   group is offset to +X and the camera looks straight down −Z), leaving the
+   left side open for text. A close dolly makes it a face bust, not a small animal. */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.05, 100);
-const camState = { z:5.2, ty:0.0 };            // dolly distance + look-at height (scroll-driven)
-const TARGET_X = 0.55;                          // statue lives on the right; text on the left
-camera.position.set(0, 0.1, camState.z);
-camera.lookAt(TARGET_X, camState.ty, 0);
+const camState = { z:3.15 };                    // dolly distance (scroll-driven)
+const CAM_Y = 0.06;                             // eye-level, kept flat (no tilt)
+const TARGET_X = 1.22;                           // pushes the head to the right third; text on the left
+camera.position.set(0, CAM_Y, camState.z);
+camera.lookAt(0, CAM_Y, 0);
 
 /* Image-based lighting for realistic stone PBR */
 const pmrem = new THREE.PMREMGenerator(renderer);
@@ -234,7 +238,7 @@ const ring = new THREE.Mesh(
   new THREE.TorusGeometry(1.15, 0.018, 32, 220),
   new THREE.MeshBasicMaterial({ color:0xffffff })
 );
-ring.position.set(TARGET_X, 2.35, -0.1);       // hovers above the tiger like an overhead ring-light
+ring.position.set(TARGET_X, 1.5, -0.1);        // hovers above the tiger's head like an overhead ring-light
 ring.rotation.x = Math.PI / 2;                 // laid flat (90° on X) — a horizontal halo casting light down
 scene.add(ring);
 
@@ -244,7 +248,7 @@ const ground = new THREE.Mesh(
   new THREE.ShadowMaterial({ opacity: 0.55 })   // transparent — shows ONLY the shadow over the black stage
 );
 ground.rotation.x = -Math.PI / 2;
-ground.position.set(TARGET_X, -1.15, 0);
+ground.position.set(TARGET_X, -1.05, 0);
 ground.receiveShadow = true;
 scene.add(ground);
 
@@ -297,10 +301,17 @@ const draco = new DRACOLoader();
 draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/libs/draco/');
 gltfLoader.setDRACOLoader(draco);
 
+/* Pivot the statue around its HEAD (not its body centre) so the face stays put
+   and only turns as you scroll — a rotating museum bust. Head anchor measured
+   from the model: eyes/neck ≈ (0, 0.30, 1.0) after frameObject. */
+const HEAD_ANCHOR = { y: 0.30, z: 1.0 };
+
 function addGltf(gltf){
   const m = gltf.scene;
   m.traverse((o) => { if(o.isMesh){ stonify(o.material); o.castShadow = true; o.receiveShadow = true; } });
   frameObject(m, 3.2);
+  m.position.y -= HEAD_ANCHOR.y;   // shift so the head sits at the group origin…
+  m.position.z -= HEAD_ANCHOR.z;   // …then model.rotation.y turns the face in place
   model.add(m);
   model.rotation.y = ROT_HERO;   // opening angle — a 3/4 gaze toward the viewer
   if(gltf.animations && gltf.animations.length){
@@ -330,11 +341,13 @@ function buildFallbackExhibit(){
 
 setTimeout(finishLoad, 6000);
 
-/* ── Turntable choreography ──
-   The statue rotates through flattering angles as you scroll (never the rear).
-   Hero 3/4 gaze → face → toward full body → majestic left profile. */
+/* ── Portrait choreography ──
+   The face turns in place as you scroll — right-3/4 gaze → head-on eyes →
+   left-3/4 — a museum bust seen from a new angle at each level. The range is
+   kept tight so the body recedes behind and never sweeps across the text. */
 const ROT_HERO = -0.45;
 const rot = { y: ROT_HERO };
+let fbDir = 1;
 
 /* ── Render loop ── */
 const clock = new THREE.Clock();
@@ -342,14 +355,15 @@ function animate(){
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
   const t = clock.elapsedTime;
-  ring.position.y = 2.35 + Math.sin(t * 0.6) * 0.04;   // gentle overhead-light float
+  ring.position.y = 1.5 + Math.sin(t * 0.6) * 0.03;    // gentle overhead-light float
   model.rotation.y = rot.y;
   if(window.__fallbackSpin){                     // gentle idle turn if GSAP unavailable
-    rot.y += dt * 0.12;
-    if(rot.y > 1.9) rot.y = ROT_HERO;            // loop within flattering range
+    rot.y += dt * 0.10 * fbDir;
+    if(rot.y > 0.45){ rot.y = 0.45; fbDir = -1; } // ping-pong within the portrait range
+    if(rot.y < -0.45){ rot.y = -0.45; fbDir = 1; }
   }
-  camera.position.set(0, 0.1, camState.z);
-  camera.lookAt(TARGET_X, camState.ty, 0);
+  camera.position.set(0, CAM_Y, camState.z);
+  camera.lookAt(0, CAM_Y, 0);
   if(mixer) mixer.update(dt);
   composer.render();
 }
@@ -368,14 +382,14 @@ if(hasGSAP){
   const tl = gsap.timeline({
     scrollTrigger: { trigger:'#scroll', start:'top top', end:'bottom bottom', scrub:1 }
   });
-  // keyframes reached at each panel: rotate the statue + gentle camera dolly
-  // 0 hero (−0.45, 3/4 gaze) → 1 face (0.15, push in) → 2 body (1.05, pull back) → 3 profile (1.85)
-  tl.to(rot,      { y: 0.15, ease:'power1.inOut', duration:1 }, 0)
-    .to(camState, { z: 4.5, ty: 0.28, ease:'power1.inOut', duration:1 }, 0)   // → THE GAZE (face)
-    .to(rot,      { y: 1.05, ease:'power1.inOut', duration:1 }, 1)
-    .to(camState, { z: 5.5, ty: 0.05, ease:'power1.inOut', duration:1 }, 1)   // → THE FRAME (full body)
-    .to(rot,      { y: 1.85, ease:'power1.inOut', duration:1 }, 2)
-    .to(camState, { z: 5.1, ty: 0.05, ease:'power1.inOut', duration:1 }, 2);  // → THE REVEAL (profile)
+  // keyframes at each panel: turn the face + a subtle dolly (portrait-safe range)
+  // hero (−0.45, right-3/4) → GAZE (−0.05, head-on, push in) → FRAME (+0.20) → REVEAL (+0.42)
+  tl.to(rot,      { y: -0.05, ease:'power1.inOut', duration:1 }, 0)
+    .to(camState, { z: 2.92, ease:'power1.inOut', duration:1 }, 0)   // → THE GAZE (eyes, closest)
+    .to(rot,      { y:  0.20, ease:'power1.inOut', duration:1 }, 1)
+    .to(camState, { z: 3.10, ease:'power1.inOut', duration:1 }, 1)   // → THE FRAME
+    .to(rot,      { y:  0.42, ease:'power1.inOut', duration:1 }, 2)
+    .to(camState, { z: 3.28, ease:'power1.inOut', duration:1 }, 2);  // → THE REVEAL (other cheek)
 
   /* Editorial text: fade/slide in and out, synced to scroll */
   gsap.utils.toArray('[data-panel]').forEach((panel) => {
