@@ -47,9 +47,11 @@
   .back:hover{color:var(--gold-2)}
   @media(max-width:720px){ .nav .links{display:none} }
 
-  /* cinematic scroll panels */
+  /* cinematic pinned stage — the tiger snaps between shots while text crossfades in place */
   #cine{position:relative;z-index:10}
-  .panel{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:0 6vw;position:relative}
+  #cine-stage{height:100svh;position:relative;overflow:hidden}
+  .panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 6vw}
+  .panel[data-inner="1"] .inner,.panel[data-inner="2"] .inner{opacity:0}  /* revealed in sequence by JS */
   .panel .inner{max-width:min(42vw,520px)}
   .panel.right{align-items:flex-end;text-align:right}
   .panel.right .inner{margin-left:auto}
@@ -131,38 +133,40 @@
   <a href="../" class="back">← Back to site</a>
 </header>
 
-<!-- Cinematic sequence: face → muscle → claws -->
+<!-- Cinematic pinned sequence: face → muscle → claws (text crossfades in place) -->
 <main id="cine">
-  <!-- 0 · half-face on the RIGHT, text LEFT -->
-  <section class="panel" data-panel data-shot="0">
-    <div class="inner">
-      <span class="eyebrow">The Exhibition</span>
-      <h1 class="h-hero serif">The White<br><em>Tiger</em></h1>
-      <p class="lede">Come closer. Scroll — and move through the beast: its gaze, its muscle, its claws.</p>
-    </div>
-  </section>
-
-  <!-- 1 · tiger snaps LEFT (face + shoulder muscle), text RIGHT -->
-  <section class="panel right" data-panel data-shot="1">
-    <div class="inner">
-      <span class="eyebrow">I · The Gaze</span>
-      <h2 class="h-sec serif">Watchful.<br><em style="font-style:italic;color:var(--gold-2)">Precise.</em></h2>
-      <p class="lede">Eyes that never blink and shoulders built to move — signal over noise, truth over spectacle.</p>
-    </div>
-  </section>
-
-  <!-- 2 · extreme zoom to the CLAWS on the RIGHT, text LEFT -->
-  <section class="panel" data-panel data-shot="2">
-    <div class="inner">
-      <span class="eyebrow">II · The Edge</span>
-      <h2 class="h-sec serif">Precision,<br>to the <em style="font-style:italic;color:var(--gold-2)">claw</em>.</h2>
-      <p class="lede">Muscle without the noise — every source verified, every claim traceable.</p>
-      <div class="spec">
-        <div class="s"><b>24+</b><span>Verified sources</span></div>
-        <div class="s"><b>9</b><span>VIBGYOR pillars</span></div>
+  <div id="cine-stage">
+    <!-- 0 · half-face on the RIGHT, text LEFT -->
+    <section class="panel" data-inner="0">
+      <div class="inner">
+        <span class="eyebrow">The Exhibition</span>
+        <h1 class="h-hero serif">The White<br><em>Tiger</em></h1>
+        <p class="lede">Come closer. Scroll — and move through the beast: its gaze, its muscle, its claws.</p>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- 1 · tiger snaps LEFT (face + shoulder muscle), text RIGHT -->
+    <section class="panel right" data-inner="1">
+      <div class="inner">
+        <span class="eyebrow">I · The Gaze</span>
+        <h2 class="h-sec serif">Watchful.<br><em style="font-style:italic;color:var(--gold-2)">Precise.</em></h2>
+        <p class="lede">Eyes that never blink and shoulders built to move — signal over noise, truth over spectacle.</p>
+      </div>
+    </section>
+
+    <!-- 2 · extreme zoom to the CLAWS on the RIGHT, text LEFT -->
+    <section class="panel" data-inner="2">
+      <div class="inner">
+        <span class="eyebrow">II · The Edge</span>
+        <h2 class="h-sec serif">Precision,<br>to the <em style="font-style:italic;color:var(--gold-2)">claw</em>.</h2>
+        <p class="lede">Muscle without the noise — every source verified, every claim traceable.</p>
+        <div class="spec">
+          <div class="s"><b>24+</b><span>Verified sources</span></div>
+          <div class="s"><b>9</b><span>VIBGYOR pillars</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 
 <!-- Normal website section -->
@@ -386,31 +390,39 @@ window.addEventListener('resize', () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ── Scroll-driven cinematography ── */
+/* ── Scroll-driven cinematography ──
+   The stage is PINNED and one scrubbed timeline drives everything, so the model
+   snap and the text swap are perfectly in sync — text on one side, tiger frame
+   on the other, with no overlap during the move. */
 if(hasGSAP){
-  // scrub the tiger between the three shots across the cinematic section
-  const tl = gsap.timeline({ scrollTrigger:{ trigger:'#cine', start:'top top', end:'bottom bottom', scrub:0.6 } });
-  tl.to(st, { ...SHOTS[1], ease:'power2.inOut', duration:1 }, 0)   // half-face → snap LEFT (face+shoulder)
-    .to(st, { ...SHOTS[2], ease:'power2.inOut', duration:1 }, 1);  // → extreme claws on the RIGHT
+  const SNAP = 'expo.inOut';                 // crisp, decisive snap between poses
+  const inners = gsap.utils.toArray('.panel .inner');
+  gsap.set(inners[0], { autoAlpha:1 });
+  gsap.set([inners[1], inners[2]], { autoAlpha:0 });
 
-  // text fade per panel
-  gsap.utils.toArray('[data-panel]').forEach((panel) => {
-    const inner = panel.querySelector('.inner');
-    gsap.fromTo(inner, { autoAlpha:0, y:44 }, {
-      autoAlpha:1, y:0, ease:'power2.out',
-      scrollTrigger:{ trigger:panel, start:'top 80%', end:'top 45%', scrub:true }
-    });
-    gsap.to(inner, {
-      autoAlpha:0, y:-30, ease:'power2.in',
-      scrollTrigger:{ trigger:panel, start:'bottom 58%', end:'bottom 22%', scrub:true }
-    });
+  const tl = gsap.timeline({
+    defaults:{ ease:SNAP },
+    scrollTrigger:{ trigger:'#cine', start:'top top', end:'+=320%', scrub:0.25, pin:'#cine-stage', anticipatePin:1 }
   });
 
-  // hide the scroll cue once you leave the hero
+  // ── SHOT 0 (hold) → SNAP → SHOT 1 ──
+  tl.to({}, { duration:0.9 })                                       // hold the half-face
+    .to(inners[0], { autoAlpha:0, duration:0.18 }, 0.82)           // clear text 0 just before the move
+    .to(st, { ...SHOTS[1], duration:0.42 }, 0.92)                   // SNAP: tiger flies to the LEFT
+    .to(inners[1], { autoAlpha:1, duration:0.22 }, 1.24)           // text 1 appears (right) once settled
+  // ── SHOT 1 (hold) → SNAP → SHOT 2 ──
+    .to({}, { duration:0.55 })                                      // hold the shoulder
+    .to(inners[1], { autoAlpha:0, duration:0.18 }, 1.92)
+    .to(st, { ...SHOTS[2], duration:0.42 }, 2.02)                   // SNAP: extreme zoom to the CLAWS (right)
+    .to(inners[2], { autoAlpha:1, duration:0.22 }, 2.34)
+    .to({}, { duration:0.5 });                                      // hold the claws
+
+  // hide the scroll cue once the sequence starts
   const cue = document.getElementById('cue');
-  ScrollTrigger.create({ trigger:'#cine', start:'top top-=80', onEnter:()=>cue&&(cue.style.opacity='0'),
+  ScrollTrigger.create({ trigger:'#cine', start:'top top-=60', onEnter:()=>cue&&(cue.style.opacity='0'),
     onLeaveBack:()=>cue&&(cue.style.opacity='1') });
 } else {
+  gsap && gsap.set && gsap.set('.panel .inner', { autoAlpha:1 });
   window.__fallbackSway = true;   // no GSAP → hold the hero half-face with a gentle sway
 }
 </script>
