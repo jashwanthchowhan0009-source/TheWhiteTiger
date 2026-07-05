@@ -143,26 +143,16 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
 // A single weathered-granite material reused across every mesh of the tiger.
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
+  // polished grey MARBLE — smooth carved-statue stone (no markings)
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#c9cbce'),   // neutral grey tint; granite tones live in the map
+    color: new THREE.Color('#b7b9bd'),   // mid light-grey; granite tones live in the map
     map: color,
-    roughness: 0.76,
+    roughness: 0.5,                       // semi-polished so the light rakes across it
     metalness: 0.0,
-    envMapIntensity: 0.35,
+    envMapIntensity: 0.32,
     normalMap: normal,
-    normalScale: new THREE.Vector2(1.05, 1.05),
+    normalScale: new THREE.Vector2(0.75, 0.75),
     roughnessMap: rough,
   });
-  // faint surviving stripes: a soft directional band along the body axis, mixed
-  // into the albedo at low strength so the tiger's markings ghost through stone.
-  mat.onBeforeCompile = (sh) => {
-    sh.fragmentShader = sh.fragmentShader.replace(
-      '#include <color_fragment>',
-      `#include <color_fragment>
-       float band = sin(vViewPosition.y * 6.0 + vViewPosition.x * 2.0);
-       band = smoothstep(0.72, 1.0, abs(band));
-       diffuseColor.rgb *= (1.0 - 0.12 * band);`
-    );
-  };
   return mat;
 }

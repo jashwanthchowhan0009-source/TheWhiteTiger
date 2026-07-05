@@ -35,19 +35,19 @@ export function About() {
   return (
     <section id="about" className="section h-100" style={{ display: 'flex', alignItems: 'center' }}>
       <div className="layer-front copy-scrim r sec-copy" style={{ marginLeft: 'auto', maxWidth: '50ch' }} data-reveal>
-        <span className="num-label">02 — The Form</span>
-        <h2 className="h-sec">Carved,<br />not <span className="italic amber">cast.</span></h2>
+        <span className="num-label">02 — VIBGYOR</span>
+        <h2 className="h-sec">Your feed. Your data.<br />Your <span className="italic amber">call</span>.</h2>
         <p className="col-copy" style={{ maxWidth: '46ch' }}>
-          No mould, no shortcut. A single block met the chisel until the predator emerged —
-          the descent, the tension in the haunches, the low unbroken stare.
+          Personalised news, a searchable history and a personal data layer you can see, export
+          or delete — anytime.
         </p>
         <p className="col-copy" style={{ maxWidth: '46ch', marginTop: 14 }}>
-          What remains is weight and patience, made to be circled and studied from every angle.
+          Nine pillars organise the world's information into a spectrum you can actually navigate.
         </p>
         <div className="stats">
-          <Stat to={120} suffix="+" label="Hours of carving" />
-          <Stat to={1.2} suffix="t" decimals={1} label="Tonnes of granite" />
-          <Stat to={1} pad label="Apex predator" />
+          <Stat to={24} suffix="+" label="Verified sources" />
+          <Stat to={9} pad label="VIBGYOR pillars" />
+          <Stat to={100} suffix="%" label="Traceable claims" />
         </div>
       </div>
     </section>

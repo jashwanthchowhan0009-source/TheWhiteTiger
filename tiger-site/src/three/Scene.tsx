@@ -49,9 +49,9 @@ function Lights() {
         shadow-bias={-0.0004}
         shadow-radius={7}
       />
-      {/* faint cool edge on the shadow (left/back) side so it isn't pure black */}
-      <directionalLight ref={rim} position={[-4.5, 2.5, -3.5]} intensity={0.6} color={'#9fb2e6'} />
-      <hemisphereLight ref={hemi} args={['#aab3c6', '#0a0a0e', 0.12]} />
+      {/* barely-there edge on the shadow side so it isn't pure black */}
+      <directionalLight ref={rim} position={[-4.5, 2.5, -3.5]} intensity={0.18} color={'#9fb2e6'} />
+      <hemisphereLight ref={hemi} args={['#9aa3b6', '#08080b', 0.08]} />
     </>
   );
 }
@@ -59,7 +59,7 @@ function Lights() {
 export function Scene() {
   return (
     <>
-      {/* transparent canvas — the CSS vignette + giant words show through behind the tiger */}
+      {/* transparent canvas — the CSS vignette shows through behind the tiger */}
       <RoomEnv />
       <Lights />
       <ModelBoundary fallback={<FallbackTiger />}>
@@ -67,7 +67,17 @@ export function Scene() {
           <Tiger />
         </Suspense>
       </ModelBoundary>
-      <ContactShadows position={[0, -1.35, 0]} scale={9} blur={2.6} opacity={0.55} far={4} resolution={1024} color="#000000" />
+      {/* real cast shadow from the single key light, thrown onto a floor plane */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.42, 0]} receiveShadow>
+        <planeGeometry args={[26, 26]} />
+        <shadowMaterial transparent opacity={0.6} />
+      </mesh>
+      {/* faint back wall to catch a subtle projected silhouette */}
+      <mesh position={[0, 1.2, -3.4]} receiveShadow>
+        <planeGeometry args={[30, 18]} />
+        <shadowMaterial transparent opacity={0.42} />
+      </mesh>
+      <ContactShadows position={[0, -1.4, 0]} scale={10} blur={3} opacity={0.4} far={4} resolution={1024} color="#000000" />
     </>
   );
 }
