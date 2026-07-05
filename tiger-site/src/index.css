@@ -81,6 +81,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ── Hero ── */
+.hero-copy { position: absolute; left: clamp(20px, 5vw, 64px); top: 50%; transform: translateY(-50%); max-width: 42ch; z-index: 3; }
 .hero-wrap { position: relative; display: grid; place-items: center; text-align: center; height: 100svh; }
 .hero-head {
   font-family: var(--serif); font-weight: 700;
