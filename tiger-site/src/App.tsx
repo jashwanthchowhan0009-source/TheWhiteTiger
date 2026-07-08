@@ -48,9 +48,9 @@ export default function App() {
         {ready && (
           <Canvas
             dpr={[1, 2]}
-            shadows={{ type: THREE.VSMShadowMap }}
+            shadows
             camera={{ fov: 34, position: [0.7, 1.6, 6.8], near: 0.1, far: 100 }}
-            gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+            gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
             onCreated={({ gl, camera }) => {
               gl.toneMapping = THREE.ACESFilmicToneMapping;
               gl.toneMappingExposure = 1.02;
