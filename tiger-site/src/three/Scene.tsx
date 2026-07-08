@@ -2,82 +2,80 @@ import { Suspense, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
-import { RoomEnv } from './RoomEnv';
+import { Studio } from './Studio';
 import { Tiger } from './Tiger';
 import { FallbackTiger } from './FallbackTiger';
 import { ModelBoundary } from './ErrorBoundary';
 import { tigerState } from '../scroll/tigerState';
 
-const NEUTRAL = new THREE.Color('#fff1e0');
-const WARM = new THREE.Color('#ffc98a');
+const NEUTRAL = new THREE.Color('#fff3e6');
+const WARM = new THREE.Color('#ffcf9a');
 
-// Three-point rig whose intensities/temperature are driven by the scroll state.
-function Lights() {
+// The studio does the heavy lifting (soft-box IBL). On top we add ONE crisp
+// directional "key" that gives the sculpture a defined form + casts the real
+// grounded shadow onto the cyclorama. Its intensity/warmth glide with scroll so
+// each beat has a subtle mood shift without ever leaving the studio look.
+function KeyLight() {
   const key = useRef<THREE.DirectionalLight>(null!);
-  const rim = useRef<THREE.DirectionalLight>(null!);
-  const hemi = useRef<THREE.HemisphereLight>(null!);
   const tmp = new THREE.Color();
-
   useFrame((_, dt) => {
-    const k = Math.min(1, dt * 3);
+    const k = Math.min(1, dt * 2.4);
     if (key.current) {
-      key.current.intensity += (tigerState.key - key.current.intensity) * k;
+      // base ~1.6, gently modulated by the scroll state's key value
+      const target = 1.35 + tigerState.key * 0.28;
+      key.current.intensity += (target - key.current.intensity) * k;
       tmp.copy(NEUTRAL).lerp(WARM, tigerState.keyWarm);
       key.current.color.lerp(tmp, k);
     }
-    if (rim.current) rim.current.intensity += (tigerState.rim - rim.current.intensity) * k;
-    if (hemi.current) hemi.current.intensity += (tigerState.fill - hemi.current.intensity) * k;
   });
-
   return (
-    <>
-      {/* KEY: far right + up + slightly front → carves the form, deep shadow on the left */}
-      <directionalLight
-        ref={key}
-        position={[6.5, 6.2, 3.2]}
-        intensity={2.6}
-        color={'#fff2e2'}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-near={1}
-        shadow-camera-far={24}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={6}
-        shadow-camera-bottom={-6}
-        shadow-bias={-0.0004}
-        shadow-radius={7}
-      />
-      {/* barely-there edge on the shadow side so it isn't pure black */}
-      <directionalLight ref={rim} position={[-4.5, 2.5, -3.5]} intensity={0.18} color={'#9fb2e6'} />
-      <hemisphereLight ref={hemi} args={['#9aa3b6', '#08080b', 0.08]} />
-    </>
+    <directionalLight
+      ref={key}
+      position={[6.5, 7, 4]}
+      intensity={1.7}
+      color={'#fff3e6'}
+      castShadow
+      shadow-mapSize-width={2048}
+      shadow-mapSize-height={2048}
+      shadow-camera-near={1}
+      shadow-camera-far={30}
+      shadow-camera-left={-7}
+      shadow-camera-right={7}
+      shadow-camera-top={7}
+      shadow-camera-bottom={-7}
+      shadow-bias={-0.0004}
+      shadow-radius={12}
+      shadow-blurSamples={24}
+    />
   );
 }
 
 export function Scene() {
   return (
     <>
-      {/* transparent canvas — the CSS vignette shows through behind the tiger */}
-      <RoomEnv />
-      <Lights />
+      {/* neutral studio grey behind the cyclorama (never pure black) */}
+      <color attach="background" args={['#191a1d']} />
+      <fog attach="fog" args={['#191a1d', 12, 26]} />
+
+      <Studio />
+      <KeyLight />
+
       <ModelBoundary fallback={<FallbackTiger />}>
         <Suspense fallback={null}>
           <Tiger />
         </Suspense>
       </ModelBoundary>
-      {/* real cast shadow from the single key light, thrown onto a floor plane */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.42, 0]} receiveShadow>
-        <planeGeometry args={[26, 26]} />
-        <shadowMaterial transparent opacity={0.6} />
-      </mesh>
-      {/* faint back wall to catch a subtle projected silhouette */}
-      <mesh position={[0, 1.2, -3.4]} receiveShadow>
-        <planeGeometry args={[30, 18]} />
-        <shadowMaterial transparent opacity={0.42} />
-      </mesh>
-      <ContactShadows position={[0, -1.4, 0]} scale={10} blur={3} opacity={0.4} far={4} resolution={1024} color="#000000" />
+
+      {/* soft grounded contact shadow directly under the paws */}
+      <ContactShadows
+        position={[0, -1.5, 0]}
+        scale={14}
+        blur={3.2}
+        opacity={0.55}
+        far={5}
+        resolution={1024}
+        color="#0a0a0c"
+      />
     </>
   );
 }

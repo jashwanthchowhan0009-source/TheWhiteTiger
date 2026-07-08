@@ -30,7 +30,7 @@ export function useScroll(ready: boolean) {
       return;
     }
 
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.4 });
+    const lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.95, touchMultiplier: 1.5 });
     lenis.on('scroll', ScrollTrigger.update);
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
@@ -39,7 +39,7 @@ export function useScroll(ready: boolean) {
     const ctx = gsap.context(() => {
       // ── master sculpture choreography ──
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: '#scroll-root', start: 'top top', end: 'bottom bottom', scrub: 1 },
+        scrollTrigger: { trigger: '#scroll-root', start: 'top top', end: 'bottom bottom', scrub: 1.2 },
       });
       tl.to(tigerState, { ...SHOTS.elegance, ease: 'none', duration: 1.1 })
         .to(tigerState, { ...SHOTS.about, ease: 'none', duration: 0.9 })
