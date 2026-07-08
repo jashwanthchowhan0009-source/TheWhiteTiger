@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Scene } from './three/Scene';
+import { ModelBoundary } from './three/ErrorBoundary';
 import { Nav } from './components/Nav';
 import { Grain } from './components/Grain';
 import { Loader } from './components/Loader';
@@ -45,24 +46,29 @@ export default function App() {
       <Nav />
 
       <div className="stage" aria-hidden="true">
-        {ready && (
-          <Canvas
-            dpr={[1, 2]}
-            shadows
-            camera={{ fov: 34, position: [0.7, 1.6, 6.8], near: 0.1, far: 100 }}
-            gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-            onCreated={({ gl, camera }) => {
-              gl.toneMapping = THREE.ACESFilmicToneMapping;
-              gl.toneMappingExposure = 1.02;
-              gl.outputColorSpace = THREE.SRGBColorSpace;
-              // elevated top-side angle, looking slightly down into the studio
-              camera.position.set(0.7, 1.6, 6.8);
-              camera.lookAt(0, -0.2, 0);
-            }}
-          >
-            <Scene />
-          </Canvas>
-        )}
+        {/* A DOM-level boundary AROUND the Canvas: if WebGL / the 3D scene ever
+            fails, we simply drop the canvas and keep the rest of the page (nav,
+            headline, sections) fully usable — never a blank screen. */}
+        <ModelBoundary fallback={null}>
+          {ready && (
+            <Canvas
+              dpr={[1, 2]}
+              shadows
+              camera={{ fov: 34, position: [0.7, 1.6, 6.8], near: 0.1, far: 100 }}
+              gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+              onCreated={({ gl, camera }) => {
+                gl.toneMapping = THREE.ACESFilmicToneMapping;
+                gl.toneMappingExposure = 1.02;
+                gl.outputColorSpace = THREE.SRGBColorSpace;
+                // elevated top-side angle, looking slightly down into the studio
+                camera.position.set(0.7, 1.6, 6.8);
+                camera.lookAt(0, -0.2, 0);
+              }}
+            >
+              <Scene />
+            </Canvas>
+          )}
+        </ModelBoundary>
       </div>
 
       <main id="scroll-root">
