@@ -40,10 +40,12 @@ export function Tiger() {
     const mob = isMobile();
     // scroll-driven pose (mobile stays centred + zoomed out to fit portrait)
     const px = mob ? 0 : tigerState.posX;
-    outer.current.position.x += (px - outer.current.position.x) * Math.min(1, dt * 4);
-    outer.current.position.y += (tigerState.posY - outer.current.position.y) * Math.min(1, dt * 4);
+    // gentler critically-damped follow → the sculpture glides between beats
+    const g = Math.min(1, dt * 2.8);
+    outer.current.position.x += (px - outer.current.position.x) * g;
+    outer.current.position.y += (tigerState.posY - outer.current.position.y) * g;
     const sc = tigerState.scale * (mob ? 0.64 : 1);
-    outer.current.scale.x += (sc - outer.current.scale.x) * Math.min(1, dt * 4);
+    outer.current.scale.x += (sc - outer.current.scale.x) * g;
     outer.current.scale.y = outer.current.scale.z = outer.current.scale.x;
 
     const t = performance.now() * 0.001;
@@ -51,7 +53,7 @@ export function Tiger() {
     const drift = reduced ? 0 : Math.sin(t * 0.35) * 0.05;
     const par = (mob || reduced) ? { x: 0, y: 0 } : { x: pointer.x * 0.035, y: pointer.y * 0.02 };
     inner.current.rotation.y = tigerState.rotY + drift + par.x;
-    inner.current.rotation.x = -0.21 + par.y; // ~-12° "descending toward viewer"
+    inner.current.rotation.x = -0.1 + par.y; // slight downward set, standing proud (not nose-diving)
     const breathe = reduced ? 1 : 1 + Math.sin(t * 1.25) * 0.004;
     inner.current.scale.y = breathe;
   });

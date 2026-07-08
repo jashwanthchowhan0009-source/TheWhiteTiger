@@ -140,19 +140,22 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
   return mat;
 }
 
-// A single weathered-granite material reused across every mesh of the tiger.
-export function makeStoneMaterial(): THREE.MeshStandardMaterial {
+// Museum-grade carved marble, tuned to read under studio soft-box light: a
+// physical material with a faint clear-coat sheen (polished stone), fine surface
+// normals for detail, and enough env reflection to catch the studio panels.
+export function makeStoneMaterial(): THREE.MeshPhysicalMaterial {
   const { normal, rough, color } = makeStoneMaps();
-  // polished grey MARBLE — smooth carved-statue stone (no markings)
-  const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#b7b9bd'),   // mid light-grey; granite tones live in the map
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color('#c4c6ca'),   // light neutral grey; granite tones live in the map
     map: color,
-    roughness: 0.5,                       // semi-polished so the light rakes across it
+    roughness: 0.52,                      // semi-polished so soft-boxes rake across it
     metalness: 0.0,
-    envMapIntensity: 0.32,
+    envMapIntensity: 0.95,                // real studio env → let the stone reflect it
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.75, 0.75),
+    normalScale: new THREE.Vector2(0.9, 0.9), // crisper micro-detail on the body
     roughnessMap: rough,
+    clearcoat: 0.35,                      // faint polished-marble sheen
+    clearcoatRoughness: 0.55,
   });
   return mat;
 }
