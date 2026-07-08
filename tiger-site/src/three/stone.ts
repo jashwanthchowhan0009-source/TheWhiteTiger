@@ -140,22 +140,20 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
   return mat;
 }
 
-// Museum-grade carved marble, tuned to read under studio soft-box light: a
-// physical material with a faint clear-coat sheen (polished stone), fine surface
-// normals for detail, and enough env reflection to catch the studio panels.
-export function makeStoneMaterial(): THREE.MeshPhysicalMaterial {
+// Museum-grade carved marble (plain MeshStandardMaterial — the proven baseline):
+// light neutral grey, semi-polished so the studio soft-boxes rake across it, with
+// fine surface normals for detail and enough env reflection to catch the light.
+export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
-  const mat = new THREE.MeshPhysicalMaterial({
+  const mat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#c4c6ca'),   // light neutral grey; granite tones live in the map
     map: color,
     roughness: 0.52,                      // semi-polished so soft-boxes rake across it
     metalness: 0.0,
-    envMapIntensity: 0.95,                // real studio env → let the stone reflect it
+    envMapIntensity: 0.9,
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.9, 0.9), // crisper micro-detail on the body
+    normalScale: new THREE.Vector2(0.9, 0.9),
     roughnessMap: rough,
-    clearcoat: 0.35,                      // faint polished-marble sheen
-    clearcoatRoughness: 0.55,
   });
   return mat;
 }
