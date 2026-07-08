@@ -49,13 +49,18 @@ export default function App() {
         {/* A DOM-level boundary AROUND the Canvas: if WebGL / the 3D scene ever
             fails, we simply drop the canvas and keep the rest of the page (nav,
             headline, sections) fully usable — never a blank screen. */}
-        <ModelBoundary fallback={null}>
+        <ModelBoundary
+          label="canvas"
+          fallback={(err) => (
+            <div className="gl-note">3D scene unavailable on this browser — {String(err.message).slice(0, 90)}</div>
+          )}
+        >
           {ready && (
             <Canvas
               dpr={[1, 2]}
               shadows
               camera={{ fov: 34, position: [0.7, 1.6, 6.8], near: 0.1, far: 100 }}
-              gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+              gl={{ antialias: true, alpha: true }}
               onCreated={({ gl, camera }) => {
                 gl.toneMapping = THREE.ACESFilmicToneMapping;
                 gl.toneMappingExposure = 1.02;

@@ -1,13 +1,22 @@
 import { Component, ReactNode } from 'react';
 
-// If the GLB fails to load (missing/corrupt), swap in the fallback silhouette
-// so the canvas is never blank.
+// Generic React error boundary. `fallback` can be a node, or a function that
+// receives the caught error (used to surface WebGL failures on-page so a device
+// that can't run the 3D scene degrades visibly instead of silently).
 export class ModelBoundary extends Component<
-  { children: ReactNode; fallback: ReactNode },
-  { failed: boolean }
+  { children: ReactNode; fallback: ReactNode | ((err: Error) => ReactNode); label?: string },
+  { failed: boolean; error: Error | null }
 > {
-  state = { failed: false };
-  static getDerivedStateFromError() { return { failed: true }; }
-  componentDidCatch(err: unknown) { console.warn('[tiger] model failed, using fallback:', err); }
-  render() { return this.state.failed ? this.props.fallback : this.props.children; }
+  state = { failed: false, error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { failed: true, error }; }
+  componentDidCatch(err: unknown) {
+    console.warn(`[tiger] ${this.props.label ?? 'scene'} failed:`, err);
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    const { fallback } = this.props;
+    return typeof fallback === 'function'
+      ? fallback(this.state.error ?? new Error('unknown'))
+      : fallback;
+  }
 }
