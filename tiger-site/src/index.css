@@ -39,10 +39,13 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--dim);
 }
 
-/* ── The subtle radial vignette behind the tiger ── */
+/* ── Studio backdrop behind the (transparent) canvas: a graded grey cyclorama
+   feel. Doubles as a graceful fallback — if WebGL is slow or unavailable the
+   page still reads as a lit studio with copy, never a blank screen. ── */
 .bg-vignette {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(58% 46% at 50% 44%, var(--bg-glow) 0%, #141416 34%, var(--bg) 70%);
+  background:
+    radial-gradient(78% 64% at 54% 38%, #2b2c31 0%, #202127 40%, #131418 78%, #0e0e10 100%);
 }
 
 /* ── Fixed WebGL sculpture stage ── */
