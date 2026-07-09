@@ -31,8 +31,8 @@ export const SHOTS = {
   hero:     { rotY: 0.2,   posX: 1.85, posY: -0.32, scale: 1.14, key: 2.5, fill: 0.12, rim: 0.18, keyWarm: 0.05 },
   // I · The Gaze — the FACE / eyes, tiger right, text left
   elegance: { rotY: -0.1,  posX: 1.55, posY: -1.12, scale: 1.5,  key: 2.7, fill: 0.10, rim: 0.2, keyWarm: 0.22 },
-  // II · The Form — SIDE PROFILE, head left, text right
-  about:    { rotY: -1.52, posX: 2.05, posY: -0.62, scale: 1.92, key: 2.6, fill: 0.12, rim: 0.2, keyWarm: 0.14 },
+  // II · The Form — SIDE PROFILE on the LEFT facing the right-hand copy
+  about:    { rotY: 1.5,   posX: -1.75, posY: -0.62, scale: 1.85, key: 2.6, fill: 0.12, rim: 0.2, keyWarm: 0.14 },
   // III · The Edge — the CLAWS / front paws, tiger right, text left
   gallery:  { rotY: 0.14,  posX: 1.35, posY: 1.05,  scale: 1.9,  key: 2.5, fill: 0.13, rim: 0.18, keyWarm: 0.1 },
   // IV · The Reveal — dramatic FACE, tiger slightly right, warm key

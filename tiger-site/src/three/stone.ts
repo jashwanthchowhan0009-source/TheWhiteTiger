@@ -124,9 +124,9 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
   const mat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#ffffff'),
     map: baseMap || null,
-    roughness: 0.58,
+    roughness: 0.6,
     metalness: 0.0,
-    envMapIntensity: 0.75,
+    envMapIntensity: 0.4,
     normalMap: normal,
     normalScale: new THREE.Vector2(0.95, 0.95),
     roughnessMap: rough,
@@ -137,7 +137,7 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
       `#include <map_fragment>
        float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));
        _l = smoothstep(0.12, 0.74, _l);
-       diffuseColor.rgb = mix(vec3(0.010,0.010,0.014), vec3(0.085,0.088,0.10), _l);`);
+       diffuseColor.rgb = mix(vec3(0.008,0.008,0.011), vec3(0.06,0.062,0.072), _l);`);
   };
   mat.needsUpdate = true;
   return mat;
