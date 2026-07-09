@@ -20,7 +20,7 @@ function StudioLights() {
   useFrame((_, dt) => {
     const k = Math.min(1, dt * 2.4);
     if (key.current) {
-      const target = 1.9 + tigerState.key * 0.24;
+      const target = 1.35 + tigerState.key * 0.16;
       key.current.intensity += (target - key.current.intensity) * k;
       tmp.copy(NEUTRAL).lerp(WARM, tigerState.keyWarm);
       key.current.color.lerp(tmp, k);
