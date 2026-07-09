@@ -114,29 +114,30 @@ function surfaceMaps() {
   return _maps;
 }
 
-// Grey stone body with BLACK stripe/scale markings: reuse the model's own
-// texture (which carries the tiger's stripes) and remap its luminance so the
-// stripes go pitch-black while the body stays grey stone. The beast is not
-// black — only its scales are.
+// Dark charcoal-stone tiger with black stripe markings: reuse the model's own
+// texture (which carries the tiger's stripes) and remap its luminance to a
+// COOL DARK CHARCOAL body with near-black stripes — a slate stone beast, never
+// a white tiger, and dark enough that it stays charcoal even under the studio
+// key light in the tight close-ups.
 export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.MeshStandardMaterial {
   const { normal, rough } = surfaceMaps();
   const mat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#ffffff'),
     map: baseMap || null,
-    roughness: 0.52,
+    roughness: 0.58,
     metalness: 0.0,
-    envMapIntensity: 0.9,
+    envMapIntensity: 0.75,
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.9, 0.9),
+    normalScale: new THREE.Vector2(0.95, 0.95),
     roughnessMap: rough,
   });
-  // remap the model's texture luminance → pitch-black stripes over grey stone
+  // remap the model's texture luminance → near-black stripes over dark charcoal
   mat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
       `#include <map_fragment>
        float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));
-       _l = smoothstep(0.12, 0.72, _l);
-       diffuseColor.rgb = mix(vec3(0.012,0.012,0.016), vec3(0.19,0.195,0.21), _l);`);
+       _l = smoothstep(0.12, 0.74, _l);
+       diffuseColor.rgb = mix(vec3(0.010,0.010,0.014), vec3(0.085,0.088,0.10), _l);`);
   };
   mat.needsUpdate = true;
   return mat;
