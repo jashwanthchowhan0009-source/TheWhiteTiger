@@ -13,6 +13,7 @@ export function Tiger() {
   const outer = useRef<THREE.Group>(null!);
   const inner = useRef<THREE.Group>(null!);
   const reduced = prefersReducedMotion();
+  const born = useRef(performance.now());
 
   // Clone + apply the stone material + normalise to height ≈ 2.2, centred.
   const model = useMemo(() => {
@@ -40,10 +41,15 @@ export function Tiger() {
     const mob = isMobile();
     // scroll-driven pose (mobile stays centred + zoomed out to fit portrait)
     const px = mob ? 0 : tigerState.posX;
+    // ── emergence: on load the beast rises up out of the ocean ──
+    const el = (performance.now() - born.current) / 2400;
+    const rise = reduced ? 1 : Math.min(1, el);
+    const emerge = (1 - (1 - rise) * (1 - rise) * (1 - rise)) ; // easeOutCubic 0→1
+    const emergeY = (emerge - 1) * 2.6; // starts 2.6 units submerged, settles to 0
     // gentler critically-damped follow → the sculpture glides between beats
     const g = Math.min(1, dt * 2.8);
     outer.current.position.x += (px - outer.current.position.x) * g;
-    outer.current.position.y += (tigerState.posY - outer.current.position.y) * g;
+    outer.current.position.y += (tigerState.posY + emergeY - outer.current.position.y) * g;
     const sc = tigerState.scale * (mob ? 0.64 : 1);
     outer.current.scale.x += (sc - outer.current.scale.x) * g;
     outer.current.scale.y = outer.current.scale.z = outer.current.scale.x;

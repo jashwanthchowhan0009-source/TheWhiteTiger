@@ -140,19 +140,20 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
   return mat;
 }
 
-// Museum-grade carved marble (plain MeshStandardMaterial — the proven baseline):
-// light neutral grey, semi-polished so the studio soft-boxes rake across it, with
-// fine surface normals for detail and enough env reflection to catch the light.
+// Pitch-black, wet-looking beast: a near-black obsidian/scale surface with a
+// glossy sheen so studio + water light glints off it, as if it just rose out of
+// the ocean. The colour map stays for micro tonal life; the dark base colour
+// multiplies it down to near-black. Stronger normals read as scales/skin.
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#c4c6ca'),   // light neutral grey; granite tones live in the map
+    color: new THREE.Color('#0c0e13'),   // blue-black; multiplies the map down to pitch dark
     map: color,
-    roughness: 0.52,                      // semi-polished so soft-boxes rake across it
-    metalness: 0.0,
-    envMapIntensity: 0.9,
+    roughness: 0.3,                       // wet sheen — light glints across the surface
+    metalness: 0.22,                      // slight metallic wetness for reflections
+    envMapIntensity: 1.35,                // catch the sky / water reflections
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.9, 0.9),
+    normalScale: new THREE.Vector2(1.15, 1.15), // pronounced scale/skin relief
     roughnessMap: rough,
   });
   return mat;
