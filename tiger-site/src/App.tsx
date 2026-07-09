@@ -63,7 +63,7 @@ export default function App() {
               gl={{ antialias: true, alpha: true }}
               onCreated={({ gl, camera }) => {
                 gl.toneMapping = THREE.ACESFilmicToneMapping;
-                gl.toneMappingExposure = 1.02;
+                gl.toneMappingExposure = 0.9;
                 gl.outputColorSpace = THREE.SRGBColorSpace;
                 // elevated top-side angle, looking slightly down into the studio
                 camera.position.set(0.7, 1.6, 6.8);
