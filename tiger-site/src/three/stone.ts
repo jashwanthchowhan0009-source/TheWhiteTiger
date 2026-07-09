@@ -114,46 +114,45 @@ function surfaceMaps() {
   return _maps;
 }
 
-// WHITE-TIGER stone: keep the model's own stripe markings (white body, dark
-// stripes) so it reads as a white tiger carved in pale stone — not a blank blob.
+// Grey stone body with BLACK stripe/scale markings: reuse the model's own
+// texture (which carries the tiger's stripes) and remap its luminance so the
+// stripes go pitch-black while the body stays grey stone. The beast is not
+// black — only its scales are.
 export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.MeshStandardMaterial {
   const { normal, rough } = surfaceMaps();
   const mat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#ffffff'),
     map: baseMap || null,
-    roughness: 0.66,
+    roughness: 0.52,
     metalness: 0.0,
-    envMapIntensity: 0.28,
+    envMapIntensity: 0.9,
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.7, 0.7),
+    normalScale: new THREE.Vector2(0.9, 0.9),
     roughnessMap: rough,
   });
-  // remap the model's texture luminance → dark charcoal stripes over warm ivory
+  // remap the model's texture luminance → pitch-black stripes over grey stone
   mat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>',
       `#include <map_fragment>
        float _l = dot(diffuseColor.rgb, vec3(0.299,0.587,0.114));
-       _l = smoothstep(0.10, 0.80, _l);
-       diffuseColor.rgb = mix(vec3(0.085,0.085,0.095), vec3(0.94,0.92,0.88), _l);`);
+       _l = smoothstep(0.12, 0.72, _l);
+       diffuseColor.rgb = mix(vec3(0.012,0.012,0.016), vec3(0.19,0.195,0.21), _l);`);
   };
   mat.needsUpdate = true;
   return mat;
 }
 
-// Pitch-black, wet-looking beast: a near-black obsidian/scale surface with a
-// glossy sheen so studio + water light glints off it, as if it just rose out of
-// the ocean. The colour map stays for micro tonal life; the dark base colour
-// multiplies it down to near-black. Stronger normals read as scales/skin.
+// Plain grey carved-stone (used by the fallback silhouette that has no texture).
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#0c0e13'),   // blue-black; multiplies the map down to pitch dark
+    color: new THREE.Color('#c4c6ca'),
     map: color,
-    roughness: 0.3,                       // wet sheen — light glints across the surface
-    metalness: 0.22,                      // slight metallic wetness for reflections
-    envMapIntensity: 1.35,                // catch the sky / water reflections
+    roughness: 0.52,
+    metalness: 0.0,
+    envMapIntensity: 0.9,
     normalMap: normal,
-    normalScale: new THREE.Vector2(1.15, 1.15), // pronounced scale/skin relief
+    normalScale: new THREE.Vector2(0.9, 0.9),
     roughnessMap: rough,
   });
   return mat;
