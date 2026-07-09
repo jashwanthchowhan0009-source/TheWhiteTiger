@@ -5,11 +5,10 @@
   --dim: #8a8a8f;
   --amber: #e0731d;
   --line: rgba(236, 231, 223, 0.14);
-  /* Brand typography — modern grotesques (matches the original WhiteTiger site) */
-  --sans: "Inter", system-ui, -apple-system, sans-serif;         /* body */
-  --serif: "Bricolage Grotesque", "Sora", var(--sans);           /* big display / hero */
-  --serif-2: "Sora", "Space Grotesk", var(--sans);               /* section headings & names */
-  --mono: "Space Grotesk", var(--sans);                          /* labels / meta */
+  --serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --serif-2: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter", system-ui, -apple-system, sans-serif;
+  --mono: var(--sans);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -29,10 +28,9 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-.serif { font-family: var(--serif-2); }
+.serif { font-family: var(--serif); }
 .serif-2 { font-family: var(--serif-2); }
-/* grotesque display fonts have no true italic — use an accent, not a slant */
-.italic { font-style: normal; }
+.italic { font-style: italic; }
 .amber { color: var(--amber); }
 .mono-label {
   font-family: var(--mono);
@@ -48,7 +46,8 @@ html.lenis, html.lenis body { height: auto; }
 .bg-vignette {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(78% 64% at 54% 38%, #2b2c31 0%, #202127 40%, #131418 78%, #0e0e10 100%);
+    radial-gradient(60% 40% at 60% 30%, rgba(60,110,150,0.16), transparent 70%),
+    linear-gradient(180deg, #16222e 0%, #0d1824 44%, #081019 74%, #05090f 100%);
 }
 
 /* ── Fixed WebGL sculpture stage ── */
@@ -124,7 +123,7 @@ html.lenis, html.lenis body { height: auto; }
 .col-copy { max-width: 34ch; color: var(--dim); font-size: 1.02rem; line-height: 1.75; }
 .col-copy strong { color: var(--ink); font-weight: 500; }
 .num-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--amber); margin-bottom: 18px; display: block; }
-.h-sec { font-family: var(--serif-2); font-weight: 700; font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.04; letter-spacing: -0.015em; margin-bottom: 20px; }
+.h-sec { font-family: var(--serif); font-weight: 700; font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.02; margin-bottom: 20px; }
 
 /* Two-layer engine (B2C / B2B) */
 .two-layer { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 28px; }
