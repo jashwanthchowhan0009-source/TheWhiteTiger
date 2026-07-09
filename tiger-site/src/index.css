@@ -170,6 +170,57 @@ html.lenis, html.lenis body { height: auto; }
   .card { scroll-snap-align: center; }
 }
 
+/* ── Company deep-dive zone: solid readable content over the fixed canvas ── */
+.company-zone { position: relative; z-index: 3; background: #0b0b0d; border-top: 1px solid var(--line); }
+.co-sec { max-width: 1120px; margin: 0 auto; padding: clamp(64px, 10vh, 120px) clamp(20px, 5vw, 64px); min-height: 0; }
+.co-sec + .co-sec { border-top: 1px solid var(--line); }
+
+/* Problem vs solution */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+.compare .col { border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+.compare .old { background: rgba(255,80,80,0.03); }
+.compare .neu { background: rgba(224,115,29,0.05); border-color: rgba(224,115,29,0.25); }
+.compare .c-head { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
+.compare .neu .c-head { color: var(--amber); }
+.compare ul { list-style: none; display: grid; gap: 10px; }
+.compare li { position: relative; padding-left: 20px; font-size: 0.95rem; line-height: 1.5; color: var(--ink); }
+.compare .old li::before { content: "✕"; position: absolute; left: 0; color: #b65; }
+.compare .neu li::before { content: "→"; position: absolute; left: 0; color: var(--amber); }
+@media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
+
+/* Feature grid */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
+.feat { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: rgba(255,255,255,0.012); }
+.feat .f-t { font-size: 1.12rem; margin-bottom: 8px; }
+.feat .f-s { font-size: 0.88rem; line-height: 1.6; color: var(--dim); }
+@media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .feat-grid { grid-template-columns: 1fr; } }
+
+/* Stack grid */
+.stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; }
+.stk { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.stk .s-k { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.stk .s-v { font-family: var(--serif-2); font-size: 1.05rem; margin-top: 6px; }
+@media (max-width: 900px) { .stack-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Roadmap */
+.road { display: grid; gap: 0; margin-top: 28px; }
+.ph { display: grid; grid-template-columns: 64px 1fr; gap: 18px; padding: 18px 0; border-top: 1px solid var(--line); }
+.ph:last-child { border-bottom: 1px solid var(--line); }
+.ph-n { font-family: var(--serif); font-size: 1.6rem; color: var(--dim); }
+.ph-t { font-size: 1.15rem; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.ph-d { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; }
+.ph.done .ph-d { color: #6fd08a; border: 1px solid rgba(111,208,138,0.4); }
+.ph.wip .ph-d { color: var(--amber); border: 1px solid rgba(224,115,29,0.5); }
+.ph.wip .ph-n { color: var(--amber); }
+.ph-s { font-size: 0.9rem; color: var(--dim); margin-top: 5px; line-height: 1.55; }
+
+/* Compliance */
+.comply-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; margin-top: 18px; }
+.cmp { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; color: var(--ink); }
+.cmp .tick { color: var(--amber); }
+@media (max-width: 620px) { .comply-row { grid-template-columns: 1fr; } }
+
 /* Contact / footer */
 .den-head { font-family: var(--serif); font-weight: 700; font-size: clamp(3rem, 9vw, 8rem); line-height: 0.95; text-align: center; }
 .den-mail { display: block; text-align: center; margin-top: 24px; font-size: clamp(1rem, 2vw, 1.4rem); color: var(--amber); letter-spacing: 0.02em; }
