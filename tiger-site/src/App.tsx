@@ -13,6 +13,8 @@ import { Gallery } from './components/sections/Gallery';
 import { Company } from './components/sections/Company';
 import { Contact } from './components/sections/Contact';
 import { useScroll } from './lib/useScroll';
+import { beginIntro } from './three/intro';
+import { prefersReducedMotion } from './scroll/tigerState';
 import './three/pointer';
 
 export default function App() {
@@ -20,9 +22,16 @@ export default function App() {
   const [done, setDone] = useState(false);    // fade the loader
 
   useEffect(() => {
+    const reduced = prefersReducedMotion();
+    // reveal the hero + choreograph the entrance once the loader clears
+    const fire = () => {
+      beginIntro(reduced);
+      document.body.classList.add('is-ready');
+      setTimeout(() => setDone(true), 120);
+    };
     // debug framing mode (?pose=…) skips the loader for fast iteration
     if (new URLSearchParams(window.location.search).has('pose')) {
-      setReady(true); setTimeout(() => setDone(true), 60); return;
+      setReady(true); fire(); return;
     }
     const fonts = (document as any).fonts?.ready ?? Promise.resolve();
     // never block forever on fonts (offline / blocked CDN): cap the wait
@@ -32,7 +41,7 @@ export default function App() {
     Promise.all([fontsCapped, minWait]).then(() => {
       if (cancelled) return;
       setReady(true);
-      setTimeout(() => setDone(true), 120);
+      fire();
     });
     return () => { cancelled = true; };
   }, []);
