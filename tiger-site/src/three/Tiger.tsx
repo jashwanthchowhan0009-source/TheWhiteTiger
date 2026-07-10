@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { makeWhiteTigerMaterial } from './stone';
+import { makeStoneMaterial } from './stone';
 import { tigerState, isMobile, prefersReducedMotion } from '../scroll/tigerState';
 import { pointer } from './pointer';
 
@@ -17,15 +17,10 @@ export function Tiger() {
   // Clone + apply the stone material + normalise to height ≈ 2.2, centred.
   const model = useMemo(() => {
     const root = scene.clone(true);
+    const stone = makeStoneMaterial();          // uniform carved-stone statue
     root.traverse((o) => {
       const m = o as THREE.Mesh;
-      if (m.isMesh) {
-        // reuse the model's own texture so its stripes become the black scales
-        const orig = m.material as THREE.MeshStandardMaterial | undefined;
-        const baseMap = orig && 'map' in orig ? orig.map : null;
-        m.material = makeWhiteTigerMaterial(baseMap);
-        m.castShadow = true; m.receiveShadow = true;
-      }
+      if (m.isMesh) { m.material = stone; m.castShadow = true; m.receiveShadow = true; }
     });
     const box = new THREE.Box3().setFromObject(root);
     const size = box.getSize(new THREE.Vector3());
