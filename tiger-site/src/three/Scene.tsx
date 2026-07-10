@@ -45,12 +45,12 @@ function StudioLights() {
         shadow-bias={-0.0004}
         shadow-radius={9}
       />
-      {/* cool soft fill from the left — just opens the shadow side a touch */}
-      <directionalLight position={[-7, 3, 3.5]} intensity={0.45} color={'#cfe0ff'} />
-      {/* top rim / kicker from behind — separates the beast from the backdrop */}
-      <directionalLight position={[-1.5, 8, -5]} intensity={0.6} color={'#ffffff'} />
-      {/* faint ambient wrap so nothing is ever pure black */}
-      <hemisphereLight args={['#aeb6c2', '#0c0c10', 0.2]} />
+      {/* cool soft fill from the left — opens the shadow side without flattening */}
+      <directionalLight position={[-7, 3, 3.5]} intensity={0.68} color={'#dfe8f5'} />
+      {/* top rim / kicker from behind — separates the sculpture from the backdrop */}
+      <directionalLight position={[-1.5, 8, -5]} intensity={0.85} color={'#ffffff'} />
+      {/* gentle ambient wrap so nothing is ever pure black */}
+      <hemisphereLight args={['#c2c6cd', '#141416', 0.32]} />
     </>
   );
 }

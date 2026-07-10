@@ -143,17 +143,19 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
   return mat;
 }
 
-// Plain grey carved-stone (used by the fallback silhouette that has no texture).
+// Carved-stone statue: a natural neutral-grey granite, matte, with the granite
+// colour map + surface normals giving real stone texture and relief. This is the
+// whole "carved from stone" idea — a uniform stone tiger, no painted markings.
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#c4c6ca'),
+    color: new THREE.Color('#b0aea8'),   // neutral warm-grey carved stone
     map: color,
-    roughness: 0.52,
+    roughness: 0.72,                     // matte, non-polished stone
     metalness: 0.0,
-    envMapIntensity: 0.9,
+    envMapIntensity: 0.55,
     normalMap: normal,
-    normalScale: new THREE.Vector2(0.9, 0.9),
+    normalScale: new THREE.Vector2(1.0, 1.0),
     roughnessMap: rough,
   });
   return mat;
