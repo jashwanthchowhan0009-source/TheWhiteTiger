@@ -6,6 +6,7 @@ import { RoomEnv } from './RoomEnv';
 import { Tiger } from './Tiger';
 import { FallbackTiger } from './FallbackTiger';
 import { ModelBoundary } from './ErrorBoundary';
+import { Dust } from './Dust';
 import { tigerState } from '../scroll/tigerState';
 import { intro, INTRO_MS } from './intro';
 
@@ -83,9 +84,12 @@ function StudioLights() {
 export function Scene() {
   return (
     <>
+      {/* depth: distant geometry melts into the page's dark backdrop */}
+      <fog attach="fog" args={['#0d0d11', 11, 26]} />
       <RoomEnv />
       <Intro />
       <StudioLights />
+      <Dust />
 
       <ModelBoundary fallback={<FallbackTiger />}>
         <Suspense fallback={null}>
@@ -98,6 +102,13 @@ export function Scene() {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]} receiveShadow>
         <planeGeometry args={[40, 40]} />
         <shadowMaterial transparent opacity={0.45} />
+      </mesh>
+
+      {/* black-marble base: a barely-visible cool disc the sculpture stands on,
+          catching the studio reflection — museum plinth, not bare void. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.6, -1.49, 0]}>
+        <circleGeometry args={[3.1, 64]} />
+        <meshStandardMaterial color={'#0a0c14'} roughness={0.32} metalness={0.5} envMapIntensity={0.7} transparent opacity={0.5} />
       </mesh>
 
       {/* soft grounded contact shadow directly under the paws */}

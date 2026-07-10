@@ -47,8 +47,20 @@ html.lenis, html.lenis body { height: auto; }
 .bg-vignette {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(78% 64% at 54% 38%, #2b2c31 0%, #202127 40%, #131418 78%, #0e0e10 100%);
+    /* cool counter-glow, low left — the fill light's presence in the air */
+    radial-gradient(52% 58% at 6% 64%, rgba(125, 152, 205, 0.075), transparent 64%),
+    /* warm light pool on the floor where the sculpture stands */
+    radial-gradient(44% 20% at 62% 86%, rgba(255, 205, 140, 0.085), transparent 70%),
+    /* the stage itself: deep graded vignette, never flat */
+    radial-gradient(78% 64% at 54% 38%, #232429 0%, #191a1f 42%, #101116 76%, #0a0a0e 100%);
 }
+/* the key light's beam from upper right — alive, slowly breathing */
+.bg-vignette::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(46% 64% at 68% -6%, rgba(255, 213, 150, 0.13), transparent 62%);
+  animation: beam 9s ease-in-out infinite alternate;
+}
+@keyframes beam { from { opacity: 0.55; } to { opacity: 1; } }
 
 /* ── Fixed WebGL sculpture stage ── */
 .stage {
@@ -94,10 +106,13 @@ html.lenis, html.lenis body { height: auto; }
 .h-hero, .h-100 { min-height: 100vh; min-height: 100svh; }
 .h-150 { min-height: 150vh; }
 
-/* Giant background words (behind the tiger) */
+/* Giant background words (behind the tiger) — etched into the dark, clearly
+   present but never competing with the sculpture in front of them. */
 .giant {
   font-family: var(--serif); font-weight: 800; line-height: 0.9;
-  color: #16161a; letter-spacing: -0.02em; user-select: none; white-space: nowrap;
+  color: rgba(236, 231, 223, 0.045);
+  -webkit-text-stroke: 1px rgba(236, 231, 223, 0.085);
+  letter-spacing: -0.02em; user-select: none; white-space: nowrap;
 }
 
 /* ── Hero ── */
@@ -260,7 +275,7 @@ body.is-ready .hero-mask .wi { transform: translateY(0); }
 .loader .bar i { position: absolute; inset: 0; background: var(--amber); transform-origin: left; transform: scaleX(0); }
 
 @media (prefers-reduced-motion: reduce) {
-  .grain, .scroll-hint .line::after { animation: none; }
+  .grain, .scroll-hint .line::after, .bg-vignette::before { animation: none; }
   .hero-mask .wi { transform: none !important; transition: none !important; }
 }
 
