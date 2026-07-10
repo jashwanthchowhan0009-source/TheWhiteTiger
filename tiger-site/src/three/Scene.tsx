@@ -20,7 +20,7 @@ function StudioLights() {
   useFrame((_, dt) => {
     const k = Math.min(1, dt * 2.4);
     if (key.current) {
-      const target = 1.35 + tigerState.key * 0.16;
+      const target = 2.5 + tigerState.key * 0.32;
       key.current.intensity += (target - key.current.intensity) * k;
       tmp.copy(NEUTRAL).lerp(WARM, tigerState.keyWarm);
       key.current.color.lerp(tmp, k);
@@ -28,11 +28,13 @@ function StudioLights() {
   });
   return (
     <>
+      {/* CINEMATIC KEY: a single strong warm raking light from high right that
+          carves the stone and throws a long shadow — the drama light. */}
       <directionalLight
         ref={key}
-        position={[6.5, 7, 4]}
-        intensity={2.2}
-        color={'#fff3e6'}
+        position={[7.5, 6, 2.5]}
+        intensity={2.8}
+        color={'#fff2e0'}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -43,14 +45,15 @@ function StudioLights() {
         shadow-camera-top={7}
         shadow-camera-bottom={-7}
         shadow-bias={-0.0004}
-        shadow-radius={9}
+        shadow-radius={7}
       />
-      {/* cool soft fill from the left — opens the shadow side without flattening */}
-      <directionalLight position={[-7, 3, 3.5]} intensity={0.68} color={'#dfe8f5'} />
-      {/* top rim / kicker from behind — separates the sculpture from the backdrop */}
-      <directionalLight position={[-1.5, 8, -5]} intensity={0.85} color={'#ffffff'} />
-      {/* gentle ambient wrap so nothing is ever pure black */}
-      <hemisphereLight args={['#c2c6cd', '#141416', 0.32]} />
+      {/* very low cool fill so the shadow side stays deep and moody (not black) */}
+      <directionalLight position={[-7, 2, 3]} intensity={0.16} color={'#9fb6d8'} />
+      {/* cool rim / kicker from high behind-left — a bright edge that separates
+          the sculpture from the dark background for that cinematic silhouette. */}
+      <directionalLight position={[-3, 7, -5]} intensity={1.15} color={'#dfeafd'} />
+      {/* barely-there ambient so the darkest areas keep a hint of form */}
+      <hemisphereLight args={['#8f97a6', '#0a0a0d', 0.12]} />
     </>
   );
 }

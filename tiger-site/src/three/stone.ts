@@ -149,13 +149,13 @@ export function makeWhiteTigerMaterial(baseMap: THREE.Texture | null): THREE.Mes
 export function makeStoneMaterial(): THREE.MeshStandardMaterial {
   const { normal, rough, color } = makeStoneMaps();
   const mat = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#b0aea8'),   // neutral warm-grey carved stone
+    color: new THREE.Color('#7f8184'),   // true neutral-grey stone (not white)
     map: color,
-    roughness: 0.72,                     // matte, non-polished stone
+    roughness: 0.74,                     // matte, non-polished stone
     metalness: 0.0,
-    envMapIntensity: 0.55,
+    envMapIntensity: 0.35,
     normalMap: normal,
-    normalScale: new THREE.Vector2(1.0, 1.0),
+    normalScale: new THREE.Vector2(1.05, 1.05),
     roughnessMap: rough,
   });
   return mat;
