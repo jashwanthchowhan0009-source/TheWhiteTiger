@@ -21,7 +21,12 @@ export function Hero() {
           <Word text="The" i={0} />{' '}
           <Word text="informed" i={1} /><br />
           <Word text="are" i={2} />{' '}
-          <Word text="ungovernable" i={3} cls="italic amber" /><Word text="." i={4} />
+          {/* word + period share one mask unit so the dot can never wrap alone */}
+          <span className="w">
+            <span className="wi" style={{ transitionDelay: '580ms' }}>
+              <span className="italic amber">ungovernable</span>.
+            </span>
+          </span>
         </h1>
         <p className="hero-sub" style={{ marginLeft: 0, textAlign: 'left' }}>
           An information engine — clean, verified, objective truth, carved from the world's noise.
