@@ -1,9 +1,11 @@
 export function Elegance() {
   return (
     <section className="section h-150">
-      {/* giant word behind the tiger */}
+      {/* etched brand line behind the tiger — one line, deliberately restrained */}
       <div className="layer-back" style={{ position: 'sticky', top: 0, height: '100svh', display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
-        <div className="giant" data-giant style={{ fontSize: '20vw' }}>SIGNAL</div>
+        <div className="giant" data-giant style={{ fontSize: 'clamp(2rem, 5.6vw, 6rem)', letterSpacing: '0.04em' }}>
+          THE WHITE TIGER COMPANY SOON
+        </div>
       </div>
       {/* left column copy in front */}
       <div className="layer-front copy-scrim sec-copy" style={{ position: 'absolute', top: '20vh', left: 'clamp(20px,5vw,64px)', maxWidth: '46ch' }} data-reveal>

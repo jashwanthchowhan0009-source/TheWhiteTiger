@@ -38,13 +38,24 @@ export function useScroll(ready: boolean) {
 
     const ctx = gsap.context(() => {
       // ── master sculpture choreography ──
+      // Anchored to the GALLERY section's end (not the page bottom) so the tall
+      // company-data zone can't stretch the timeline and de-sync every pose
+      // from its section.
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: '#scroll-root', start: 'top top', end: 'bottom bottom', scrub: 1.2 },
+        scrollTrigger: {
+          trigger: '#scroll-root', start: 'top top',
+          endTrigger: '#gallery', end: 'bottom bottom', scrub: 1.2,
+        },
       });
       tl.to(tigerState, { ...SHOTS.elegance, ease: 'none', duration: 1.1 })
         .to(tigerState, { ...SHOTS.about, ease: 'none', duration: 0.9 })
-        .to(tigerState, { ...SHOTS.gallery, ease: 'none', duration: 1.1 })
-        .to(tigerState, { ...SHOTS.contact, ease: 'none', duration: 0.9 });
+        .to(tigerState, { ...SHOTS.gallery, ease: 'none', duration: 1.1 });
+
+      // finale: the tiger takes its contact pose as the contact section arrives
+      gsap.to(tigerState, {
+        ...SHOTS.contact, ease: 'none',
+        scrollTrigger: { trigger: '#contact', start: 'top bottom', end: 'center center', scrub: 1.2 },
+      });
 
       // ── section copy reveals ──
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
