@@ -6,7 +6,7 @@ import { prefersReducedMotion, isMobile } from '../scroll/tigerState';
 // Studio dust: faint warm motes drifting through the key light. Plain
 // THREE.Points (no shaders, no textures) so it renders on every GPU. This is
 // what makes the light feel like it has a body — atmosphere, not decoration.
-const COUNT = 130;
+const COUNT = 120;
 
 export function Dust() {
   const ref = useRef<THREE.Points>(null!);
@@ -16,9 +16,12 @@ export function Dust() {
     const g = new THREE.BufferGeometry();
     const pos = new Float32Array(COUNT * 3);
     for (let i = 0; i < COUNT; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 11;      // x — across the stage
-      pos[i * 3 + 1] = Math.random() * 6.5 - 1.6;   // y — floor to above head
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 6;   // z — depth
+      // inside the light pool: a loose column around the spot's footprint
+      const r = Math.sqrt(Math.random()) * 3.4;
+      const a = Math.random() * Math.PI * 2;
+      pos[i * 3] = 0.4 + Math.cos(a) * r;           // x — around the pool centre
+      pos[i * 3 + 1] = Math.random() * 5.5 - 1.5;   // y — floor to above head
+      pos[i * 3 + 2] = Math.sin(a) * r * 0.7;       // z — depth
     }
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     return g;
@@ -28,10 +31,10 @@ export function Dust() {
     () =>
       new THREE.PointsMaterial({
         color: new THREE.Color('#ffdfae'),
-        size: 0.022,
+        size: 0.016,
         sizeAttenuation: true,
         transparent: true,
-        opacity: 0.32,
+        opacity: 0.35,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
       }),
