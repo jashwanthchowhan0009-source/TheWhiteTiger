@@ -20,6 +20,7 @@ import './three/pointer';
 export default function App() {
   const [ready, setReady] = useState(false); // fonts ready → mount canvas
   const [done, setDone] = useState(false);    // fade the loader
+  const [glTry, setGlTry] = useState(0);      // WebGL retry attempts (context creation can hiccup)
 
   useEffect(() => {
     const reduced = prefersReducedMotion();
@@ -60,9 +61,19 @@ export default function App() {
             fails, we simply drop the canvas and keep the rest of the page (nav,
             headline, sections) fully usable — never a blank screen. */}
         <ModelBoundary
+          key={glTry}
           label="canvas"
+          onError={() => {
+            // context creation often recovers after the GPU process settles —
+            // remount the canvas automatically a few times before giving up
+            if (glTry < 3) setTimeout(() => setGlTry((t) => t + 1), 1600);
+          }}
           fallback={(err) => (
-            <div className="gl-note">3D scene unavailable on this browser — {String(err.message).slice(0, 90)}</div>
+            <div className="gl-note">
+              {glTry < 3
+                ? '3D scene hiccuped — retrying…'
+                : <>3D scene unavailable — {String(err.message).slice(0, 70)}. <button className="gl-retry" onClick={() => setGlTry((t) => t + 1)}>Retry 3D</button> (or restart the browser)</>}
+            </div>
           )}
         >
           {ready && (
