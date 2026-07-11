@@ -140,7 +140,10 @@ html.lenis, html.lenis body { height: auto; }
 .hero-wrap { position: relative; display: grid; place-items: center; text-align: center; height: 100svh; }
 .hero-head {
   font-family: var(--serif); font-weight: 700;
-  font-size: clamp(3.4rem, 9vw, 9rem); line-height: 0.95; letter-spacing: -0.025em;
+  /* capped by BOTH width and height: the 4-line headline + eyebrow + sub + CTA
+     must always fit one viewport frame — the CTA can never fall below the fold */
+  font-size: clamp(2.8rem, min(8.2vw, 10vh), 8rem);
+  line-height: 0.95; letter-spacing: -0.025em;
 }
 /* entrance: each word rises out of a mask (translateY 110% → 0), staggered.
    The mask box gets extra room below + right (then pulls it back with negative
@@ -152,7 +155,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 .hero-mask .wi { display: inline-block; transform: translateY(130%); transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); will-change: transform; }
 body.is-ready .hero-mask .wi { transform: translateY(0); }
-.hero-sub { margin-top: 26px; color: var(--dim); font-size: clamp(0.95rem, 1.3vw, 1.05rem); letter-spacing: 0.01em; }
+.hero-sub { margin-top: 20px; color: var(--dim); font-size: clamp(0.95rem, 1.3vw, 1.05rem); letter-spacing: 0.01em; }
 .cta {
   display: inline-flex; align-items: center; gap: 10px; margin-top: 30px;
   padding: 13px 26px; border: 1px solid var(--line); border-radius: 999px;
