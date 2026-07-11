@@ -26,17 +26,19 @@ export const tigerState: TigerState = {
 // Cinematic character beats (NOT a 360° spin): a prowl toward you, then a tight
 // zoom to the EYES, the SIDE PROFILE, the CLAWS, and a final dramatic FACE.
 // Tight crops on purpose — the weak full-body wide shot is avoided.
+// Four deliberate photographs (fixed camera at (0.7,1.6,6.8) → (0,-0.2,0);
+// each shot composes the model inside that frame — no mid-body crops).
 export const SHOTS = {
-  // hero — prowl, held well to the RIGHT so the headline stays clean on the left
-  hero:     { rotY: 0.2,   posX: 1.85, posY: -0.32, scale: 1.14, key: 2.5, fill: 0.12, rim: 0.18, keyWarm: 0.05 },
-  // I · The Gaze — the FACE / eyes, tiger right, text left
-  elegance: { rotY: -0.1,  posX: 1.55, posY: -1.12, scale: 1.5,  key: 2.7, fill: 0.10, rim: 0.2, keyWarm: 0.22 },
-  // II · The Form — SIDE PROFILE on the LEFT facing the right-hand copy
-  about:    { rotY: 1.5,   posX: -1.75, posY: -0.62, scale: 1.85, key: 2.6, fill: 0.12, rim: 0.2, keyWarm: 0.14 },
-  // III · The Edge — the CLAWS / front paws, tiger right, text left
-  gallery:  { rotY: 0.14,  posX: 1.35, posY: 1.05,  scale: 1.9,  key: 2.5, fill: 0.13, rim: 0.18, keyWarm: 0.1 },
-  // IV · The Reveal — dramatic FACE, tiger slightly right, warm key
-  contact:  { rotY: 0.02,  posX: 0.7,  posY: -1.12, scale: 1.78, key: 2.9, fill: 0.05, rim: 0.15, keyWarm: 0.24 },
+  // hero — three-quarter prowl held to the RIGHT, headline clean on the left
+  hero:     { rotY: 0.2,   posX: 1.85,  posY: -0.32, scale: 1.14, key: 2.5, fill: 0.12, rim: 0.18, keyWarm: 0.05 },
+  // Act I · three-quarter face PORTRAIT — eyes upper third, negative space left
+  elegance: { rotY: -0.28, posX: 1.55,  posY: -1.05, scale: 1.45, key: 2.7, fill: 0.10, rim: 0.2, keyWarm: 0.22 },
+  // Act II · FULL side profile — whole animal visible on the left, head left
+  about:    { rotY: -1.55, posX: -0.55, posY: -0.55, scale: 0.92, key: 2.6, fill: 0.12, rim: 0.2, keyWarm: 0.14 },
+  // Act III · front-quarter POWER shot — head & shoulders dominate, prowling left
+  gallery:  { rotY: -0.8,  posX: 2.05,  posY: -0.85, scale: 1.5,  key: 2.5, fill: 0.13, rim: 0.18, keyWarm: 0.1 },
+  // Act IV · pull-back — the whole tiger small and centred in the void
+  contact:  { rotY: 0.25,  posX: 0,     posY: -0.5,  scale: 0.78, key: 2.9, fill: 0.05, rim: 0.15, keyWarm: 0.24 },
 };
 
 // Debug: ?pose=elegance&scale=2.6&posY=-1.9 freezes a single shot for tuning.

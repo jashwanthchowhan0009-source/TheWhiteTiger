@@ -74,6 +74,11 @@ html.lenis, html.lenis body { height: auto; }
   font-size: 11px; letter-spacing: .04em; line-height: 1.5;
 }
 .stage canvas { display: block; }
+/* cinematic vignette over the canvas — the frame's dark edges */
+.stage::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55));
+}
 
 /* ── Two DOM layers so the tiger can pass in front of / behind text ── */
 .layer-back { position: relative; z-index: 1; }   /* behind the canvas */
@@ -158,10 +163,10 @@ body.is-ready .hero-mask .wi { transform: translateY(0); }
 @keyframes hint { 40% { transform: translateY(0); } 100% { transform: translateY(100%); } }
 .scroll-hint span { font-size: 10px; letter-spacing: 0.3em; color: var(--dim); }
 
-/* strong dark scrim so copy stays fully readable over the light stone */
-.copy-scrim { background: linear-gradient(95deg, rgba(11,11,13,.95) 0%, rgba(11,11,13,.9) 48%, rgba(11,11,13,.6) 76%, transparent 100%); padding: 30px 34px; border-radius: 16px; }
-.copy-scrim.r { background: linear-gradient(265deg, rgba(11,11,13,.95) 0%, rgba(11,11,13,.9) 48%, rgba(11,11,13,.6) 76%, transparent 100%); }
-.copy-scrim.c { background: radial-gradient(88% 80% at 50% 46%, rgba(11,11,13,.94), rgba(11,11,13,.74) 56%, rgba(11,11,13,.22) 84%, transparent 94%); padding: 40px; border-radius: 24px; }
+/* dark radial scrim so copy passes 4.5:1 over any frame of the animation */
+.copy-scrim { background: radial-gradient(120% 120% at 30% 40%, rgba(5,4,3,.88), rgba(5,4,3,.55) 60%, transparent); padding: 30px 34px; border-radius: 16px; }
+.copy-scrim.r { background: radial-gradient(120% 120% at 70% 40%, rgba(5,4,3,.88), rgba(5,4,3,.55) 60%, transparent); }
+.copy-scrim.c { background: radial-gradient(120% 120% at 50% 45%, rgba(5,4,3,.9), rgba(5,4,3,.55) 60%, transparent); padding: 40px; border-radius: 24px; }
 
 /* ── Editorial columns ── */
 .col-copy { max-width: 34ch; color: var(--dim); font-size: 1.02rem; line-height: 1.75; }

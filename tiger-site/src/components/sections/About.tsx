@@ -46,6 +46,10 @@ function Stat({ to, suffix, label, decimals = 0, pad = false }: { to: number; su
 export function About() {
   return (
     <section id="about" className="section h-100" style={{ display: 'flex', alignItems: 'center', paddingTop: '12vh', paddingBottom: '12vh' }}>
+      {/* act watermark — one word, fully inside the viewport */}
+      <div className="layer-back" style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', overflow: 'hidden' }} aria-hidden="true">
+        <div className="giant" data-giant style={{ fontSize: 'clamp(4rem, 13vw, 12rem)' }}>VIBGYOR</div>
+      </div>
       <div className="layer-front copy-scrim r sec-copy" style={{ marginLeft: 'auto', maxWidth: '56ch' }} data-reveal>
         <span className="num-label">02 — VIBGYOR</span>
         <h2 className="h-sec">The 9-pillar<br /><span className="italic amber">VIBGYOR</span> taxonomy.</h2>

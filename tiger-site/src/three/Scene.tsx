@@ -7,11 +7,7 @@ import { Tiger } from './Tiger';
 import { FallbackTiger } from './FallbackTiger';
 import { ModelBoundary } from './ErrorBoundary';
 import { Dust } from './Dust';
-import { tigerState } from '../scroll/tigerState';
 import { intro, INTRO_MS } from './intro';
-
-const NEUTRAL = new THREE.Color('#fff3e6');
-const WARM = new THREE.Color('#ffcf9a');
 
 // The entrance: the camera eases from slightly closer + lower to shot 0 while
 // the key light fades up (via intro.keyMul) — the sculpture steps into light.
@@ -34,30 +30,26 @@ function Intro() {
   return null;
 }
 
-// Studio soft-box rig from plain lights (renders everywhere): a warm KEY
-// upper-right that casts the grounded shadow, a cool FILL from the left, a top
-// RIM to carve the edge, and a low hemisphere wrap. Key glides with scroll.
-function StudioLights() {
+// Gallery-spotlight rig for the bronze (exact spec):
+//   warm KEY  #ffd9a8 2.6 @ (4,6,3) with shadows
+//   cool FILL #7a8fc4 0.5 @ (-5,2,-2)
+//   warm RIM  #ffb45e 3.2 @ (-2,4,-6) — carves the silhouette out of the black
+//   ambient   #1a1410 0.6
+function BronzeLights() {
   const key = useRef<THREE.DirectionalLight>(null!);
-  const tmp = new THREE.Color();
   useFrame((_, dt) => {
     const k = Math.min(1, dt * 2.4);
     if (key.current) {
-      const target = (2.5 + tigerState.key * 0.32) * intro.keyMul;
-      key.current.intensity += (target - key.current.intensity) * k;
-      tmp.copy(NEUTRAL).lerp(WARM, tigerState.keyWarm);
-      key.current.color.lerp(tmp, k);
+      key.current.intensity += (2.6 * intro.keyMul - key.current.intensity) * k;
     }
   });
   return (
     <>
-      {/* CINEMATIC KEY: a single strong warm raking light from high right that
-          carves the stone and throws a long shadow — the drama light. */}
       <directionalLight
         ref={key}
-        position={[7.5, 6, 2.5]}
-        intensity={2.8}
-        color={'#fff2e0'}
+        position={[4, 6, 3]}
+        intensity={2.6}
+        color={'#ffd9a8'}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -70,13 +62,12 @@ function StudioLights() {
         shadow-bias={-0.0004}
         shadow-radius={7}
       />
-      {/* very low cool fill so the shadow side stays deep and moody (not black) */}
-      <directionalLight position={[-7, 2, 3]} intensity={0.16} color={'#9fb6d8'} />
-      {/* cool rim / kicker from high behind-left — a bright edge that separates
-          the sculpture from the dark background for that cinematic silhouette. */}
-      <directionalLight position={[-3, 7, -5]} intensity={1.15} color={'#dfeafd'} />
-      {/* barely-there ambient so the darkest areas keep a hint of form */}
-      <hemisphereLight args={['#8f97a6', '#0a0a0d', 0.12]} />
+      <directionalLight position={[-5, 2, -2]} intensity={0.5} color={'#7a8fc4'} />
+      <directionalLight position={[-2, 4, -6]} intensity={3.2} color={'#ffb45e'} />
+      <ambientLight color={'#1a1410'} intensity={0.6} />
+      {/* the pool of light the tiger stands in — soft warm spot from directly
+          above (decay 0 so the physical falloff doesn't swallow it) */}
+      <spotLight position={[0.4, 6.5, 0]} angle={0.5} penumbra={1} intensity={1.2} decay={0} color={'#ffce7a'} />
     </>
   );
 }
@@ -84,11 +75,11 @@ function StudioLights() {
 export function Scene() {
   return (
     <>
-      {/* depth: distant geometry melts into the page's dark backdrop */}
-      <fog attach="fog" args={['#0d0d11', 11, 26]} />
+      {/* the far body melts into darkness */}
+      <fogExp2 attach="fog" args={['#0a0a0e', 0.055]} />
       <RoomEnv />
       <Intro />
-      <StudioLights />
+      <BronzeLights />
       <Dust />
 
       <ModelBoundary fallback={<FallbackTiger />}>
@@ -97,18 +88,10 @@ export function Scene() {
         </Suspense>
       </ModelBoundary>
 
-      {/* invisible floor that only catches the key light's shadow → grounds the
-          sculpture in the studio without drawing a visible plane. */}
+      {/* shadow-catcher floor: no visible geometry, just the sculpture's shadow */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]} receiveShadow>
         <planeGeometry args={[40, 40]} />
         <shadowMaterial transparent opacity={0.45} />
-      </mesh>
-
-      {/* black-marble base: a barely-visible cool disc the sculpture stands on,
-          catching the studio reflection — museum plinth, not bare void. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.6, -1.49, 0]}>
-        <circleGeometry args={[3.1, 64]} />
-        <meshStandardMaterial color={'#0a0c14'} roughness={0.32} metalness={0.5} envMapIntensity={0.7} transparent opacity={0.5} />
       </mesh>
 
       {/* soft grounded contact shadow directly under the paws */}
