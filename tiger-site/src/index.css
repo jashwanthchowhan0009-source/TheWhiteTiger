@@ -116,7 +116,15 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ── Hero ── */
-.hero-copy { position: absolute; left: clamp(20px, 5vw, 64px); top: 50%; transform: translateY(-50%); max-width: 42ch; z-index: 3; }
+/* full-height flex column with a nav-safe top pad: the copy centres vertically
+   but its top can never slide under the fixed nav on short viewports. */
+.hero-copy {
+  position: absolute; left: clamp(20px, 5vw, 64px); top: 0; bottom: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  justify-content: safe center; /* falls back to start instead of under the nav */
+  padding-top: 104px; padding-bottom: 40px;
+  max-width: 42ch; z-index: 3;
+}
 .hero-wrap { position: relative; display: grid; place-items: center; text-align: center; height: 100svh; }
 .hero-head {
   font-family: var(--serif); font-weight: 700;
@@ -273,6 +281,14 @@ body.is-ready .hero-mask .wi { transform: translateY(0); }
 .loader .count { font-family: var(--serif); font-size: clamp(3rem, 12vw, 8rem); line-height: 1; margin-top: 14px; }
 .loader .bar { width: min(240px, 60vw); height: 1px; background: var(--line); margin-top: 22px; position: relative; overflow: hidden; }
 .loader .bar i { position: absolute; inset: 0; background: var(--amber); transform-origin: left; transform: scaleX(0); }
+
+/* short landscape windows: scale the display type down so the hero never
+   collides with the nav or clips its CTA */
+@media (max-height: 720px) {
+  .hero-head { font-size: clamp(2.6rem, 6.4vw, 5.2rem); }
+  .hero-sub { margin-top: 16px; }
+  .cta { margin-top: 20px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .grain, .scroll-hint .line::after, .bg-vignette::before { animation: none; }
