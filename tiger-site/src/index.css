@@ -68,11 +68,18 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* on-page notice if the 3D scene can't run on this browser/GPU */
 .gl-note {
-  position: fixed; right: 18px; bottom: 18px; z-index: 4; max-width: 320px;
+  position: fixed; right: 18px; bottom: 18px; z-index: 4; max-width: 340px;
   padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px;
-  background: rgba(14,14,16,.7); color: var(--dim);
-  font-size: 11px; letter-spacing: .04em; line-height: 1.5;
+  background: rgba(14,14,16,.78); color: var(--dim);
+  font-size: 11px; letter-spacing: .04em; line-height: 1.6;
+  pointer-events: auto; /* .stage is pointer-events:none — the note must stay clickable */
 }
+.gl-retry {
+  display: inline-block; margin: 0 2px; padding: 2px 10px; cursor: pointer;
+  font: inherit; color: var(--amber); background: transparent;
+  border: 1px solid rgba(224, 115, 29, 0.5); border-radius: 999px;
+}
+.gl-retry:hover { background: rgba(224, 115, 29, 0.15); }
 .stage canvas { display: block; }
 /* cinematic vignette over the canvas — the frame's dark edges */
 .stage::after {
