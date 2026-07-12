@@ -1,8 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import * as THREE from 'three';
-import { Scene } from './three/Scene';
-import { ModelBoundary } from './three/ErrorBoundary';
 import { Nav } from './components/Nav';
 import { Grain } from './components/Grain';
 import { Loader } from './components/Loader';
@@ -13,31 +9,21 @@ import { Gallery } from './components/sections/Gallery';
 import { Company } from './components/sections/Company';
 import { Contact } from './components/sections/Contact';
 import { useScroll } from './lib/useScroll';
-import { beginIntro } from './three/intro';
-import { prefersReducedMotion } from './scroll/tigerState';
-import './three/pointer';
 
 export default function App() {
-  const [ready, setReady] = useState(false); // fonts ready → mount canvas
-  const [done, setDone] = useState(false);    // fade the loader
-  const [glTry, setGlTry] = useState(0);      // WebGL retry attempts (context creation can hiccup)
+  const [ready, setReady] = useState(false);
+  const [done, setDone] = useState(false); // fade the loader
 
   useEffect(() => {
-    const reduced = prefersReducedMotion();
-    // reveal the hero + choreograph the entrance once the loader clears
+    // reveal the hero (word masks) once the loader clears
     const fire = () => {
-      beginIntro(reduced);
       document.body.classList.add('is-ready');
       setTimeout(() => setDone(true), 120);
     };
-    // debug framing mode (?pose=…) skips the loader for fast iteration
-    if (new URLSearchParams(window.location.search).has('pose')) {
-      setReady(true); fire(); return;
-    }
     const fonts = (document as any).fonts?.ready ?? Promise.resolve();
     // never block forever on fonts (offline / blocked CDN): cap the wait
     const fontsCapped = Promise.race([fonts, new Promise((r) => setTimeout(r, 2200))]);
-    const minWait = new Promise((r) => setTimeout(r, 1400));
+    const minWait = new Promise((r) => setTimeout(r, 900));
     let cancelled = false;
     Promise.all([fontsCapped, minWait]).then(() => {
       if (cancelled) return;
@@ -55,47 +41,6 @@ export default function App() {
       <Grain />
       <div className="bg-vignette" aria-hidden="true" />
       <Nav />
-
-      <div className="stage" aria-hidden="true">
-        {/* A DOM-level boundary AROUND the Canvas: if WebGL / the 3D scene ever
-            fails, we simply drop the canvas and keep the rest of the page (nav,
-            headline, sections) fully usable — never a blank screen. */}
-        <ModelBoundary
-          key={glTry}
-          label="canvas"
-          onError={() => {
-            // context creation often recovers after the GPU process settles —
-            // remount the canvas automatically a few times before giving up
-            if (glTry < 3) setTimeout(() => setGlTry((t) => t + 1), 1600);
-          }}
-          fallback={(err) => (
-            <div className="gl-note">
-              {glTry < 3
-                ? '3D scene hiccuped — retrying…'
-                : <>3D scene unavailable — {String(err.message).slice(0, 70)}. <button className="gl-retry" onClick={() => setGlTry((t) => t + 1)}>Retry 3D</button> (or restart the browser)</>}
-            </div>
-          )}
-        >
-          {ready && (
-            <Canvas
-              dpr={[1, 2]}
-              shadows
-              camera={{ fov: 34, position: [0.7, 1.6, 6.8], near: 0.1, far: 100 }}
-              gl={{ antialias: true, alpha: true }}
-              onCreated={({ gl, camera }) => {
-                gl.toneMapping = THREE.ACESFilmicToneMapping;
-                gl.toneMappingExposure = 1.0;
-                gl.outputColorSpace = THREE.SRGBColorSpace;
-                // elevated top-side angle, looking slightly down into the studio
-                camera.position.set(0.7, 1.6, 6.8);
-                camera.lookAt(0, -0.2, 0);
-              }}
-            >
-              <Scene />
-            </Canvas>
-          )}
-        </ModelBoundary>
-      </div>
 
       <main id="scroll-root">
         <Hero />
