@@ -7,37 +7,42 @@ const TEAM = [
 
 export function Contact() {
   return (
-    <section id="contact" className="section h-100" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '10vh' }}>
-      <div className="layer-front copy-scrim c" style={{ marginTop: '4vh', maxWidth: 'min(1040px, 92vw)', marginLeft: 'auto', marginRight: 'auto' }} data-reveal>
-        <span className="mono-label" style={{ color: 'var(--amber)' }}>Reclaim your time · Own your truth</span>
-        <h2 className="den-head" style={{ marginTop: 16 }}>The informed are<br /><span className="italic amber">ungovernable</span>.</h2>
-        <p className="col-copy" style={{ margin: '20px auto 0', maxWidth: '52ch', textAlign: 'center' }}>
-          SherrByte saves a professional 187.5 hours of searching for news every year — giving
-          back ₹56,250 worth of their own time. Download the app, or partner with us.
-        </p>
-        <a href="/download/" className="den-mail">Download SherrByte →</a>
-        <a href="mailto:thewhitetigerdotin@gmail.com" className="den-sub">thewhitetigerdotin@gmail.com</a>
-      </div>
-
-      <div className="layer-front team-wrap" data-reveal>
-        <span className="num-label" style={{ textAlign: 'center', display: 'block' }}>The founders — incubated at RTIH Anantapur</span>
-        <div className="team-row">
-          {TEAM.map((m) => (
-            <div className="member" key={m.n}>
-              <div className="m-n serif">{m.n}</div>
-              <div className="m-r">{m.r}</div>
-            </div>
-          ))}
+    <>
+      <section id="contact" className="sec cta-sec">
+        <div className="wrap center">
+          <span className="label">Reclaim your time · Own your truth</span>
+          <h2>The informed are <em>ungovernable</em>.</h2>
+          <p className="sec-lead center-lead">
+            SherrByte saves a professional 187.5 hours of searching for news every year — giving
+            back ₹56,250 worth of their own time. Download the app, or partner with us.
+          </p>
+          <div className="hero-actions center-actions">
+            <a href="/download/" className="btn primary">Download SherrByte</a>
+            <a href="mailto:thewhitetigerdotin@gmail.com" className="btn ghost">thewhitetigerdotin@gmail.com</a>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <footer className="footer layer-front" style={{ marginTop: 'auto' }}>
-        <span>© 2026 TheWhiteTiger · SherrByte</span>
-        <div className="fnav">
-          <a href="#top">Home</a><a href="#about">VIBGYOR</a><a href="#gallery">Pipeline</a><a href="#contact">Contact</a>
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">The founders — incubated at RTIH Anantapur</span>
+          <div className="grid-4 team">
+            {TEAM.map((m) => (
+              <div key={m.n}><h3 className="m-n">{m.n}</h3><p className="m-r">{m.r}</p></div>
+            ))}
+          </div>
         </div>
-        <span>Anantapur, Andhra Pradesh · India</span>
+      </section>
+
+      <footer className="footer">
+        <div className="wrap foot-in">
+          <span>© 2026 TheWhiteTiger · SherrByte</span>
+          <nav className="fnav">
+            <a href="#top">Home</a><a href="#about">VIBGYOR</a><a href="#pipeline">Pipeline</a><a href="#contact">Contact</a>
+          </nav>
+          <span>Anantapur, Andhra Pradesh · India</span>
+        </div>
       </footer>
-    </section>
+    </>
   );
 }

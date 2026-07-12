@@ -52,96 +52,95 @@ const COMPLY = [
 
 export function Company() {
   return (
-    <div className="company-zone">
-      {/* Problem → Solution */}
-      <section className="section co-sec">
-        <span className="num-label">The problem</span>
-        <h2 className="h-sec">The feed is broken.<br />We <span className="italic amber">rebuilt</span> it.</h2>
-        <div className="compare">
-          <div className="col old">
-            <div className="c-head">Today’s feed</div>
-            <ul>{OLD.map((x) => <li key={x}>{x}</li>)}</ul>
-          </div>
-          <div className="col neu">
-            <div className="c-head">With SherrByte</div>
-            <ul>{NEW.map((x) => <li key={x}>{x}</li>)}</ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Information integrity */}
-      <section className="section co-sec">
-        <span className="num-label">Engineered for integrity</span>
-        <h2 className="h-sec">Built for factual accuracy,<br />not <span className="italic amber">engagement</span>.</h2>
-        <div className="feat-grid">
-          {INTEGRITY.map((f) => (
-            <div className="feat" key={f.t}>
-              <div className="f-t serif">{f.t}</div>
-              <div className="f-s">{f.s}</div>
+    <>
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">04 — The Problem</span>
+          <h2>The feed is broken. We <em>rebuilt</em> it.</h2>
+          <div className="grid-2" style={{ marginTop: 28 }}>
+            <div className="card">
+              <span className="tag">Today's feed</span>
+              <ul className="list x">{OLD.map((x) => <li key={x}>{x}</li>)}</ul>
             </div>
-          ))}
+            <div className="card amberline">
+              <span className="tag amber">With SherrByte</span>
+              <ul className="list ok">{NEW.map((x) => <li key={x}>{x}</li>)}</ul>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Infrastructure */}
-      <section className="section co-sec">
-        <span className="num-label">Cloud-native by design</span>
-        <h2 className="h-sec">The infrastructure<br />behind the <span className="italic amber">engine</span>.</h2>
-        <p className="col-copy" style={{ maxWidth: '52ch' }}>
-          A multi-provider, resilient, cost-efficient stack — engineered for sub-500ms feed
-          serving and zero-downtime failover.
-        </p>
-        <div className="stack-grid">
-          {STACK.map(([k, v]) => (
-            <div className="stk" key={k}><div className="s-k">{k}</div><div className="s-v">{v}</div></div>
-          ))}
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">05 — Engineered for integrity</span>
+          <h2>Built for factual accuracy, not <em>engagement</em>.</h2>
+          <div className="grid-3" style={{ marginTop: 28 }}>
+            {INTEGRITY.map((f) => (
+              <div className="card" key={f.t}><h3>{f.t}</h3><p>{f.s}</p></div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Roadmap */}
-      <section className="section co-sec">
-        <span className="num-label">The build</span>
-        <h2 className="h-sec">Six structured <span className="italic amber">phases</span>.</h2>
-        <div className="road">
-          {PHASES.map((p, i) => (
-            <div className={`ph ${p.d === 'Complete' ? 'done' : 'wip'}`} key={p.t}>
-              <div className="ph-n">{String(i + 1).padStart(2, '0')}</div>
-              <div className="ph-body">
-                <div className="ph-t serif">{p.t} <span className="ph-d">{p.d}</span></div>
-                <div className="ph-s">{p.s}</div>
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">06 — Cloud-native by design</span>
+          <h2>The infrastructure behind the <em>engine</em>.</h2>
+          <p className="sec-lead">
+            A multi-provider, resilient, cost-efficient stack — engineered for sub-500ms feed
+            serving and zero-downtime failover.
+          </p>
+          <div className="grid-4">
+            {STACK.map(([k, v]) => (
+              <div className="card mini" key={k}><span className="tag">{k}</span><div className="mini-v">{v}</div></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">07 — The build</span>
+          <h2>Six structured <em>phases</em>.</h2>
+          <div className="phases">
+            {PHASES.map((p, i) => (
+              <div className="phase" key={p.t}>
+                <span className="ph-n">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3>{p.t} <span className={`badge ${p.d === 'Complete' ? 'done' : 'wip'}`}>{p.d}</span></h3>
+                  <p>{p.s}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <p className="sec-lead" style={{ marginTop: 20 }}>
+            <strong>Next:</strong> short-form Bytes, VIBGYOR community Circles, the productised
+            B2B Core Data API, and Telugu / Hindi multilingual support.
+          </p>
         </div>
-        <p className="col-copy" style={{ maxWidth: '52ch', marginTop: 18 }}>
-          <strong>Next:</strong> short-form Bytes, VIBGYOR community Circles, the productised B2B
-          Core Data API, and Telugu / Hindi multilingual support.
-        </p>
       </section>
 
-      {/* Revenue + compliance */}
-      <section className="section co-sec">
-        <span className="num-label">How we grow</span>
-        <h2 className="h-sec">A dual-engine<br />revenue <span className="italic amber">model</span>.</h2>
-        <div className="two-layer" style={{ marginTop: 24 }}>
-          <div className="lyr">
-            <span className="lyr-tag">B2C · SherrByte</span>
-            <p className="lyr-copy">Ads and aggregated insights first; premium subscriptions and
-              value-added features as the base grows toward a ~1 lakh Year-1 user target.</p>
+      <section className="sec">
+        <div className="wrap">
+          <span className="label">08 — How we grow</span>
+          <h2>A dual-engine revenue <em>model</em>.</h2>
+          <div className="grid-2" style={{ marginTop: 28 }}>
+            <div className="card">
+              <span className="tag">B2C · SherrByte</span>
+              <p>Ads and aggregated insights first; premium subscriptions and value-added
+                features as the base grows toward a ~1 lakh Year-1 user target.</p>
+            </div>
+            <div className="card">
+              <span className="tag">B2B · Core Data</span>
+              <p>Licensing structured, real-time feeds and API access to enterprises, publishers
+                and research firms — targeting 15–20 integrations by Year 2.</p>
+            </div>
           </div>
-          <div className="lyr">
-            <span className="lyr-tag">B2B · Core Data</span>
-            <p className="lyr-copy">Licensing structured, real-time feeds and API access to
-              enterprises, publishers and research firms — targeting 15–20 integrations by Year 2.</p>
-          </div>
-        </div>
-        <div className="comply">
-          <span className="num-label" style={{ marginTop: 34 }}>Built for India, compliant by design</span>
-          <div className="comply-row">
-            {COMPLY.map((c) => <div className="cmp" key={c}><span className="tick">✓</span>{c}</div>)}
+          <div className="comply">
+            {COMPLY.map((c) => <div className="cmp" key={c}><span>✓</span>{c}</div>)}
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

@@ -1,44 +1,22 @@
-// headline split into masked words for the entrance reveal (translateY → 0)
-function Word({ text, i, cls = '' }: { text: string; i: number; cls?: string }) {
-  return (
-    <span className="w">
-      <span className="wi" style={{ transitionDelay: `${400 + i * 60}ms` }}>
-        <span className={cls}>{text}</span>
-      </span>
-    </span>
-  );
-}
-
 export function Hero() {
   return (
-    <section id="top" className="section h-hero hero-2d">
-      <div className="hero-copy" data-reveal>
-        <span className="mono-label" style={{ color: 'var(--amber)', letterSpacing: '0.22em' }}>
-          SherrByte · your personal information OS
-        </span>
-        <h1 className="hero-head hero-mask" style={{ marginTop: 22 }}>
-          <Word text="The" i={0} />{' '}
-          <Word text="informed" i={1} /><br />
-          <Word text="are" i={2} />{' '}
-          {/* word + period share one mask unit so the dot can never wrap alone */}
-          <span className="w">
-            <span className="wi" style={{ transitionDelay: '580ms' }}>
-              <span className="italic amber">ungovernable</span>.
-            </span>
-          </span>
-        </h1>
-        <p className="hero-sub" style={{ marginLeft: 0, textAlign: 'left' }}>
-          An information engine — clean, verified, objective truth, carved from the world's noise.
-        </p>
-        <a href="/download/" className="cta">Get SherrByte</a>
+    <section id="top" className="hero">
+      <div className="wrap hero-grid">
+        <div>
+          <span className="label">SherrByte · your personal information OS</span>
+          <h1>The informed are <em>ungovernable</em>.</h1>
+          <p className="lead">
+            An information engine — clean, verified, objective truth, carved from the world's noise.
+          </p>
+          <div className="hero-actions">
+            <a href="/download/" className="btn primary">Get SherrByte</a>
+            <a href="#engine" className="btn ghost">See how it works</a>
+          </div>
+        </div>
+        <div className="hero-art">
+          <img src="/tiger.png" alt="TheWhiteTiger" width="520" height="520" loading="eager" />
+        </div>
       </div>
-
-      {/* the brand tiger — a still, no WebGL */}
-      <div className="hero-art" aria-hidden="true">
-        <img src="/tiger.png" alt="" width="880" height="880" loading="eager" />
-      </div>
-
-      <div className="scroll-hint"><span>Scroll</span><div className="line" /></div>
     </section>
   );
 }
