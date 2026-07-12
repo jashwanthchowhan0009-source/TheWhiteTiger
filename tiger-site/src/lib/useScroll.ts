@@ -2,31 +2,17 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { tigerState, SHOTS, prefersReducedMotion, debugPose } from '../scroll/tigerState';
+import { prefersReducedMotion } from '../scroll/tigerState';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Wires Lenis smooth-scroll to ScrollTrigger and builds the one master timeline
-// that scrubs the sculpture through every section pose. Returns nothing; it just
-// mutates the shared tigerState which the R3F scene reads each frame.
+// Smooth scroll (Lenis) + section reveals + watermark parallax. Pure 2D.
 export function useScroll(ready: boolean) {
   useEffect(() => {
     if (!ready) return;
-    const reduced = prefersReducedMotion();
 
-    // debug: freeze a single pose for framing (?pose=elegance&scale=2.6…)
-    const dbg = debugPose();
-    if (dbg) {
-      Object.assign(tigerState, dbg);
+    if (prefersReducedMotion()) {
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => (el.style.opacity = '1'));
-      return;
-    }
-
-    if (reduced) {
-      Object.assign(tigerState, SHOTS.hero);
-      // still let native scroll work; no smoothing, no scrub
-      const reveals = gsap.utils.toArray<HTMLElement>('[data-reveal]');
-      reveals.forEach((el) => (el.style.opacity = '1'));
       return;
     }
 
@@ -37,26 +23,6 @@ export function useScroll(ready: boolean) {
     gsap.ticker.lagSmoothing(0);
 
     const ctx = gsap.context(() => {
-      // ── master sculpture choreography ──
-      // Anchored to the GALLERY section's end (not the page bottom) so the tall
-      // company-data zone can't stretch the timeline and de-sync every pose
-      // from its section.
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#scroll-root', start: 'top top',
-          endTrigger: '#gallery', end: 'bottom bottom', scrub: 1.2,
-        },
-      });
-      tl.to(tigerState, { ...SHOTS.elegance, ease: 'none', duration: 1.1 })
-        .to(tigerState, { ...SHOTS.about, ease: 'none', duration: 0.9 })
-        .to(tigerState, { ...SHOTS.gallery, ease: 'none', duration: 1.1 });
-
-      // finale: the tiger takes its contact pose as the contact section arrives
-      gsap.to(tigerState, {
-        ...SHOTS.contact, ease: 'none',
-        scrollTrigger: { trigger: '#contact', start: 'top bottom', end: 'center center', scrub: 1.2 },
-      });
-
       // ── section copy reveals ──
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
         gsap.fromTo(

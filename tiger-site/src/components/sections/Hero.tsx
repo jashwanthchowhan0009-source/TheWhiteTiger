@@ -1,4 +1,4 @@
-// headline split into masked words for the entrance reveal (translateY 110%→0)
+// headline split into masked words for the entrance reveal (translateY → 0)
 function Word({ text, i, cls = '' }: { text: string; i: number; cls?: string }) {
   return (
     <span className="w">
@@ -11,9 +11,8 @@ function Word({ text, i, cls = '' }: { text: string; i: number; cls?: string }) 
 
 export function Hero() {
   return (
-    <section id="top" className="section h-hero">
-      {/* text sits in the negative space to the LEFT of the sculpture */}
-      <div className="hero-copy layer-front" data-reveal>
+    <section id="top" className="section h-hero hero-2d">
+      <div className="hero-copy" data-reveal>
         <span className="mono-label" style={{ color: 'var(--amber)', letterSpacing: '0.22em' }}>
           SherrByte · your personal information OS
         </span>
@@ -33,7 +32,13 @@ export function Hero() {
         </p>
         <a href="/download/" className="cta">Get SherrByte</a>
       </div>
-      <div className="scroll-hint layer-front"><span>Scroll — enter the beast</span><div className="line" /></div>
+
+      {/* the brand tiger — a still, no WebGL */}
+      <div className="hero-art" aria-hidden="true">
+        <img src="/tiger.png" alt="" width="880" height="880" loading="eager" />
+      </div>
+
+      <div className="scroll-hint"><span>Scroll</span><div className="line" /></div>
     </section>
   );
 }
