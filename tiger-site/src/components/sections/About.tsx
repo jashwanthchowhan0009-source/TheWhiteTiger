@@ -1,6 +1,3 @@
-import { useEffect, useRef } from 'react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 const PILLARS = [
   { c: '#6d28d9', t: 'Society & Governance', s: 'Policy, civics & public life' },
   { c: '#2563eb', t: 'Business & Economy', s: 'Markets, startups & trade' },
@@ -13,47 +10,13 @@ const PILLARS = [
   { c: '#7c3aed', t: 'Sports & Gaming', s: 'Play, competition & esports' },
 ];
 
-function Stat({ to, suffix, label, decimals = 0, pad = false }: { to: number; suffix?: string; label: string; decimals?: number; pad?: boolean }) {
-  const ref = useRef<HTMLElement>(null);
-  const fmt = (v: number) => {
-    const s = decimals ? v.toFixed(decimals) : Math.round(v).toString();
-    return (pad && v < 10 && !decimals ? '0' + s : s) + (suffix || '');
-  };
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const st = ScrollTrigger.create({
-      trigger: el, start: 'top 88%', once: true,
-      onEnter: () => {
-        const dur = 1500, start = performance.now();
-        const step = (t: number) => {
-          const p = Math.min(1, (t - start) / dur);
-          el.textContent = fmt((1 - Math.pow(1 - p, 3)) * to);
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      },
-    });
-    return () => st.kill();
-  }, [to, suffix, decimals, pad]);
-  return (
-    <div className="stat">
-      <b ref={ref}>{fmt(0)}</b>
-      <span>{label}</span>
-    </div>
-  );
-}
-
 export function About() {
   return (
-    <section id="about" className="section h-100" style={{ display: 'flex', alignItems: 'center', paddingTop: '12vh', paddingBottom: '12vh' }}>
-      {/* act watermark — one word, fully inside the viewport */}
-      <div className="layer-back" style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', overflow: 'hidden' }} aria-hidden="true">
-        <div className="giant" data-giant style={{ fontSize: 'clamp(4rem, 13vw, 12rem)' }}>VIBGYOR</div>
-      </div>
-      <div className="layer-front copy-scrim r sec-copy" style={{ marginLeft: 'auto', maxWidth: '56ch' }} data-reveal>
-        <span className="num-label">02 — VIBGYOR</span>
-        <h2 className="h-sec">The 9-pillar<br /><span className="italic amber">VIBGYOR</span> taxonomy.</h2>
-        <p className="col-copy" style={{ maxWidth: '48ch' }}>
+    <section id="about" className="sec">
+      <div className="wrap">
+        <span className="label">02 — VIBGYOR</span>
+        <h2>The 9-pillar <em>VIBGYOR</em> taxonomy.</h2>
+        <p className="sec-lead">
           Every piece of information is classified into a colour-coded knowledge pillar spanning
           50+ micro-topics — a standardised structure no other Indian platform offers.
         </p>
@@ -69,9 +32,9 @@ export function About() {
           ))}
         </div>
         <div className="stats">
-          <Stat to={9} pad label="Knowledge pillars" />
-          <Stat to={50} suffix="+" label="Micro-topics" />
-          <Stat to={24} suffix="+" label="Verified sources" />
+          <div className="stat"><b>09</b><span>Knowledge pillars</span></div>
+          <div className="stat"><b>50+</b><span>Micro-topics</span></div>
+          <div className="stat"><b>24+</b><span>Verified sources</span></div>
         </div>
       </div>
     </section>
