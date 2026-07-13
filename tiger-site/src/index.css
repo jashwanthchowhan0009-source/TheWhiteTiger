@@ -192,7 +192,26 @@ h1 em, h2 em {
 /* stat numbers get a gradient */
 .stat b { background: linear-gradient(180deg, #fff, var(--amber)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
+/* ambient aurora — slow drifting colour clouds, fixed behind everything */
+.aurora {
+  position: fixed; inset: -20%; z-index: -2; pointer-events: none; filter: blur(80px); opacity: .5;
+  background:
+    radial-gradient(38% 42% at 18% 22%, rgba(224,115,29,0.18), transparent 60%),
+    radial-gradient(34% 40% at 82% 30%, rgba(90,120,220,0.14), transparent 60%),
+    radial-gradient(46% 44% at 60% 88%, rgba(224,115,29,0.10), transparent 60%);
+  animation: drift 22s ease-in-out infinite alternate;
+}
+@keyframes drift { from { transform: translate3d(-3%, -2%, 0) scale(1); } to { transform: translate3d(4%, 3%, 0) scale(1.12); } }
+
+/* soft spotlight following the cursor */
+.cursor-glow {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(220px 220px at var(--mx, 50%) var(--my, -100%), rgba(224,115,29,0.06), transparent 70%);
+  transition: background .1s linear;
+}
+.btn, .nav-cta { transition: transform .18s cubic-bezier(.2,.7,.2,1), box-shadow .3s, filter .2s; }
+
 @media (prefers-reduced-motion: reduce) {
-  .aura, .hero-art img, h1 em, h2 em { animation: none; }
+  .aura, .hero-art img, h1 em, h2 em, .aurora { animation: none; }
   h1 em, h2 em { -webkit-text-fill-color: var(--amber); }
 }
