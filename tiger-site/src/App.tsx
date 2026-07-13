@@ -72,11 +72,33 @@ export default function App() {
       io.observe(el);
     });
 
-    return () => window.removeEventListener('scroll', onScroll);
+    // ── magnetic buttons + cursor spotlight (desktop, fine pointer only) ──
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let cleanupPointer = () => {};
+    if (fine && !reduce) {
+      const mags = Array.from(document.querySelectorAll<HTMLElement>('.btn, .nav-cta'));
+      const onMove = (e: PointerEvent) => {
+        root.style.setProperty('--mx', e.clientX + 'px');
+        root.style.setProperty('--my', e.clientY + 'px');
+        mags.forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          const dy = e.clientY - (r.top + r.height / 2);
+          if (Math.hypot(dx, dy) < 90) el.style.transform = `translate(${dx * 0.28}px, ${dy * 0.34}px)`;
+          else el.style.transform = '';
+        });
+      };
+      window.addEventListener('pointermove', onMove, { passive: true });
+      cleanupPointer = () => window.removeEventListener('pointermove', onMove);
+    }
+
+    return () => { window.removeEventListener('scroll', onScroll); cleanupPointer(); };
   }, []);
 
   return (
     <>
+      <div className="aurora" aria-hidden="true" />
+      <div className="cursor-glow" aria-hidden="true" />
       <div id="progress" aria-hidden="true" />
       <Nav />
       <main>
