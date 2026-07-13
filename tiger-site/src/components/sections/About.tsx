@@ -32,9 +32,9 @@ export function About() {
           ))}
         </div>
         <div className="stats">
-          <div className="stat"><b>09</b><span>Knowledge pillars</span></div>
-          <div className="stat"><b>50+</b><span>Micro-topics</span></div>
-          <div className="stat"><b>24+</b><span>Verified sources</span></div>
+          <div className="stat"><b data-to="9" data-pad="1">09</b><span>Knowledge pillars</span></div>
+          <div className="stat"><b data-to="50" data-suffix="+">50+</b><span>Micro-topics</span></div>
+          <div className="stat"><b data-to="24" data-suffix="+">24+</b><span>Verified sources</span></div>
         </div>
       </div>
     </section>

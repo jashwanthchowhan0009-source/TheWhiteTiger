@@ -14,6 +14,7 @@ export function Hero() {
           </div>
         </div>
         <div className="hero-art">
+          <span className="aura" aria-hidden="true" />
           <img src="/tiger.png" alt="TheWhiteTiger" width="520" height="520" loading="eager" />
         </div>
       </div>

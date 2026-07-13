@@ -122,3 +122,77 @@ em { font-style: italic; color: var(--amber); }
 .foot-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
 .fnav { display: flex; gap: 20px; }
 .fnav a:hover { color: var(--ink); }
+
+/* ══════════ PREMIUM MOTION + POLISH LAYER ══════════ */
+
+/* scroll progress bar */
+#progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 60;
+  background: linear-gradient(90deg, var(--amber), #ffb45e);
+  transform: scaleX(0); transform-origin: 0 50%;
+}
+
+/* nav condenses on scroll */
+.nav { transition: background .3s, box-shadow .3s; }
+.nav.shrunk { background: rgba(11, 12, 15, 0.85); box-shadow: 0 8px 30px -18px #000; }
+.nav.shrunk .nav-in { height: 56px; }
+.nav-in { transition: height .3s; }
+/* animated underline on nav links */
+.links a { position: relative; }
+.links a::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: -6px; height: 1.5px;
+  background: var(--amber); transition: right .3s cubic-bezier(.2,.7,.2,1);
+}
+.links a:hover::after { right: 0; }
+
+/* reveal-on-scroll (only when JS is active, so no-JS shows everything) */
+.js [data-r] { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
+.js [data-r].in { opacity: 1; transform: none; }
+
+/* headline: subtle animated amber sheen on the emphasis word */
+h1 em, h2 em {
+  background: linear-gradient(100deg, var(--amber) 0%, #ffb45e 45%, var(--amber) 90%);
+  background-size: 220% 100%; -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: var(--amber);
+  animation: sheen 6s linear infinite;
+}
+@keyframes sheen { to { background-position: 220% 0; } }
+
+/* hero aura — a soft breathing glow behind the tiger art */
+.hero-art { position: relative; }
+.aura {
+  position: absolute; inset: -12% -8%; z-index: 0; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(224,115,29,0.28), rgba(224,115,29,0.06) 55%, transparent 75%);
+  filter: blur(6px); animation: pulse 6s ease-in-out infinite alternate;
+}
+.hero-art img { position: relative; z-index: 1; animation: float 7s ease-in-out infinite alternate; }
+@keyframes pulse { from { opacity: .7; transform: scale(.96); } to { opacity: 1; transform: scale(1.04); } }
+@keyframes float { from { transform: translateY(-8px); } to { transform: translateY(10px); } }
+
+/* buttons: shine sweep + lift */
+.btn { position: relative; overflow: hidden; transition: transform .2s, box-shadow .3s, filter .2s; }
+.btn.primary { box-shadow: 0 10px 30px -12px rgba(224,115,29,.6); }
+.btn:hover { transform: translateY(-2px); }
+.btn.primary:hover { box-shadow: 0 16px 40px -12px rgba(224,115,29,.8); }
+.btn::before {
+  content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent);
+  transform: skewX(-18deg); transition: left .6s;
+}
+.btn:hover::before { left: 140%; }
+
+/* cards: hover lift + amber border glow + sheen */
+.card, .pillar { transition: transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, box-shadow .3s, background .3s; }
+.card:hover, .pillar:hover {
+  transform: translateY(-4px); border-color: rgba(224,115,29,.4);
+  box-shadow: 0 20px 50px -24px rgba(0,0,0,.8), 0 0 0 1px rgba(224,115,29,.15) inset;
+}
+.pillar:hover { background: #16181f; }
+
+/* stat numbers get a gradient */
+.stat b { background: linear-gradient(180deg, #fff, var(--amber)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aura, .hero-art img, h1 em, h2 em { animation: none; }
+  h1 em, h2 em { -webkit-text-fill-color: var(--amber); }
+}
