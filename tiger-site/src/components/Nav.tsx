@@ -13,10 +13,10 @@ export function Nav() {
       <div className="wrap nav-in">
         <a href="#top" className="wordmark">THEWHITETIGER</a>
         <nav className="links">
-          <a href="#engine">Engine</a>
-          <a href="#about">VIBGYOR</a>
-          <a href="#pipeline">Pipeline</a>
-          <a href="#contact">Contact</a>
+          <a href="#platform">Platform</a>
+          <a href="#solutions">Solutions</a>
+          <a href="#industries">Industries</a>
+          <a href="#products">Products</a>
         </nav>
         <button
           type="button"
@@ -32,7 +32,7 @@ export function Nav() {
             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
         </button>
-        <a href="/download/" className="nav-cta">Get SherrByte</a>
+        <a href="#contact" className="nav-cta">Contact sales</a>
       </div>
     </header>
   );

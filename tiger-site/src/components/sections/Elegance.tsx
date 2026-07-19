@@ -1,29 +1,43 @@
+const FLOW = [
+  {
+    icon: '🌍',
+    t: 'Collect',
+    s: 'Aggregate information from news, markets, government portals, weather, transportation, scientific publications, public datasets, financial feeds and thousands of other public sources.',
+  },
+  {
+    icon: '🧠',
+    t: 'Process',
+    s: 'Normalise, clean and enrich the data — classify it, detect entities, identify relationships, discover trends and generate structured intelligence with AI.',
+  },
+  {
+    icon: '🚀',
+    t: 'Deliver',
+    s: 'Serve business-ready intelligence through dashboards, APIs, reports, alerts, analytics and custom enterprise solutions built around your workflows.',
+  },
+];
+
 export function Elegance() {
   return (
-    <section id="engine" className="sec">
+    <section id="platform" className="sec">
       <div className="wrap">
-        <span className="label">01 — The Engine</span>
-        <h2>One engine. Two layers of <em>truth</em>.</h2>
+        <span className="label">01 — What we do</span>
+        <h2>One engine, from raw public data to <em>decisions</em>.</h2>
         <p className="sec-lead">
-          The TheWhiteTiger Core is a high-throughput pipeline for real-time ingestion, AI
-          processing, structuring and serving of the world's information at scale — exposed both
-          as a consumer product and as an enterprise data service.
+          SherrByte is the infrastructure layer between the world's public information and the
+          people who need to act on it — collecting at global scale, processing with AI, and
+          delivering intelligence that's ready for the business.
         </p>
-        <div className="grid-2">
-          <div className="card">
-            <span className="tag">B2C · Consumer</span>
-            <h3>SherrByte</h3>
-            <p>A single, hyper-personalised, AI-verified feed across all nine pillars — a
-              Progressive Web App &amp; mobile app with a personal Knowledge Library auto-sorted
-              by VIBGYOR.</p>
-          </div>
-          <div className="card">
-            <span className="tag">B2B · Enterprise</span>
-            <h3>Core Data Streams</h3>
-            <p>The same infrastructure as a clean, real-time data &amp; API service: classified
-              article streams, a semantic Search API and a Trend Signal API across the nine
-              pillars.</p>
-          </div>
+        <div className="flow">
+          {FLOW.map((f, i) => (
+            <div className="flow-step" key={f.t}>
+              <div className="card flow-card">
+                <span className="flow-ico">{f.icon}</span>
+                <h3>{f.t}</h3>
+                <p>{f.s}</p>
+              </div>
+              {i < FLOW.length - 1 && <span className="flow-arrow" aria-hidden="true">↓</span>}
+            </div>
+          ))}
         </div>
       </div>
     </section>
