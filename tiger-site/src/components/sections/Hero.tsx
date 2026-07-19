@@ -2,7 +2,7 @@ export function Hero() {
   return (
     <section id="top" className="hero">
       <div className="hero-media" aria-hidden="true">
-        <video autoPlay muted loop playsInline preload="auto">
+        <video autoPlay muted loop playsInline preload="auto" poster="/media/hero-poster.jpg">
           <source src="/media/hero.mp4" type="video/mp4" />
         </video>
       </div>

@@ -17,7 +17,7 @@ export function Contact() {
     <>
       <section id="contact" className="sec cta-sec">
         <div className="sec-media" aria-hidden="true">
-          <video autoPlay muted loop playsInline preload="none">
+          <video autoPlay muted loop playsInline preload="none" poster="/media/engine-poster.jpg">
             <source src="/media/engine.mp4" type="video/mp4" />
           </video>
         </div>

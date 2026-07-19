@@ -119,7 +119,7 @@ h1 em, h2 em { font-style: normal; color: var(--accent-ink); }
 
 /* ── Hero (full-bleed video) ── */
 .hero { position: relative; min-height: 92vh; display: flex; align-items: center; border-bottom: 1px solid var(--line); overflow: hidden; }
-.hero-media { position: absolute; inset: 0; z-index: 0; }
+.hero-media { position: absolute; inset: 0; z-index: 0; background: #08090b url(/media/hero-poster.jpg) center/cover no-repeat; }
 .hero-media video { width: 100%; height: 100%; object-fit: cover; }
 .hero-media::after { content: ""; position: absolute; inset: 0; background: var(--overlay); }
 .hero-media::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--overlay-side); }
@@ -160,7 +160,7 @@ h1 em, h2 em { font-style: normal; color: var(--accent-ink); }
 .center-actions { justify-content: center; }
 
 /* ── Media band (video section background) ── */
-.sec-media { position: absolute; inset: 0; z-index: 0; }
+.sec-media { position: absolute; inset: 0; z-index: 0; background: #08090b url(/media/engine-poster.jpg) center/cover no-repeat; }
 .sec-media video { width: 100%; height: 100%; object-fit: cover; opacity: .32; }
 .sec-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--bg) 0%, rgba(8,9,11,0.72) 40%, var(--bg) 100%); }
 :root[data-theme="light"] .sec-media video { opacity: .14; }
