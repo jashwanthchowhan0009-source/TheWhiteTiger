@@ -72,21 +72,19 @@ export default function App() {
       io.observe(el);
     });
 
-    // ── magnetic buttons + cursor spotlight (desktop, fine pointer only) ──
+    // ── cursor spotlight (desktop, fine pointer only) — smooth, rAF-throttled ──
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     let cleanupPointer = () => {};
     if (fine && !reduce) {
-      const mags = Array.from(document.querySelectorAll<HTMLElement>('.btn, .nav-cta'));
+      let mx = 0, my = 0, queued = false;
+      const apply = () => {
+        queued = false;
+        root.style.setProperty('--mx', mx + 'px');
+        root.style.setProperty('--my', my + 'px');
+      };
       const onMove = (e: PointerEvent) => {
-        root.style.setProperty('--mx', e.clientX + 'px');
-        root.style.setProperty('--my', e.clientY + 'px');
-        mags.forEach((el) => {
-          const r = el.getBoundingClientRect();
-          const dx = e.clientX - (r.left + r.width / 2);
-          const dy = e.clientY - (r.top + r.height / 2);
-          if (Math.hypot(dx, dy) < 90) el.style.transform = `translate(${dx * 0.28}px, ${dy * 0.34}px)`;
-          else el.style.transform = '';
-        });
+        mx = e.clientX; my = e.clientY;
+        if (!queued) { queued = true; requestAnimationFrame(apply); }
       };
       window.addEventListener('pointermove', onMove, { passive: true });
       cleanupPointer = () => window.removeEventListener('pointermove', onMove);

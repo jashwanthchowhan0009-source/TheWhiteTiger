@@ -7,13 +7,13 @@ const INDUSTRIES = [
 ];
 
 const SOLUTIONS = [
-  { c: '#2563eb', t: 'Market Intelligence', s: 'Monitor industries, competitors, regulations and emerging trends as they move.' },
-  { c: '#dc2626', t: 'Risk Intelligence', s: 'Track geopolitical events, disasters, cyber threats, policy changes and supply-chain disruptions.' },
-  { c: '#0891b2', t: 'Public Intelligence', s: 'Follow government announcements, tenders, schemes, regulations and public-sector updates.' },
-  { c: '#16a34a', t: 'Financial Intelligence', s: 'Stocks, commodities, forex, crypto, economic indicators, company news and market movements.' },
-  { c: '#db2777', t: 'Media Intelligence', s: 'Track brand mentions, sentiment, news coverage and industry discussion at scale.' },
-  { c: '#7c3aed', t: 'Research Intelligence', s: 'Aggregate patents, journals, scientific publications, university research and innovation trends.' },
-  { c: '#ea580c', t: 'Custom Intelligence', s: 'Organisation-specific dashboards, alerts, reports and workflows tailored to your business.' },
+  { c: '#3b82f6', t: 'Market Intelligence', s: 'Monitor industries, competitors, regulations and emerging trends as they move.' },
+  { c: '#ef4444', t: 'Risk Intelligence', s: 'Track geopolitical events, disasters, cyber threats, policy changes and supply-chain disruptions.' },
+  { c: '#0ea5e9', t: 'Public Intelligence', s: 'Follow government announcements, tenders, schemes, regulations and public-sector updates.' },
+  { c: '#10b981', t: 'Financial Intelligence', s: 'Stocks, commodities, forex, crypto, economic indicators, company news and market movements.' },
+  { c: '#6366f1', t: 'Media Intelligence', s: 'Track brand mentions, sentiment, news coverage and industry discussion at scale.' },
+  { c: '#14b8a6', t: 'Research Intelligence', s: 'Aggregate patents, journals, scientific publications, university research and innovation trends.' },
+  { c: '#64748b', t: 'Custom Intelligence', s: 'Organisation-specific dashboards, alerts, reports and workflows tailored to your business.' },
 ];
 
 export function About() {
