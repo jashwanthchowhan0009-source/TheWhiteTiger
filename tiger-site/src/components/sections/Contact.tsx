@@ -16,6 +16,11 @@ export function Contact() {
   return (
     <>
       <section id="contact" className="sec cta-sec">
+        <div className="sec-media" aria-hidden="true">
+          <video autoPlay muted loop playsInline preload="none">
+            <source src="/media/engine.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="wrap center">
           <span className="label">Talk to us</span>
           <h2>Turn the world's public data into your <em>advantage</em>.</h2>
@@ -36,7 +41,7 @@ export function Contact() {
 
       <section className="sec">
         <div className="wrap">
-          <span className="label">The team — incubated at RTIH Anantapur</span>
+          <span className="label">09 / The team — incubated at RTIH Anantapur</span>
           <div className="grid-4 team">
             {TEAM.map((m) => (
               <div key={m.n}><h3 className="m-n">{m.n}</h3><p className="m-r">{m.r}</p></div>

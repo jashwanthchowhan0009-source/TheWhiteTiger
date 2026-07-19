@@ -37,7 +37,7 @@ export function Company() {
     <>
       <section id="usecases" className="sec">
         <div className="wrap">
-          <span className="label">06 — Example use cases</span>
+          <span className="label">06 / Example use cases</span>
           <h2>What teams do with <em>SherrByte</em>.</h2>
           <div className="grid-3" style={{ marginTop: 28 }}>
             {CASES.map((c) => (
@@ -50,9 +50,9 @@ export function Company() {
         </div>
       </section>
 
-      <section id="products" className="sec">
+      <section id="products" className="sec tinted">
         <div className="wrap">
-          <span className="label">07 — Products</span>
+          <span className="label">07 / Products</span>
           <h2>One platform, three <em>products</em>.</h2>
           <p className="sec-lead">
             A data-intelligence platform — with the consumer app as one product and enterprise
@@ -72,7 +72,7 @@ export function Company() {
 
       <section id="tech" className="sec">
         <div className="wrap">
-          <span className="label">08 — Technology</span>
+          <span className="label">08 / Technology</span>
           <h2>The engineering behind the <em>engine</em>.</h2>
           <p className="sec-lead">
             A multi-provider, cloud-native stack engineered for real-time throughput, resilient

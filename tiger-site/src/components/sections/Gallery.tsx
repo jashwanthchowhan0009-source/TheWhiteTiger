@@ -23,7 +23,7 @@ export function Gallery() {
     <>
       <section id="how" className="sec">
         <div className="wrap">
-          <span className="label">04 — How it works</span>
+          <span className="label">04 / How it works</span>
           <h2>From public noise to verified <em>signal</em>.</h2>
           <p className="sec-lead">
             A single pipeline turns the open, chaotic web of public information into structured
@@ -46,9 +46,9 @@ export function Gallery() {
         </div>
       </section>
 
-      <section className="sec">
+      <section className="sec tinted">
         <div className="wrap">
-          <span className="label">05 — Why SherrByte</span>
+          <span className="label">05 / Why SherrByte</span>
           <h2>Infrastructure built for <em>scale and trust</em>.</h2>
           <div className="comply why">
             {WHY.map((c) => <div className="cmp" key={c}><span>✓</span>{c}</div>)}

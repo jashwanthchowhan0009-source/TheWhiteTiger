@@ -21,7 +21,7 @@ export function About() {
     <>
       <section id="industries" className="sec">
         <div className="wrap">
-          <span className="label">02 — Industries we serve</span>
+          <span className="label">02 / Industries we serve</span>
           <h2>Built for organisations that run on <em>information</em>.</h2>
           <p className="sec-lead">
             Any team whose decisions depend on what's happening in the world — across the public,
@@ -33,9 +33,9 @@ export function About() {
         </div>
       </section>
 
-      <section id="solutions" className="sec">
+      <section id="solutions" className="sec tinted">
         <div className="wrap">
-          <span className="label">03 — Enterprise solutions</span>
+          <span className="label">03 / Enterprise solutions</span>
           <h2>Intelligence, not just <em>data feeds</em>.</h2>
           <p className="sec-lead">
             We deliver outcomes, not raw APIs — packaged intelligence products your teams can act
