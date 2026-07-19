@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>THEWHITETIGER — SherrByte, your personal information OS</title>
     <meta name="description" content="SherrByte by TheWhiteTiger: one clean, AI-verified feed across nine knowledge pillars. No outrage, no bias, no AI slop — just sourced, traceable truth." />
-    <meta name="theme-color" content="#070a12" />
+    <meta name="theme-color" content="#08090b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#5b9dff" />
     <script>
       (function () {
         try {
@@ -13,7 +15,7 @@
           var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
           document.documentElement.dataset.theme = theme;
           var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', theme === 'light' ? '#f4f6fb' : '#070a12');
+          if (m) m.setAttribute('content', theme === 'light' ? '#ffffff' : '#08090b');
         } catch (e) {
           document.documentElement.dataset.theme = 'dark';
         }
