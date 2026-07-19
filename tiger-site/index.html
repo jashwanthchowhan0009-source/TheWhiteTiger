@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>THEWHITETIGER — SherrByte, your personal information OS</title>
     <meta name="description" content="SherrByte by TheWhiteTiger: one clean, AI-verified feed across nine knowledge pillars. No outrage, no bias, no AI slop — just sourced, traceable truth." />
-    <meta name="theme-color" content="#070a12" />
+    <meta name="theme-color" content="#08090b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color="#5b9dff" />
     <script>
       (function () {
         try {
@@ -13,7 +15,7 @@
           var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
           document.documentElement.dataset.theme = theme;
           var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', theme === 'light' ? '#f4f6fb' : '#070a12');
+          if (m) m.setAttribute('content', theme === 'light' ? '#ffffff' : '#08090b');
         } catch (e) {
           document.documentElement.dataset.theme = 'dark';
         }
@@ -22,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
   </head>

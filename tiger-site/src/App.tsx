@@ -72,31 +72,11 @@ export default function App() {
       io.observe(el);
     });
 
-    // ── cursor spotlight (desktop, fine pointer only) — smooth, rAF-throttled ──
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    let cleanupPointer = () => {};
-    if (fine && !reduce) {
-      let mx = 0, my = 0, queued = false;
-      const apply = () => {
-        queued = false;
-        root.style.setProperty('--mx', mx + 'px');
-        root.style.setProperty('--my', my + 'px');
-      };
-      const onMove = (e: PointerEvent) => {
-        mx = e.clientX; my = e.clientY;
-        if (!queued) { queued = true; requestAnimationFrame(apply); }
-      };
-      window.addEventListener('pointermove', onMove, { passive: true });
-      cleanupPointer = () => window.removeEventListener('pointermove', onMove);
-    }
-
-    return () => { window.removeEventListener('scroll', onScroll); cleanupPointer(); };
+    return () => { window.removeEventListener('scroll', onScroll); };
   }, []);
 
   return (
     <>
-      <div className="aurora" aria-hidden="true" />
-      <div className="cursor-glow" aria-hidden="true" />
       <div id="progress" aria-hidden="true" />
       <Nav />
       <main>

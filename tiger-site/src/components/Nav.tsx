@@ -4,7 +4,7 @@ function toggleTheme() {
   root.dataset.theme = next;
   try { localStorage.setItem('theme', next); } catch { /* ignore */ }
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', next === 'light' ? '#f4f6fb' : '#070a12');
+  if (meta) meta.setAttribute('content', next === 'light' ? '#ffffff' : '#08090b');
 }
 
 export function Nav() {
