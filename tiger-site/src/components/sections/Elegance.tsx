@@ -1,16 +1,16 @@
 const FLOW = [
   {
-    icon: '🌍',
+    n: 'Step 01',
     t: 'Collect',
     s: 'Aggregate information from news, markets, government portals, weather, transportation, scientific publications, public datasets, financial feeds and thousands of other public sources.',
   },
   {
-    icon: '🧠',
+    n: 'Step 02',
     t: 'Process',
     s: 'Normalise, clean and enrich the data — classify it, detect entities, identify relationships, discover trends and generate structured intelligence with AI.',
   },
   {
-    icon: '🚀',
+    n: 'Step 03',
     t: 'Deliver',
     s: 'Serve business-ready intelligence through dashboards, APIs, reports, alerts, analytics and custom enterprise solutions built around your workflows.',
   },
@@ -31,7 +31,7 @@ export function Elegance() {
           {FLOW.map((f, i) => (
             <div className="flow-step" key={f.t}>
               <div className="card flow-card">
-                <span className="flow-ico">{f.icon}</span>
+                <span className="flow-n">{f.n}</span>
                 <h3>{f.t}</h3>
                 <p>{f.s}</p>
               </div>
