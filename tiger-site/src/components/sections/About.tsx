@@ -1,42 +1,57 @@
-const PILLARS = [
-  { c: '#6d28d9', t: 'Society & Governance', s: 'Policy, civics & public life' },
-  { c: '#2563eb', t: 'Business & Economy', s: 'Markets, startups & trade' },
-  { c: '#0891b2', t: 'Science & Technology', s: 'Research, computing & AI' },
-  { c: '#16a34a', t: 'Arts & Culture', s: 'Film, music & heritage' },
-  { c: '#ca8a04', t: 'Natural World', s: 'Climate, environment & ecology' },
-  { c: '#ea580c', t: 'The Self & Wellbeing', s: 'Health, mind & growth' },
-  { c: '#dc2626', t: 'Philosophy & Belief', s: 'Ideas, ethics & meaning' },
-  { c: '#db2777', t: 'Society & Lifestyle', s: 'Living, food & travel' },
-  { c: '#7c3aed', t: 'Sports & Gaming', s: 'Play, competition & esports' },
+const INDUSTRIES = [
+  'Government & Smart Cities', 'Banking & Financial Services', 'Insurance',
+  'Media & Broadcasting', 'Logistics & Supply Chain', 'Retail & E-commerce',
+  'Manufacturing', 'Healthcare', 'Automotive', 'Energy & Utilities',
+  'Cybersecurity', 'Education', 'Research Organizations', 'Consulting Firms',
+  'Investment & Venture Capital', 'NGOs',
+];
+
+const SOLUTIONS = [
+  { c: '#2563eb', t: 'Market Intelligence', s: 'Monitor industries, competitors, regulations and emerging trends as they move.' },
+  { c: '#dc2626', t: 'Risk Intelligence', s: 'Track geopolitical events, disasters, cyber threats, policy changes and supply-chain disruptions.' },
+  { c: '#0891b2', t: 'Public Intelligence', s: 'Follow government announcements, tenders, schemes, regulations and public-sector updates.' },
+  { c: '#16a34a', t: 'Financial Intelligence', s: 'Stocks, commodities, forex, crypto, economic indicators, company news and market movements.' },
+  { c: '#db2777', t: 'Media Intelligence', s: 'Track brand mentions, sentiment, news coverage and industry discussion at scale.' },
+  { c: '#7c3aed', t: 'Research Intelligence', s: 'Aggregate patents, journals, scientific publications, university research and innovation trends.' },
+  { c: '#ea580c', t: 'Custom Intelligence', s: 'Organisation-specific dashboards, alerts, reports and workflows tailored to your business.' },
 ];
 
 export function About() {
   return (
-    <section id="about" className="sec">
-      <div className="wrap">
-        <span className="label">02 — VIBGYOR</span>
-        <h2>The 9-pillar <em>VIBGYOR</em> taxonomy.</h2>
-        <p className="sec-lead">
-          Every piece of information is classified into a colour-coded knowledge pillar spanning
-          50+ micro-topics — a standardised structure no other Indian platform offers.
-        </p>
-        <div className="pillars">
-          {PILLARS.map((p) => (
-            <div className="pillar" key={p.t}>
-              <span className="dot" style={{ background: p.c }} />
-              <div>
-                <div className="p-t">{p.t}</div>
-                <div className="p-s">{p.s}</div>
+    <>
+      <section id="industries" className="sec">
+        <div className="wrap">
+          <span className="label">02 — Industries we serve</span>
+          <h2>Built for organisations that run on <em>information</em>.</h2>
+          <p className="sec-lead">
+            Any team whose decisions depend on what's happening in the world — across the public,
+            private and research sectors — can build on SherrByte intelligence.
+          </p>
+          <div className="chips">
+            {INDUSTRIES.map((x) => <span className="chip" key={x}>{x}</span>)}
+          </div>
+        </div>
+      </section>
+
+      <section id="solutions" className="sec">
+        <div className="wrap">
+          <span className="label">03 — Enterprise solutions</span>
+          <h2>Intelligence, not just <em>data feeds</em>.</h2>
+          <p className="sec-lead">
+            We deliver outcomes, not raw APIs — packaged intelligence products your teams can act
+            on from day one, or a custom build shaped around your domain.
+          </p>
+          <div className="grid-3">
+            {SOLUTIONS.map((s) => (
+              <div className="card" key={s.t}>
+                <span className="dot" style={{ background: s.c }} />
+                <h3>{s.t}</h3>
+                <p>{s.s}</p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div className="stats">
-          <div className="stat"><b data-to="9" data-pad="1">09</b><span>Knowledge pillars</span></div>
-          <div className="stat"><b data-to="50" data-suffix="+">50+</b><span>Micro-topics</span></div>
-          <div className="stat"><b data-to="24" data-suffix="+">24+</b><span>Verified sources</span></div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
