@@ -38,16 +38,24 @@ export function About() {
         </div>
       </section>
 
-      {/* Scene 5 — Knowledge graph */}
+      {/* Scene 5 — Knowledge graph (real neural footage, recoloured) */}
       <section className="scene tight">
-        <div className="wrap">
-          <div className="graph-wrap reveal">
-            <NodeField mode="graph" density={1.25} />
-            <div className="graph-cap">
-              <span className="eyebrow">The knowledge graph</span>
-              <p>Millions of entities and relationships, connected across nine intelligence domains —
-                queryable by meaning, not keywords.</p>
+        <div className="wrap graph2">
+          <div className="graph-copy reveal">
+            <span className="eyebrow">The knowledge graph</span>
+            <h2>Everything, <em>connected</em>.</h2>
+            <p>Millions of entities and relationships, fused across nine intelligence domains into
+              one living structure — queryable by meaning, not keywords.</p>
+            <div className="metrics">
+              <div><b>9</b><span>Domains</span></div>
+              <div><b>50M+</b><span>Entities</span></div>
+              <div><b>&lt;1ms</b><span>Graph query</span></div>
             </div>
+          </div>
+          <div className="graph-video glass reveal" style={{ backgroundImage: 'url(/media/neural-poster.jpg)' }}>
+            <video autoPlay muted loop playsInline preload="metadata" poster="/media/neural-poster.jpg">
+              <source src="/media/neural.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
       </section>
