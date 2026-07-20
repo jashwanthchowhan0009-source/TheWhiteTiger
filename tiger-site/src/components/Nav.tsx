@@ -4,26 +4,21 @@ function toggleTheme() {
   root.dataset.theme = next;
   try { localStorage.setItem('theme', next); } catch { /* ignore */ }
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', next === 'light' ? '#ffffff' : '#08090b');
+  if (meta) meta.setAttribute('content', next === 'light' ? '#f5f7fc' : '#05070e');
 }
 
 export function Nav() {
   return (
     <header className="nav">
       <div className="wrap nav-in">
-        <a href="#top" className="wordmark">THEWHITETIGER</a>
+        <a href="#top" className="wordmark">THE WHITE TIGER</a>
         <nav className="links">
-          <a href="#platform">Platform</a>
-          <a href="#solutions">Solutions</a>
-          <a href="#industries">Industries</a>
+          <a href="#collect">Collect</a>
+          <a href="#process">Process</a>
+          <a href="#deliver">Deliver</a>
           <a href="#products">Products</a>
         </nav>
-        <button
-          type="button"
-          className="theme-btn"
-          onClick={toggleTheme}
-          aria-label="Toggle light and dark mode"
-        >
+        <button type="button" className="theme-btn" onClick={toggleTheme} aria-label="Toggle light and dark mode">
           <svg className="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>

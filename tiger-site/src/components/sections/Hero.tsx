@@ -1,32 +1,27 @@
+import { NodeField } from '../NodeField';
+
 export function Hero() {
   return (
     <section id="top" className="hero">
-      <div className="hero-media" aria-hidden="true">
-        <video autoPlay muted loop playsInline preload="auto" poster="/media/hero-poster.jpg">
-          <source src="/media/hero.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <div className="hero-canvas"><NodeField mode="field" /></div>
       <div className="wrap">
-        <div className="hero-copy">
-          <span className="pill">SherrByte // AI data-intelligence infrastructure</span>
-          <h1>Transforming the world's public data into <em>actionable intelligence</em>.</h1>
-          <p className="lead">
-            SherrByte builds AI-powered data infrastructure that continuously collects, processes
-            and organises information from thousands of public sources — delivering real-time
-            intelligence for enterprises, governments, researchers and digital platforms.
-          </p>
-          <div className="hero-actions">
-            <a href="#platform" className="btn primary">Explore the platform</a>
-            <a href="#contact" className="btn ghost">Contact sales</a>
-          </div>
-          <div className="hero-proof">
-            <span><b>1000s</b> Public sources</span>
-            <span><b>9</b> Intelligence domains</span>
-            <span><b>Real-time</b> Delivery</span>
-          </div>
+        <span className="eyebrow reveal">SherrByte — AI intelligence infrastructure</span>
+        <h1 className="reveal">Transforming public information into <em>intelligence</em>.</h1>
+        <p className="lead reveal">
+          The White Tiger builds the system that observes the world's public data, understands it
+          with AI, and delivers it as real-time intelligence — to enterprises, governments and
+          everyone who must decide.
+        </p>
+        <div className="hero-actions reveal">
+          <a href="#collect" className="btn primary">Enter the system</a>
+          <a href="#contact" className="btn ghost">Contact sales</a>
+        </div>
+        <div className="hero-live reveal">
+          <span className="dotlive" />
+          <span><b id="live-count">12,904</b> public sources · streaming</span>
         </div>
       </div>
-      <div className="scroll-cue" aria-hidden="true">Scroll</div>
+      <div className="scroll-cue" aria-hidden="true">Scroll<span /></div>
     </section>
   );
 }

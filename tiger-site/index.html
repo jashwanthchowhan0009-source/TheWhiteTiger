@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>THEWHITETIGER — SherrByte, your personal information OS</title>
-    <meta name="description" content="SherrByte by TheWhiteTiger: one clean, AI-verified feed across nine knowledge pillars. No outrage, no bias, no AI slop — just sourced, traceable truth." />
-    <meta name="theme-color" content="#08090b" />
+    <title>THE WHITE TIGER — SherrByte · AI intelligence infrastructure</title>
+    <meta name="description" content="The White Tiger builds AI infrastructure that observes the world's public data, understands it, and delivers it as real-time intelligence — for enterprises, governments and researchers." />
+    <meta name="theme-color" content="#05070e" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -13,10 +13,10 @@
       (function () {
         try {
           var stored = localStorage.getItem('theme');
-          var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          var theme = stored || 'dark';
           document.documentElement.dataset.theme = theme;
           var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', theme === 'light' ? '#ffffff' : '#08090b');
+          if (m) m.setAttribute('content', theme === 'light' ? '#f5f7fc' : '#05070e');
         } catch (e) {
           document.documentElement.dataset.theme = 'dark';
         }
@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>

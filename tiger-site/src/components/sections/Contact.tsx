@@ -5,46 +5,40 @@ const TEAM = [
   { n: 'Dr. Arun Chan', r: 'Mentorship & cohort support through RTIH' },
 ];
 
-const WAYS = [
-  'Schedule a demo', 'Talk to sales', 'Partner with us',
-  'Enterprise inquiry', 'Government solutions', 'Careers',
-];
-
+const WAYS = ['Schedule a demo', 'Talk to sales', 'Partner with us', 'Enterprise inquiry', 'Government solutions', 'Careers'];
 const MAIL = 'mailto:thewhitetigerdotin@gmail.com';
 
 export function Contact() {
   return (
     <>
-      <section id="contact" className="sec cta-sec">
-        <div className="sec-media" aria-hidden="true">
-          <video autoPlay muted loop playsInline preload="none" poster="/media/engine-poster.jpg">
-            <source src="/media/engine.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div className="wrap center">
-          <span className="label">Talk to us</span>
-          <h2>Turn the world's public data into your <em>advantage</em>.</h2>
-          <p className="sec-lead center-lead">
-            SherrByte is building the infrastructure that transforms the world's publicly
-            available information into intelligent, actionable insight — for businesses,
-            governments and professionals. Let's find what it can do for your organisation.
+      <section id="contact" className="scene cta">
+        <span className="glow" aria-hidden="true" />
+        <div className="wrap" style={{ textAlign: 'center' }}>
+          <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>
+          <h2 className="reveal" style={{ marginTop: 18 }}>The informed are <em>ungovernable</em>.</h2>
+          <p className="sec-lead reveal" style={{ margin: '18px auto 0' }}>
+            The White Tiger is building the infrastructure that turns the world's public information
+            into decisive advantage. Let's find what it can do for your organisation.
           </p>
-          <div className="hero-actions center-actions">
+          <div className="hero-actions reveal" style={{ justifyContent: 'center', marginTop: 34 }}>
             <a href={MAIL} className="btn primary">Schedule a demo</a>
-            <a href={MAIL} className="btn ghost">Talk to sales →</a>
+            <a href={MAIL} className="btn ghost">Talk to sales</a>
           </div>
-          <div className="ways">
+          <div className="ways reveal">
             {WAYS.map((w) => <a href={MAIL} className="way" key={w}>{w}</a>)}
           </div>
         </div>
       </section>
 
-      <section className="sec">
+      <section className="scene tight">
         <div className="wrap">
-          <span className="label">09 / The team — incubated at RTIH Anantapur</span>
-          <div className="grid-4 team">
+          <span className="eyebrow reveal">The team — incubated at RTIH Anantapur</span>
+          <div className="team">
             {TEAM.map((m) => (
-              <div key={m.n}><h3 className="m-n">{m.n}</h3><p className="m-r">{m.r}</p></div>
+              <div className="glass reveal" key={m.n}>
+                <div className="m-n">{m.n}</div>
+                <div className="m-r">{m.r}</div>
+              </div>
             ))}
           </div>
         </div>
@@ -52,10 +46,10 @@ export function Contact() {
 
       <footer className="footer">
         <div className="wrap foot-in">
-          <span>© 2026 TheWhiteTiger · SherrByte</span>
+          <span>© 2026 The White Tiger · SherrByte</span>
           <nav className="fnav">
-            <a href="#top">Home</a><a href="#platform">Platform</a><a href="#solutions">Solutions</a>
-            <a href="#products">Products</a><a href="#contact">Contact</a>
+            <a href="#top">Home</a><a href="#collect">Collect</a><a href="#process">Process</a>
+            <a href="#deliver">Deliver</a><a href="#contact">Contact</a>
           </nav>
           <span>Anantapur, Andhra Pradesh · India</span>
         </div>
