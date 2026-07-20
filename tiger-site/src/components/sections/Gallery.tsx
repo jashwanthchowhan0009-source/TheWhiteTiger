@@ -1,60 +1,45 @@
-const PIPE = [
-  { t: 'Public data sources', s: 'News, markets, government, weather, science, transport & more' },
-  { t: 'Global data collection', s: 'Continuous, real-time ingestion at scale' },
-  { t: 'AI processing engine', s: 'Clean · enrich · classify · detect entities & events' },
-  { t: 'Knowledge graph', s: 'Entities and relationships, connected across domains' },
-  { t: 'Enterprise intelligence', s: 'Structured, verified, business-ready signals' },
-  { t: 'Dashboards · reports · alerts · integrations', s: 'Delivered into your existing workflows' },
-];
+type Out = { t: string; s: string; icon: JSX.Element };
 
-const WHY = [
-  'Real-time information aggregation',
-  'AI-powered data enrichment',
-  'Structured knowledge graphs',
-  'Multi-source verification',
-  'Cross-domain intelligence',
-  'Custom enterprise dashboards',
-  'Scalable cloud architecture',
-  'Flexible integrations',
+const I = {
+  api: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M8 3H5a2 2 0 0 0-2 2v3m0 8v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3m0-8V5a2 2 0 0 0-2-2h-3M9 9l6 6m0-6l-6 6" strokeLinecap="round"/></svg>,
+  dash: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="3" y="16" width="8" height="5" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="11" width="7" height="10" rx="1.5"/></svg>,
+  search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4" strokeLinecap="round"/></svg>,
+  alert: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" strokeLinecap="round" strokeLinejoin="round"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0" strokeLinecap="round"/></svg>,
+  report: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" strokeLinejoin="round"/><path d="M14 3v5h5M9 13h6M9 17h6" strokeLinecap="round"/></svg>,
+  ent: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 21h18M6 21V8l6-4 6 4v13M10 12h4M10 16h4" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+};
+
+const OUTS: Out[] = [
+  { t: 'Intelligence API', s: 'Structured, classified, real-time streams your systems can build on.', icon: I.api },
+  { t: 'Dashboards', s: 'Live command views across markets, risk, public and financial intelligence.', icon: I.dash },
+  { t: 'Semantic search', s: 'Query by meaning across the entire graph — sub-millisecond, sourced.', icon: I.search },
+  { t: 'Alerts', s: 'The moment something changes in your world, you know — with evidence.', icon: I.alert },
+  { t: 'Reports', s: 'Auto-synthesised briefings, watermarked and traceable to every source.', icon: I.report },
+  { t: 'Enterprise systems', s: 'Delivered into the SAP, data and workflow stack you already run.', icon: I.ent },
 ];
 
 export function Gallery() {
   return (
-    <>
-      <section id="how" className="sec">
-        <div className="wrap">
-          <span className="label">04 / How it works</span>
-          <h2>From public noise to verified <em>signal</em>.</h2>
+    <section id="deliver" className="scene">
+      <div className="wrap">
+        <div className="s-head reveal">
+          <span className="eyebrow">03 — Act</span>
+          <h2>Intelligence, delivered where you <em>decide</em>.</h2>
           <p className="sec-lead">
-            A single pipeline turns the open, chaotic web of public information into structured
-            intelligence — every stage verifiable, every claim traceable to its source.
+            One engine, many surfaces. The same structured intelligence reaches your teams as an API,
+            a dashboard, a search box, an alert, a report — or straight into your enterprise stack.
           </p>
-          <div className="pipe">
-            {PIPE.map((p, i) => (
-              <div className="pipe-row" key={p.t}>
-                <div className="pipe-node">
-                  <span className="pipe-n">{String(i + 1).padStart(2, '0')}</span>
-                  <div>
-                    <div className="pipe-t">{p.t}</div>
-                    <div className="pipe-s">{p.s}</div>
-                  </div>
-                </div>
-                {i < PIPE.length - 1 && <span className="pipe-arrow" aria-hidden="true">↓</span>}
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
-
-      <section className="sec tinted">
-        <div className="wrap">
-          <span className="label">05 / Why SherrByte</span>
-          <h2>Infrastructure built for <em>scale and trust</em>.</h2>
-          <div className="comply why">
-            {WHY.map((c) => <div className="cmp" key={c}><span>✓</span>{c}</div>)}
-          </div>
+        <div className="deliver">
+          {OUTS.map((o) => (
+            <div className="out reveal" key={o.t}>
+              <span className="ic">{o.icon}</span>
+              <h3>{o.t}</h3>
+              <p>{o.s}</p>
+            </div>
+          ))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

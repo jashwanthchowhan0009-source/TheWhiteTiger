@@ -1,54 +1,53 @@
-const INDUSTRIES = [
-  'Government & Smart Cities', 'Banking & Financial Services', 'Insurance',
-  'Media & Broadcasting', 'Logistics & Supply Chain', 'Retail & E-commerce',
-  'Manufacturing', 'Healthcare', 'Automotive', 'Energy & Utilities',
-  'Cybersecurity', 'Education', 'Research Organizations', 'Consulting Firms',
-  'Investment & Venture Capital', 'NGOs',
-];
+import { NodeField } from '../NodeField';
 
-const SOLUTIONS = [
-  { c: '#3b82f6', t: 'Market Intelligence', s: 'Monitor industries, competitors, regulations and emerging trends as they move.' },
-  { c: '#ef4444', t: 'Risk Intelligence', s: 'Track geopolitical events, disasters, cyber threats, policy changes and supply-chain disruptions.' },
-  { c: '#0ea5e9', t: 'Public Intelligence', s: 'Follow government announcements, tenders, schemes, regulations and public-sector updates.' },
-  { c: '#10b981', t: 'Financial Intelligence', s: 'Stocks, commodities, forex, crypto, economic indicators, company news and market movements.' },
-  { c: '#6366f1', t: 'Media Intelligence', s: 'Track brand mentions, sentiment, news coverage and industry discussion at scale.' },
-  { c: '#14b8a6', t: 'Research Intelligence', s: 'Aggregate patents, journals, scientific publications, university research and innovation trends.' },
-  { c: '#64748b', t: 'Custom Intelligence', s: 'Organisation-specific dashboards, alerts, reports and workflows tailored to your business.' },
+const STAGES = [
+  { n: 'S1', t: 'Entity recognition', s: 'Every article resolved into people, places, organisations and instruments.' },
+  { n: 'S2', t: 'Relationship detection', s: 'Connections inferred between entities — who, what, where, and how they relate.' },
+  { n: 'S3', t: 'Knowledge graph', s: 'Entities and relationships fused into one continuously-updated structure.' },
+  { n: 'S4', t: 'Trend detection', s: 'Emerging patterns and anomalies surfaced across domains as they form.' },
+  { n: 'S5', t: 'Reasoning', s: 'RAG-consensus synthesis with hallucination control — traceable to every source.' },
+  { n: 'S6', t: 'Prediction', s: 'Forward signals and scenarios, scored by confidence and evidence.' },
 ];
 
 export function About() {
   return (
     <>
-      <section id="industries" className="sec">
+      {/* Scene 4 — Process */}
+      <section id="process" className="scene">
         <div className="wrap">
-          <span className="label">02 / Industries we serve</span>
-          <h2>Built for organisations that run on <em>information</em>.</h2>
-          <p className="sec-lead">
-            Any team whose decisions depend on what's happening in the world — across the public,
-            private and research sectors — can build on SherrByte intelligence.
-          </p>
-          <div className="chips">
-            {INDUSTRIES.map((x) => <span className="chip" key={x}>{x}</span>)}
+          <div className="s-head reveal">
+            <span className="eyebrow">02 — Understand</span>
+            <h2>AI turns signal into <em>structure</em>.</h2>
+            <p className="sec-lead">
+              A six-stage intelligence pipeline runs on every item — from raw text to reasoned,
+              evidence-backed prediction.
+            </p>
+          </div>
+          <div className="pipe">
+            {STAGES.map((s) => (
+              <div className="stage reveal" key={s.t}>
+                <span className="node" />
+                <div>
+                  <span className="st-n">{s.n}</span>
+                  <h3>{s.t}</h3>
+                  <p>{s.s}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="solutions" className="sec tinted">
+      {/* Scene 5 — Knowledge graph */}
+      <section className="scene tight">
         <div className="wrap">
-          <span className="label">03 / Enterprise solutions</span>
-          <h2>Intelligence, not just <em>data feeds</em>.</h2>
-          <p className="sec-lead">
-            We deliver outcomes, not raw APIs — packaged intelligence products your teams can act
-            on from day one, or a custom build shaped around your domain.
-          </p>
-          <div className="grid-3">
-            {SOLUTIONS.map((s) => (
-              <div className="card" key={s.t}>
-                <span className="dot" style={{ background: s.c }} />
-                <h3>{s.t}</h3>
-                <p>{s.s}</p>
-              </div>
-            ))}
+          <div className="graph-wrap reveal">
+            <NodeField mode="graph" density={1.25} />
+            <div className="graph-cap">
+              <span className="eyebrow">The knowledge graph</span>
+              <p>Millions of entities and relationships, connected across nine intelligence domains —
+                queryable by meaning, not keywords.</p>
+            </div>
           </div>
         </div>
       </section>
