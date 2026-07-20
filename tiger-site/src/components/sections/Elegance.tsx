@@ -25,6 +25,16 @@ const FEED = [
 
 export function Elegance() {
   return (
+    <>
+      <section className="statement">
+        <div className="wrap">
+          <p>
+            We turn the world's public data into <em>real-time, verifiable intelligence</em>
+            {' '}— <span className="dim">for enterprises, governments, and everyone who must decide.</span>
+          </p>
+        </div>
+      </section>
+
     <section id="platform" className="sec">
       <div className="wrap">
         <span className="label">01 / What we do</span>
@@ -72,5 +82,6 @@ export function Elegance() {
         </div>
       </div>
     </section>
+    </>
   );
 }

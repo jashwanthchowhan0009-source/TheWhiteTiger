@@ -9,17 +9,25 @@ const CASES = [
 
 const PRODUCTS = [
   {
+    idx: '/ 01',
     tag: 'B2C · Consumer',
-    t: 'SherrByte App',
+    t: 'SherrByte',
     s: 'A public-facing application that helps individuals explore news, markets, weather, sports, science and global events — one clean, AI-verified feed across nine knowledge pillars.',
   },
   {
+    idx: '/ 02',
     tag: 'B2B · Enterprise',
-    t: 'SherrByte Enterprise',
+    t: 'Enterprise',
     s: 'The enterprise intelligence platform: structured data, analytics, dashboards, reports and integrations delivered into the systems your organisation already runs on.',
-    lead: true,
   },
   {
+    idx: '/ 03',
+    tag: 'Services',
+    t: 'SAP Consulting',
+    s: 'A dedicated SAP practice: advisory, implementation, S/4HANA migration and integration — connecting SherrByte intelligence into the SAP landscape your business runs on.',
+  },
+  {
+    idx: '/ 04',
     tag: 'Future vision',
     t: 'Sherr-I',
     s: 'A next-generation AI reasoning engine designed to understand, connect and explain global information with transparent, evidence-based intelligence.',
@@ -50,23 +58,34 @@ export function Company() {
         </div>
       </section>
 
-      <section id="products" className="sec tinted">
+      <section id="products" className="sec">
         <div className="wrap">
-          <span className="label">07 / Products</span>
-          <h2>One platform, three <em>products</em>.</h2>
-          <p className="sec-lead">
-            A data-intelligence platform — with the consumer app as one product and enterprise
-            intelligence as the primary business.
-          </p>
-          <div className="grid-3">
+          <span className="label">07 / Our software &amp; services</span>
+          <h2>One platform. Four ways to <em>deploy it</em>.</h2>
+          <div className="software">
             {PRODUCTS.map((p) => (
-              <div className={`card${p.lead ? ' amberline' : ''}`} key={p.t}>
-                <span className={`tag${p.lead ? ' amber' : ''}`}>{p.tag}</span>
-                <h3>{p.t}</h3>
-                <p>{p.s}</p>
+              <div className="soft-row" key={p.t}>
+                <div className="soft-main">
+                  <span className="soft-tag">{p.tag}</span>
+                  <div className="soft-name">{p.t}</div>
+                  <p className="soft-desc">{p.s}</p>
+                </div>
+                <span className="soft-idx">{p.idx}</span>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="band" aria-label="The informed are ungovernable">
+        <div className="band-media" style={{ backgroundImage: 'url(/media/engine-poster.jpg)' }} aria-hidden="true" />
+        <div className="wrap">
+          <span className="label">Our conviction</span>
+          <h2>The informed are <em>ungovernable</em>.</h2>
+          <p className="sec-lead">
+            Access to sourced, verifiable truth changes who gets to decide. We build the
+            infrastructure that puts it in reach — at the scale of an institution.
+          </p>
         </div>
       </section>
 
