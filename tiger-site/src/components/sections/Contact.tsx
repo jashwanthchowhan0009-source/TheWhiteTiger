@@ -12,6 +12,11 @@ export function Contact() {
   return (
     <>
       <section id="contact" className="scene cta">
+        <div className="cta-media" aria-hidden="true" style={{ backgroundImage: 'url(/media/tiger-poster.jpg)' }}>
+          <video autoPlay muted loop playsInline preload="none" poster="/media/tiger-poster.jpg">
+            <source src="/media/tiger.mp4" type="video/mp4" />
+          </video>
+        </div>
         <span className="glow" aria-hidden="true" />
         <div className="wrap" style={{ textAlign: 'center' }}>
           <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>
