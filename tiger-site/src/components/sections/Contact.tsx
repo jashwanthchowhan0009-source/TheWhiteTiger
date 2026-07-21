@@ -20,7 +20,7 @@ export function Contact() {
         <span className="glow" aria-hidden="true" />
         <div className="wrap" style={{ textAlign: 'center' }}>
           <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>
-          <h2 className="reveal" style={{ marginTop: 18 }}>The informed are <em>ungovernable</em>.</h2>
+          <h2 className="reveal" style={{ marginTop: 18 }}>Turn public data into <em>decisive advantage</em>.</h2>
           <p className="sec-lead reveal" style={{ margin: '18px auto 0' }}>
             SherrByte Pvt. Ltd. is building the infrastructure that turns the world's public
             information into decisive advantage. Let's find what it can do for your organisation.
