@@ -11,7 +11,10 @@ export function Nav() {
   return (
     <header className="nav">
       <div className="wrap nav-in">
-        <a href="#top" className="wordmark">THE WHITE TIGER</a>
+        <a href="#top" className="brand" aria-label="SherrByte Pvt. Ltd. — home">
+          <img className="brand-mark" src="/tiger.png" alt="" width={26} height={26} />
+          <span className="brand-name"><b>SHERRBYTE</b><span>PVT · LTD</span></span>
+        </a>
         <nav className="links">
           <a href="#collect">Collect</a>
           <a href="#process">Process</a>

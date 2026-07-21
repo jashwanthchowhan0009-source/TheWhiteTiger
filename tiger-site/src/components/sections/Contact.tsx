@@ -22,8 +22,8 @@ export function Contact() {
           <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>
           <h2 className="reveal" style={{ marginTop: 18 }}>The informed are <em>ungovernable</em>.</h2>
           <p className="sec-lead reveal" style={{ margin: '18px auto 0' }}>
-            The White Tiger is building the infrastructure that turns the world's public information
-            into decisive advantage. Let's find what it can do for your organisation.
+            SherrByte Pvt. Ltd. is building the infrastructure that turns the world's public
+            information into decisive advantage. Let's find what it can do for your organisation.
           </p>
           <div className="hero-actions reveal" style={{ justifyContent: 'center', marginTop: 34 }}>
             <a href={MAIL} className="btn primary">Schedule a demo</a>
@@ -51,12 +51,15 @@ export function Contact() {
 
       <footer className="footer">
         <div className="wrap foot-in">
-          <span>© 2026 The White Tiger · SherrByte</span>
+          <a href="#top" className="brand" aria-label="SherrByte Pvt. Ltd.">
+            <img className="brand-mark" src="/tiger.png" alt="" width={22} height={22} />
+            <span className="brand-name"><b>SHERRBYTE</b><span>PVT · LTD</span></span>
+          </a>
           <nav className="fnav">
             <a href="#top">Home</a><a href="#collect">Collect</a><a href="#process">Process</a>
             <a href="#deliver">Deliver</a><a href="#contact">Contact</a>
           </nav>
-          <span>Anantapur, Andhra Pradesh · India</span>
+          <span>© 2026 SherrByte Pvt. Ltd. · Anantapur, India</span>
         </div>
       </footer>
     </>
