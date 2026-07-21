@@ -21,11 +21,7 @@ const OUTS: Out[] = [
 export function Gallery() {
   return (
     <section id="deliver" className="scene">
-      <div className="tex-media" aria-hidden="true">
-        <video autoPlay muted loop playsInline preload="none" poster="/media/console-poster.jpg">
-          <source src="/media/console.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <img className="scene-watermark" src="/tiger.png" alt="" aria-hidden="true" style={{ left: '-3vw', top: '10%' }} />
       <div className="wrap">
         <div className="s-head reveal">
           <span className="eyebrow">03 — Act</span>
