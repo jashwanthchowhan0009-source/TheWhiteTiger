@@ -132,15 +132,21 @@ em { font-style: italic; color: transparent; background: var(--grad); -webkit-ba
   background:
     linear-gradient(180deg, rgba(6,7,8,.74) 0%, rgba(6,7,8,.58) 38%, rgba(6,7,8,.82) 78%, var(--bg) 100%),
     radial-gradient(85% 65% at 50% 44%, transparent 26%, rgba(6,7,8,.72) 96%); }
-/* subtle particle overlay for signature motion */
-.hero-canvas { position: absolute; inset: 0; z-index: 1; opacity: .5; mix-blend-mode: screen; pointer-events: none; }
 /* huge faint tiger watermark */
-.hero-watermark { position: absolute; z-index: 1; right: -4vw; bottom: -6vh; width: min(46vw, 620px); opacity: .06;
+.hero-watermark { position: absolute; z-index: 1; right: -4vw; bottom: -6vh; width: min(42vw, 560px); opacity: .05;
   filter: grayscale(1) brightness(1.6); pointer-events: none; mix-blend-mode: screen; }
-.hero .wrap { text-align: center; padding-top: 12vh; padding-bottom: 10vh; z-index: 3; }
-.hero h1 { margin: 26px auto 0; max-width: 15ch; }
-.hero .lead { margin-left: auto; margin-right: auto; max-width: 56ch; }
-.hero-actions { display: flex; gap: 14px; justify-content: center; margin-top: 38px; flex-wrap: wrap; }
+.hero .wrap { width: 100%; padding-top: 14vh; padding-bottom: 12vh; z-index: 3; }
+.hero-copy { max-width: 860px; }
+/* hero content sits over a dark video overlay — keep it light in BOTH themes */
+.hero h1 { color: #f6f8fc; }
+.hero .lead { color: #cdd4e2; max-width: 52ch; }
+.hero .eyebrow { color: #a9c6ff; }
+.hero .hero-live { color: #aeb6c6; border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.05); }
+.hero .hero-live b { color: var(--cyan); }
+.hero .btn.ghost { color: #f6f8fc; border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.06); }
+.hero .btn.ghost:hover { border-color: var(--cyan); background: rgba(255,255,255,.1); }
+.hero h1 { margin: 26px 0 0; max-width: 15ch; }
+.hero-actions { display: flex; gap: 14px; justify-content: flex-start; margin-top: 38px; flex-wrap: wrap; }
 .hero-live { margin-top: 40px; display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono);
   font-size: 12px; color: var(--muted); letter-spacing: .04em; padding: 9px 16px; border-radius: 999px;
   border: 1px solid var(--glass-line); background: var(--panel); }
