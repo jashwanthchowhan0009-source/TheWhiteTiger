@@ -52,7 +52,6 @@ export function Contact() {
       <footer className="footer">
         <div className="wrap foot-in">
           <a href="#top" className="brand" aria-label="SherrByte Pvt. Ltd.">
-            <img className="brand-mark" src="/tiger.png" alt="" width={22} height={22} />
             <span className="brand-name"><b>SHERRBYTE</b><span>PVT · LTD</span></span>
           </a>
           <nav className="fnav">
