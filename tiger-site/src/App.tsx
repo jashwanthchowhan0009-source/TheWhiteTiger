@@ -28,14 +28,28 @@ export default function App() {
       rafId = requestAnimationFrame(raf);
     }
 
-    // ── progress bar + nav condense ──
+    // ── progress bar + nav condense + hero cinematic parallax ──
     const bar = document.getElementById('progress');
     const nav = document.querySelector('.nav');
+    const heroMedia = document.querySelector<HTMLElement>('.hero-media');
+    const heroWrap = document.querySelector<HTMLElement>('.hero .wrap');
+    const heroMark = document.querySelector<HTMLElement>('.hero-watermark');
+    let parkQueued = false;
+    const applyParallax = () => {
+      parkQueued = false;
+      const y = document.documentElement.scrollTop;
+      if (!reduce && y < window.innerHeight * 1.2) {
+        if (heroMedia) heroMedia.style.transform = `translate3d(0, ${(y * 0.18).toFixed(1)}px, 0) scale(${(1 + y * 0.00018).toFixed(4)})`;
+        if (heroWrap) { heroWrap.style.transform = `translate3d(0, ${(y * 0.28).toFixed(1)}px, 0)`; heroWrap.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.75))); }
+        if (heroMark) heroMark.style.transform = `translate3d(0, ${(-y * 0.12).toFixed(1)}px, 0)`;
+      }
+    };
     const onScroll = () => {
       const h = document.documentElement;
       const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
       if (bar) bar.style.transform = `scaleX(${p})`;
       nav?.classList.toggle('shrunk', h.scrollTop > 24);
+      if (!parkQueued) { parkQueued = true; requestAnimationFrame(applyParallax); }
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -94,6 +108,35 @@ export default function App() {
         el.addEventListener('pointerleave', leave);
         cleanups.push(() => {
           cancelAnimationFrame(raf);
+          el.removeEventListener('pointerenter', enter);
+          el.removeEventListener('pointermove', move);
+          el.removeEventListener('pointerleave', leave);
+        });
+      });
+    }
+
+    // ── 3D tilt on glass panels & cards (desktop only) ──
+    if (fine && !reduce) {
+      const tilts = Array.from(document.querySelectorAll<HTMLElement>('.tilt'));
+      tilts.forEach((el) => {
+        const MAX = 5;
+        const enter = () => el.classList.add('tilting');
+        const move = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.setProperty('--ry', `${(px * MAX * 2).toFixed(2)}deg`);
+          el.style.setProperty('--rx', `${(-py * MAX * 2).toFixed(2)}deg`);
+          el.style.setProperty('--tz', `-4px`);
+        };
+        const leave = () => {
+          el.classList.remove('tilting');
+          el.style.setProperty('--ry', '0deg'); el.style.setProperty('--rx', '0deg'); el.style.setProperty('--tz', '0px');
+        };
+        el.addEventListener('pointerenter', enter);
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerleave', leave);
+        cleanups.push(() => {
           el.removeEventListener('pointerenter', enter);
           el.removeEventListener('pointermove', move);
           el.removeEventListener('pointerleave', leave);

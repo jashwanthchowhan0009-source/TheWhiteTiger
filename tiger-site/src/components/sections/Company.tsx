@@ -53,7 +53,7 @@ export function Company() {
           </div>
           <div className="grid-3">
             {SOLUTIONS.map((s) => (
-              <div className="card reveal" key={s.t}>
+              <div className="card reveal tilt" key={s.t}>
                 <span className="dot" style={{ background: s.c, color: s.c }} />
                 <h3>{s.t}</h3>
                 <p>{s.s}</p>

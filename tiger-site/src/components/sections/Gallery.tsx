@@ -33,7 +33,7 @@ export function Gallery() {
         </div>
         <div className="deliver">
           {OUTS.map((o) => (
-            <div className="out reveal" key={o.t}>
+            <div className="out reveal tilt" key={o.t}>
               <span className="ic">{o.icon}</span>
               <h3>{o.t}</h3>
               <p>{o.s}</p>

@@ -52,7 +52,7 @@ export function About() {
               <div><b>&lt;1ms</b><span>Graph query</span></div>
             </div>
           </div>
-          <div className="graph-video glass reveal" style={{ backgroundImage: 'url(/media/neural-poster.jpg)' }}>
+          <div className="graph-video glass reveal tilt" style={{ backgroundImage: 'url(/media/neural-poster.jpg)' }}>
             <video autoPlay muted loop playsInline preload="metadata" poster="/media/neural-poster.jpg">
               <source src="/media/neural.mp4" type="video/mp4" />
             </video>
