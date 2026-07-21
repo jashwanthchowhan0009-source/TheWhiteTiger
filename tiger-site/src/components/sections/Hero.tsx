@@ -25,11 +25,11 @@ export function Hero() {
       <div className="wrap">
         <div className="hero-copy">
           <span className="eyebrow reveal">SherrByte Pvt. Ltd. — AI intelligence infrastructure</span>
-          <h1 className="reveal">Transforming public information into <em>intelligence</em>.</h1>
+          <h1 className="reveal">The informed are <em>ungovernable</em>.</h1>
           <p className="lead reveal">
-            SherrByte builds the system that observes the world's public data, understands it with AI,
-            and delivers it as real-time intelligence — to enterprises, governments and everyone who
-            must decide.
+            SherrByte builds the AI infrastructure that observes the world's public data, understands
+            it, and delivers it as real-time intelligence — for enterprises, governments and everyone
+            who must decide.
           </p>
           <div className="hero-actions reveal">
             <a href="#collect" className="btn primary">Enter the system</a>
