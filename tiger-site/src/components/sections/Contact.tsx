@@ -40,7 +40,7 @@ export function Contact() {
           <span className="eyebrow reveal">The team — incubated at RTIH Anantapur</span>
           <div className="team">
             {TEAM.map((m) => (
-              <div className="glass reveal" key={m.n}>
+              <div className="glass reveal tilt" key={m.n}>
                 <div className="m-n">{m.n}</div>
                 <div className="m-r">{m.r}</div>
               </div>
