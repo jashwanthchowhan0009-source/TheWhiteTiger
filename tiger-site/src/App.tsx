@@ -73,6 +73,22 @@ export default function App() {
       targets.forEach((el) => io.observe(el));
     }
 
+    // ── active nav-link scroll-spy ──
+    const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.links a'));
+    const linkFor = (id: string) => navLinks.find((a) => a.getAttribute('href') === `#${id}`);
+    const spySections = ['collect', 'process', 'deliver', 'products']
+      .map((id) => document.getElementById(id))
+      .filter((s): s is HTMLElement => !!s);
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          navLinks.forEach((a) => a.classList.remove('active'));
+          linkFor(e.target.id)?.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    spySections.forEach((s) => spy.observe(s));
+
     // ── live counter ──
     const counter = document.getElementById('live-count');
     let ci = 0;
@@ -151,6 +167,7 @@ export default function App() {
       window.clearInterval(tick);
       cancelAnimationFrame(rafId);
       lenis?.destroy();
+      spy.disconnect();
       cleanups.forEach((c) => c());
     };
   }, []);
