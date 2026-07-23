@@ -21,7 +21,6 @@ const OUTS: Out[] = [
 export function Gallery() {
   return (
     <section id="deliver" className="scene">
-      <img className="scene-watermark" src="/tiger.png" alt="" aria-hidden="true" style={{ left: '-3vw', top: '10%' }} />
       <div className="wrap">
         <div className="s-head reveal">
           <span className="eyebrow">03 — Act</span>

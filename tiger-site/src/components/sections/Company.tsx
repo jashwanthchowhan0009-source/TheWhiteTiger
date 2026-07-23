@@ -45,7 +45,7 @@ export function Company() {
         </div>
       </section>
 
-      <section id="solutions" className="scene">
+      <section id="solutions" className="scene tinted">
         <div className="wrap">
           <div className="s-head reveal">
             <span className="eyebrow">Enterprise solutions</span>
@@ -87,7 +87,7 @@ export function Company() {
         </div>
       </section>
 
-      <section id="tech" className="scene tight">
+      <section id="tech" className="scene tight tinted">
         <div className="wrap">
           <div className="s-head reveal">
             <span className="eyebrow">Technology</span>
