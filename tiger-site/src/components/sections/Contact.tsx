@@ -11,27 +11,6 @@ const MAIL = 'mailto:thewhitetigerdotin@gmail.com';
 export function Contact() {
   return (
     <>
-      <section className="scene center">
-        <div className="wrap">
-          <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>The SherrByte ethos</span>
-          <h2 className="reveal" style={{ marginTop: 8, maxWidth: '16ch', marginInline: 'auto' }}>
-            Clarity is a form of <em>power</em>.
-          </h2>
-          <div className="reveal" style={{ maxWidth: 780, margin: '48px auto 0' }}>
-            <div className="frame">
-              <div className="mock-card dark tilt">
-                <div className="mock-top"><i /><i /><i /><span className="u">the-white-tiger</span></div>
-                <div className="mock-vid">
-                  <video autoPlay muted loop playsInline preload="none" poster="/media/tiger-poster.jpg">
-                    <source src="/media/tiger.mp4" type="video/mp4" />
-                  </video>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="contact" className="scene cta">
         <div className="wrap">
           <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>

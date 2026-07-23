@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import { Nav } from './components/Nav';
+import { Band } from './components/Band';
 import { Hero } from './components/sections/Hero';
 import { Elegance } from './components/sections/Elegance';
 import { About } from './components/sections/About';
@@ -75,12 +76,17 @@ export default function App() {
     }, { rootMargin: '-45% 0px -50% 0px' });
     spySections.forEach((s) => spy.observe(s));
 
-    // ── framed videos: fade in on load + best-effort autoplay ──
-    document.querySelectorAll<HTMLVideoElement>('.mock-vid video').forEach((v) => {
-      const show = () => v.classList.add('ready');
-      if (v.readyState >= 2) show(); else v.addEventListener('loadeddata', show, { once: true });
-      v.play?.().catch(() => {});
-    });
+    // ── cinematic bands: reveal the fixed video only while the band is in view ──
+    const bands = Array.from(document.querySelectorAll<HTMLElement>('.band'));
+    const bandIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const fx = e.target.querySelector<HTMLElement>('.band-fx');
+        const v = fx?.querySelector('video');
+        if (e.isIntersecting) { fx?.classList.add('show'); v?.play?.().catch(() => {}); }
+        else { fx?.classList.remove('show'); v?.pause?.(); }
+      });
+    }, { threshold: 0.12 });
+    bands.forEach((b) => bandIO.observe(b));
 
     // ── live counter ──
     const counter = document.getElementById('live-count');
@@ -161,6 +167,7 @@ export default function App() {
       cancelAnimationFrame(rafId);
       lenis?.destroy();
       spy.disconnect();
+      bandIO.disconnect();
       cleanups.forEach((c) => c());
     };
   }, []);
@@ -181,9 +188,21 @@ export default function App() {
       <main>
         <Hero />
         <Elegance />
+        <Band src="/media/city.mp4" poster="/media/city-poster.jpg"
+          eyebrow="The world's public data"
+          title={<>Everything happening, <em>in real time</em>.</>}
+          lead="News, markets, governments, science, weather — thousands of open sources, watched continuously and turned into one clean signal." />
         <About />
+        <Band src="/media/neural.mp4" poster="/media/neural-poster.jpg"
+          eyebrow="The knowledge graph"
+          title={<>Everything, <em>connected</em>.</>}
+          lead="Millions of entities and relationships, fused across nine intelligence domains into one living structure — queryable by meaning, not keywords." />
         <Gallery />
         <Company />
+        <Band src="/media/tiger.mp4" poster="/media/tiger-poster.jpg"
+          eyebrow="The SherrByte ethos"
+          title={<>Clarity is a form of <em>power</em>.</>}
+          lead="Access to sourced, verifiable truth changes who gets to decide. We build the infrastructure that puts it within reach." />
         <Contact />
       </main>
     </>

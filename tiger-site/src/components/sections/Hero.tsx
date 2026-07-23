@@ -20,20 +20,6 @@ export function Hero() {
           <span><b>9</b> intelligence domains</span>
           <span><b>Real-time</b> delivery</span>
         </div>
-
-        {/* Product visual — framed city video */}
-        <div className="mockup reveal">
-          <div className="mock-card tilt">
-            <div className="mock-top">
-              <i /><i /><i /><span className="u">console.sherrbyte.ai</span>
-            </div>
-            <div className="mock-vid">
-              <video autoPlay muted loop playsInline preload="auto" poster="/media/city-poster.jpg">
-                <source src="/media/city.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
