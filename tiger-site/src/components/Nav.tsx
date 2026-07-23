@@ -4,7 +4,7 @@ function toggleTheme() {
   root.dataset.theme = next;
   try { localStorage.setItem('theme', next); } catch { /* ignore */ }
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', next === 'light' ? '#f5f7fc' : '#05070e');
+  if (meta) meta.setAttribute('content', next === 'light' ? '#f7faff' : '#0a0e17');
 }
 
 export function Nav() {
@@ -12,6 +12,11 @@ export function Nav() {
     <header className="nav">
       <div className="wrap nav-in">
         <a href="#top" className="brand" aria-label="SherrByte Pvt. Ltd. — home">
+          <span className="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+              <path d="M5 15V11M12 18V6M19 15V11" />
+            </svg>
+          </span>
           <span className="brand-name"><b>SHERRBYTE</b><span>PVT · LTD</span></span>
         </a>
         <nav className="links">
@@ -20,6 +25,7 @@ export function Nav() {
           <a href="#deliver">Deliver</a>
           <a href="#products">Products</a>
         </nav>
+        <span className="nav-div" aria-hidden="true" />
         <button type="button" className="theme-btn" onClick={toggleTheme} aria-label="Toggle light and dark mode">
           <svg className="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />

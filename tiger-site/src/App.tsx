@@ -75,6 +75,13 @@ export default function App() {
     }, { rootMargin: '-45% 0px -50% 0px' });
     spySections.forEach((s) => spy.observe(s));
 
+    // ── framed videos: fade in on load + best-effort autoplay ──
+    document.querySelectorAll<HTMLVideoElement>('.mock-vid video').forEach((v) => {
+      const show = () => v.classList.add('ready');
+      if (v.readyState >= 2) show(); else v.addEventListener('loadeddata', show, { once: true });
+      v.play?.().catch(() => {});
+    });
+
     // ── live counter ──
     const counter = document.getElementById('live-count');
     let ci = 0;

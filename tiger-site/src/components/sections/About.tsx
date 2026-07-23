@@ -7,12 +7,6 @@ const STAGES = [
   { n: '06', t: 'Prediction', s: 'Forward signals and scenarios, scored by confidence and evidence.' },
 ];
 
-// static graph nodes (light, on-brand)
-const NODES = [
-  [130, 60], [230, 40], [300, 120], [200, 130], [90, 150], [260, 200], [150, 220], [330, 190],
-];
-const EDGES: [number, number][] = [[0, 1], [0, 3], [1, 2], [2, 3], [3, 4], [3, 5], [4, 6], [5, 6], [5, 7], [2, 7], [1, 3], [6, 5]];
-
 export function About() {
   return (
     <>
@@ -52,21 +46,14 @@ export function About() {
               </div>
             </div>
             <div className="feat-visual reveal">
-              <div className="mock-card tilt">
-                <div className="mock-top"><i /><i /><i /><span className="u">graph · explore</span></div>
-                <div className="mock-body">
-                  <svg viewBox="0 0 400 260" width="100%" style={{ display: 'block' }} aria-hidden="true">
-                    {EDGES.map(([a, b], i) => (
-                      <line key={i} x1={NODES[a][0]} y1={NODES[a][1]} x2={NODES[b][0]} y2={NODES[b][1]}
-                        stroke="#2d6bff" strokeOpacity="0.28" strokeWidth="1.4" />
-                    ))}
-                    {NODES.map(([x, y], i) => (
-                      <g key={i}>
-                        <circle cx={x} cy={y} r={i % 3 === 0 ? 11 : 7} fill="#2d6bff" fillOpacity={i % 3 === 0 ? 0.16 : 0.1} />
-                        <circle cx={x} cy={y} r={i % 3 === 0 ? 5 : 3.5} fill="#2d6bff" />
-                      </g>
-                    ))}
-                  </svg>
+              <div className="frame">
+                <div className="mock-card dark tilt">
+                  <div className="mock-top"><i /><i /><i /><span className="u">graph · explore</span></div>
+                  <div className="mock-vid">
+                    <video autoPlay muted loop playsInline preload="none" poster="/media/neural-poster.jpg">
+                      <source src="/media/neural.mp4" type="video/mp4" />
+                    </video>
+                  </div>
                 </div>
               </div>
             </div>
