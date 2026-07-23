@@ -76,6 +76,13 @@ export default function App() {
     }, { rootMargin: '-45% 0px -50% 0px' });
     spySections.forEach((s) => spy.observe(s));
 
+    // ── framed video (knowledge graph): fade in + autoplay ──
+    document.querySelectorAll<HTMLVideoElement>('.mock-vid video').forEach((v) => {
+      const show = () => v.classList.add('ready');
+      if (v.readyState >= 2) show(); else v.addEventListener('loadeddata', show, { once: true });
+      v.play?.().catch(() => {});
+    });
+
     // ── cinematic bands: reveal the fixed video only while the band is in view ──
     const bands = Array.from(document.querySelectorAll<HTMLElement>('.band'));
     const bandIO = new IntersectionObserver((entries) => {
@@ -193,10 +200,6 @@ export default function App() {
           title={<>Everything happening, <em>in real time</em>.</>}
           lead="News, markets, governments, science, weather — thousands of open sources, watched continuously and turned into one clean signal." />
         <About />
-        <Band src="/media/neural.mp4" poster="/media/neural-poster.jpg"
-          eyebrow="The knowledge graph"
-          title={<>Everything, <em>connected</em>.</>}
-          lead="Millions of entities and relationships, fused across nine intelligence domains into one living structure — queryable by meaning, not keywords." />
         <Gallery />
         <Company />
         <Band src="/media/tiger.mp4" poster="/media/tiger-poster.jpg"
