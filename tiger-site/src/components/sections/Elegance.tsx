@@ -21,30 +21,16 @@ export function Elegance() {
 
       <section id="collect" className="scene tinted">
         <div className="wrap">
-          <div className="feat">
-            <div className="feat-copy reveal">
-              <span className="eyebrow">01 — Observe</span>
-              <h2 style={{ marginTop: 16 }}>We collect the world's <em>public signal</em>.</h2>
-              <p className="sec-lead">
-                Thousands of open sources, ingested in real time and normalised into one clean
-                stream — no gaps, no noise, no single point of view.
-              </p>
-              <div className="chips">
-                {SOURCES.map((s) => <span className="chip" key={s}>{s}</span>)}
-              </div>
-            </div>
-            <div className="feat-visual reveal">
-              <div className="frame">
-                <div className="mock-card dark tilt">
-                  <div className="mock-top"><i /><i /><i /><span className="u">live ingestion</span></div>
-                  <div className="mock-vid">
-                    <video autoPlay muted loop playsInline preload="none" poster="/media/console-poster.jpg">
-                      <source src="/media/console.mp4" type="video/mp4" />
-                    </video>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="s-head reveal">
+            <span className="eyebrow">01 — Observe</span>
+            <h2 style={{ marginTop: 16 }}>We collect the world's <em>public signal</em>.</h2>
+            <p className="sec-lead">
+              Thousands of open sources, ingested in real time and normalised into one clean
+              stream — no gaps, no noise, no single point of view.
+            </p>
+          </div>
+          <div className="chips">
+            {SOURCES.map((s) => <span className="chip" key={s}>{s}</span>)}
           </div>
         </div>
       </section>
