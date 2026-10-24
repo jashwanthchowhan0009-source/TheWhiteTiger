@@ -4,21 +4,20 @@ export function Hero() {
       <div className="hero-bg" aria-hidden="true" />
       <div className="hero-lines" aria-hidden="true" />
       <div className="wrap">
-        <span className="hero-pill reveal">SherrByte Pvt. Ltd. · <b>AI intelligence infrastructure</b></span>
-        <h1 className="reveal">The informed are <span className="glass-word">ungovernable</span></h1>
+        <span className="hero-pill reveal">SherrByte Pvt. Ltd. · <b>Public data intelligence platform</b></span>
+        <h1 className="reveal">Turn public data into <span className="glass-word">decisions</span></h1>
         <p className="lead reveal">
-          SherrByte builds the AI infrastructure that observes the world's public data, understands
-          it, and delivers it as real-time intelligence — for enterprises, governments and everyone
-          who must decide.
+          SherrByte watches thousands of public sources, understands them with AI, and delivers the
+          signals that matter — as a live dashboard and an API your team can build on.
         </p>
         <div className="hero-actions reveal">
-          <a href="#platform" className="btn primary">Explore the platform</a>
-          <a href="#contact" className="btn ghost">Contact sales</a>
+          <a href="#pricing" className="btn primary">Start free</a>
+          <a href="#contact" className="btn ghost">Book a demo</a>
         </div>
         <div className="hero-proof reveal">
-          <span><b>1000s</b> of public sources</span>
-          <span><b>9</b> intelligence domains</span>
-          <span><b>Real-time</b> delivery</span>
+          <span><b>1000s</b> of sources</span>
+          <span><b>Real-time</b> signals</span>
+          <span><b>API</b> + dashboard</span>
         </div>
       </div>
     </section>
