@@ -5,7 +5,7 @@ const TEAM = [
   { n: 'Dr. Arun Chan', i: 'AC', r: 'Mentorship & cohort support through RTIH' },
 ];
 
-const WAYS = ['Schedule a demo', 'Talk to sales', 'Partner with us', 'Enterprise inquiry', 'Government solutions', 'Careers'];
+const WAYS = ['Book a demo', 'Talk to sales', 'Enterprise inquiry', 'Partner with us', 'Careers'];
 const MAIL = 'mailto:thewhitetigerdotin@gmail.com';
 
 export function Contact() {
@@ -15,15 +15,15 @@ export function Contact() {
         <div className="wrap">
           <span className="eyebrow reveal" style={{ justifyContent: 'center' }}>Talk to us</span>
           <h2 className="reveal" style={{ marginTop: 18, maxWidth: '20ch', marginInline: 'auto' }}>
-            Turn public data into <em>decisive advantage</em>.
+            Start turning data into <em>decisions</em>.
           </h2>
-          <p className="lead reveal" style={{ margin: '20px auto 0', maxWidth: '58ch' }}>
-            SherrByte Pvt. Ltd. is building the infrastructure that turns the world's public
-            information into decisive advantage. Let's find what it can do for your organisation.
+          <p className="lead reveal" style={{ margin: '20px auto 0', maxWidth: '54ch' }}>
+            Spin up a free workspace in minutes, or book a demo and we’ll show you SherrByte on your
+            own use case.
           </p>
           <div className="hero-actions reveal" style={{ marginTop: 34 }}>
-            <a href={MAIL} className="btn primary">Schedule a demo</a>
-            <a href={MAIL} className="btn ghost">Talk to sales</a>
+            <a href="#pricing" className="btn primary">Start free</a>
+            <a href={MAIL} className="btn ghost">Book a demo</a>
           </div>
           <div className="ways reveal">
             {WAYS.map((w) => <a href={MAIL} className="way" key={w}>{w}</a>)}
@@ -59,19 +59,19 @@ export function Contact() {
               <p>AI infrastructure that turns the world's public data into real-time, decision-ready intelligence.</p>
             </div>
             <div className="foot-col">
-              <h5>Platform</h5>
-              <a href="#collect">Collect</a><a href="#process">Process</a>
-              <a href="#deliver">Deliver</a><a href="#products">Products</a>
+              <h5>Product</h5>
+              <a href="#features">Features</a><a href="#how">How it works</a>
+              <a href="#product">Platform</a><a href="#pricing">Pricing</a>
             </div>
             <div className="foot-col">
               <h5>Company</h5>
-              <a href="#industries">Industries</a><a href="#solutions">Solutions</a>
-              <a href="#tech">Technology</a><a href="#contact">Contact</a>
+              <a href="#contact">Contact</a><a href={MAIL}>Careers</a>
+              <a href={MAIL}>Partners</a><a href={MAIL}>Enterprise</a>
             </div>
             <div className="foot-col">
-              <h5>Get in touch</h5>
-              <a href={MAIL}>Schedule a demo</a><a href={MAIL}>Talk to sales</a>
-              <a href={MAIL}>Enterprise inquiry</a><a href={MAIL}>Careers</a>
+              <h5>Get started</h5>
+              <a href="#pricing">Start free</a><a href={MAIL}>Book a demo</a>
+              <a href={MAIL}>Talk to sales</a>
             </div>
           </div>
           <div className="foot-note">

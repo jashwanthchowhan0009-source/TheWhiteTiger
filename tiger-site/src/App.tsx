@@ -6,7 +6,6 @@ import { Hero } from './components/sections/Hero';
 import { Elegance } from './components/sections/Elegance';
 import { About } from './components/sections/About';
 import { Gallery } from './components/sections/Gallery';
-import { Company } from './components/sections/Company';
 import { Contact } from './components/sections/Contact';
 
 export default function App() {
@@ -63,7 +62,7 @@ export default function App() {
     // ── active nav-link scroll-spy ──
     const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.links a'));
     const linkFor = (id: string) => navLinks.find((a) => a.getAttribute('href') === `#${id}`);
-    const spySections = ['collect', 'process', 'deliver', 'products']
+    const spySections = ['features', 'how', 'pricing', 'product']
       .map((id) => document.getElementById(id))
       .filter((s): s is HTMLElement => !!s);
     const spy = new IntersectionObserver((entries) => {
@@ -194,18 +193,17 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
-        <Elegance />
         <Band src="/media/city.mp4" poster="/media/city-poster.jpg"
           eyebrow="The world's public data"
           title={<>Everything happening, <em>in real time</em>.</>}
           lead="News, markets, governments, science, weather — thousands of open sources, watched continuously and turned into one clean signal." />
+        <Elegance />
         <About />
         <Gallery />
-        <Company />
         <Band src="/media/tiger.mp4" poster="/media/tiger-poster.jpg"
           eyebrow="The SherrByte ethos"
           title={<>Clarity is a form of <em>power</em>.</>}
-          lead="Access to sourced, verifiable truth changes who gets to decide. We build the infrastructure that puts it within reach." />
+          lead="Access to sourced, verifiable truth changes who gets to decide. We build the platform that puts it within reach." />
         <Contact />
       </main>
     </>

@@ -20,10 +20,10 @@ export function Nav() {
           <span className="brand-name"><b>SHERRBYTE</b><span>PVT · LTD</span></span>
         </a>
         <nav className="links">
-          <a href="#collect">Collect</a>
-          <a href="#process">Process</a>
-          <a href="#deliver">Deliver</a>
-          <a href="#products">Products</a>
+          <a href="#features">Features</a>
+          <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#product">Platform</a>
         </nav>
         <span className="nav-div" aria-hidden="true" />
         <button type="button" className="theme-btn" onClick={toggleTheme} aria-label="Toggle light and dark mode">
@@ -35,7 +35,7 @@ export function Nav() {
             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
         </button>
-        <a href="#contact" className="nav-cta">Contact sales</a>
+        <a href="#contact" className="nav-cta">Book a demo</a>
       </div>
     </header>
   );
