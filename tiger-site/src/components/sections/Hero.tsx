@@ -4,6 +4,8 @@ export function Hero() {
   return (
     <>
       <section id="top" className="hero">
+        <div className="hero-dots" aria-hidden="true" />
+        <div className="hero-spot" aria-hidden="true" />
         <div className="hero-glow" aria-hidden="true" />
         <div className="wrap hero-grid">
           <div className="hero-copy">

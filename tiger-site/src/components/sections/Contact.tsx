@@ -3,8 +3,6 @@ const MAIL = 'mailto:thewhitetigerdotin@gmail.com';
 const TEAM = [
   { n: 'P. Jashwanth Chowhan', i: 'JC', r: 'Product, engineering & AI platform' },
   { n: 'P. Neethu Chowhan', i: 'NC', r: 'Business development & go-to-market' },
-  { n: 'Dr. Prashant', i: 'DP', r: 'Architecture & IP guidance' },
-  { n: 'Dr. Arun Chan', i: 'AC', r: 'Mentorship & cohort support' },
 ];
 
 const WAYS = ['Book a demo', 'Talk to sales', 'Managed GEO', 'Partner with SBBS', 'Careers'];

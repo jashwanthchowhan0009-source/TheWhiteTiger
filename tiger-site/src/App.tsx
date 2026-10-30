@@ -140,6 +140,68 @@ export default function App() {
       }
     }
 
+    // ── interactive pointer effects (desktop only) ──
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const cleanups: Array<() => void> = [];
+    if (fine && !reduce) {
+      // cursor spotlight on cards + hero
+      document.querySelectorAll<HTMLElement>('.card, .pillar, .tier, .hero').forEach((el) => {
+        const mv = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+          el.style.setProperty('--my', `${e.clientY - r.top}px`);
+        };
+        el.addEventListener('pointermove', mv);
+        cleanups.push(() => el.removeEventListener('pointermove', mv));
+      });
+
+      // magnetic buttons
+      document.querySelectorAll<HTMLElement>('.btn.primary, .nav-cta').forEach((el) => {
+        let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, inside = false;
+        const loop = () => {
+          cx += (tx - cx) * 0.18; cy += (ty - cy) * 0.18;
+          el.style.transform = `translate(${cx.toFixed(2)}px, ${cy.toFixed(2)}px)`;
+          if (inside || Math.abs(cx) > 0.1 || Math.abs(cy) > 0.1) raf = requestAnimationFrame(loop);
+          else el.style.transform = '';
+        };
+        const enter = () => { inside = true; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
+        const move = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          tx = (e.clientX - (r.left + r.width / 2)) * 0.3;
+          ty = (e.clientY - (r.top + r.height / 2)) * 0.5;
+        };
+        const leave = () => { inside = false; tx = 0; ty = 0; };
+        el.addEventListener('pointerenter', enter);
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerleave', leave);
+        cleanups.push(() => {
+          cancelAnimationFrame(raf);
+          el.removeEventListener('pointerenter', enter);
+          el.removeEventListener('pointermove', move);
+          el.removeEventListener('pointerleave', leave);
+        });
+      });
+
+      // tilt on the hero demo card
+      const card = document.querySelector<HTMLElement>('.demo-card');
+      if (card) {
+        const move = (e: PointerEvent) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(1000px) rotateY(${(px * 9).toFixed(2)}deg) rotateX(${(-py * 9).toFixed(2)}deg) translateZ(6px)`;
+        };
+        const leave = () => { card.style.transform = ''; };
+        const area = card.parentElement || card;
+        area.addEventListener('pointermove', move);
+        area.addEventListener('pointerleave', leave);
+        cleanups.push(() => {
+          area.removeEventListener('pointermove', move);
+          area.removeEventListener('pointerleave', leave);
+        });
+      }
+    }
+
     return () => {
       window.clearTimeout(minTimer);
       window.removeEventListener('load', done);
@@ -149,6 +211,7 @@ export default function App() {
       lenis?.destroy();
       spy.disconnect();
       sovIO?.disconnect();
+      cleanups.forEach((c) => c());
     };
   }, []);
 
