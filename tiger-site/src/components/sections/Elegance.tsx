@@ -1,5 +1,11 @@
 const MAIL = 'mailto:thewhitetigerdotin@gmail.com';
 
+const SOV = [
+  { lbl: 'Your brand, with GEO', pct: 72, me: true },
+  { lbl: 'Competitor A', pct: 41, me: false },
+  { lbl: 'Competitor B', pct: 23, me: false },
+];
+
 export function Elegance() {
   return (
     <section className="scene tinted">
@@ -41,6 +47,24 @@ export function Elegance() {
             </ul>
             <a href={MAIL} className="p-link">Work with SBBS <span className="arr">→</span></a>
           </div>
+        </div>
+
+        <div className="s-head reveal" style={{ marginTop: 'clamp(70px, 9vw, 120px)' }}>
+          <span className="eyebrow">Why it matters</span>
+          <h2 style={{ marginTop: 18 }}>Win a bigger share of the <em>answer</em>.</h2>
+          <p className="sec-lead">
+            When buyers ask AI instead of Google, the brand it names wins. GEO moves you up that list —
+            and we show you exactly how far.
+          </p>
+        </div>
+        <div className="sov reveal">
+          {SOV.map((r) => (
+            <div className={`sov-row${r.me ? ' me' : ''}`} key={r.lbl}>
+              <span className="lbl">{r.lbl}</span>
+              <div className="sov-track"><div className="sov-fill" data-pct={r.pct} /></div>
+              <span className="sov-pct" data-pct={r.pct}>0%</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

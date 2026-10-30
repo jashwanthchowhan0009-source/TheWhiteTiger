@@ -54,6 +54,10 @@ export function Contact() {
             <div className="foot-brand">
               <a href="#top" className="brand">SherrByte<span className="sb">SBBS</span></a>
               <p>Generative Engine Optimization as SaaS — making brands the answer AI gives.</p>
+              <div className="foot-legal">
+                <b>SherrByte Pvt. Ltd.</b><br />
+                a <span className="tw">thewhitetiger</span> company
+              </div>
             </div>
             <div className="foot-col">
               <h5>Platform</h5>
@@ -69,7 +73,7 @@ export function Contact() {
             </div>
           </div>
           <div className="foot-note">
-            <span>© 2026 SherrByte Businesses (SBBS)</span>
+            <span>© 2026 SherrByte Pvt. Ltd. · thewhitetiger</span>
             <span>Anantapur, Andhra Pradesh · India</span>
           </div>
         </div>
